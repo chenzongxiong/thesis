@@ -1,0 +1,54 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{xstring}
+\usepackage{catchfile}
+
+\newcommand\PassFirstToSecond[2]{#2{#1}}
+
+% !!! This will produce a text-file colorlist.csv for you.!!!
+% !!! Make sure it won't override another already existing!!!
+% !!! file of same name !!!
+\begin{filecontents*}{colorlist.csv}
+{0,0,0},black,
+{1,1,0},yellow,
+{1,0,1},pink
+\end{filecontents*}
+
+\begin{document}
+
+\CatchFileDef{\tempa}{colorlist.csv}{}%
+
+% Due to LaTeX's reading-apparatus which has that nice `\endlinechar`-thingie,
+% reading and tokenizing colorlist.csv yields that each end of a line of
+% colorlist.csv will result in the insertion of an explicit space token into
+% the token stream.
+% Thus the comma-character-tokens that stem from the commas at the ends of lines
+% will be trailed by explicit space tokens while the comma-character-tokens that
+% stem from commas not at the ends of lines don't have these trailing space tokens.
+% The ending of the last line of colorlist.csv does also yield the insertion
+% of an explicit space token.
+% Anything nested inside curly braces is protected from being replaced by
+% \StrSubstitute.
+
+% Let's replace the commas at line endings by //:
+\expandafter\StrSubstitute\expandafter{\tempa}{, }{//}[\tempa]%
+\show\tempa
+% Let's replace the commas not at line endings by /:
+\expandafter\StrSubstitute\expandafter{\tempa}{,}{/}[\tempa]%
+%\show\tempa
+% Let's replace the line endings (they are now denoted by //) by commas:
+\expandafter\StrSubstitute\expandafter{\tempa}{//}{,}[\tempa]%
+%\show\tempa
+% Let's remove all remaining space-tokens - this does remove
+% the space that came into being due to the end of the last
+% line of colorlist.csv
+\expandafter\StrSubstitute\expandafter{\tempa}{ }{}[\tempa]%
+%\show\tempa
+
+
+\expandafter\PassFirstToSecond\expandafter{\tempa}{\foreach\code/\col in}{%
+  \definecolor{tempcolor}{rgb}{\code}%
+  \textcolor{tempcolor}{\col};
+}%
+
+\end{document}

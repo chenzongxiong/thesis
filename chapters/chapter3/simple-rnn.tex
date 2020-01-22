@@ -1,0 +1,11 @@
+\section{Simple RNN}
+
+\begin{equation}
+    p_{n} = a(w_{1}  x_{n} + b_{0} + w_{2} h_{n-1})
+\end{equation}
+\begin{eqnarray}
+    \frac{\partial p_n}{\partial x_n} = \frac{\partial a_n}{\partial z_n} \frac{\partial z_n}{\partial x_n}
+    = w_{1} \frac{\partial a_n}{\partial z_n}
+\end{eqnarray}
+
+In our implementation, we simplify $w_1$, $w_2$ and $b_0$ as scalar and activation $a$ is $\tanh$

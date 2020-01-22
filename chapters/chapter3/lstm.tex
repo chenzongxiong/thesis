@@ -1,0 +1,71 @@
+\section{LSTM}
+
+\begin{eqnarray}
+    i_{n} &=& \sigma(w_{i} x_{n} + w_{ri} h_{n-1} + b_{i}) \\
+    f_{n} &=& \sigma(w_{f} x_{n} + w_{rf} h_{n-1} + b_{f}) \\
+    o_{n} &=& \sigma(w_{o} x_{n} + w_{ro} h_{n-1} + b_{o}) \\
+    \tilde{C_{n}} &=& \sigma(w_{c} x_{n} + w_{rc} h_{n-1} + b_{c}) \\
+    C_{n} &=& f_{n} C_{n-1} + i_{n} a(\tilde{C_{n}}) \\
+    h_{n} &=& o_{n} a(C_{n})
+\end{eqnarray}
+
+Let function $a(\tilde{C_{n}})$ be function $\tilde{a}_n$, $a(C_{n})$ be $a_{n}$
+
+\begin{align*}
+    \frac{\partial h_n}{\partial x_n} &= \frac{\partial{(o_n \cdot a_n)}}{\partial{x_n}} \\
+    &= a_{n} \frac{\partial o_{n}}{\partial z_{n}} \frac{\partial z_{n}}{\partial x_{n}} + 
+    o_{n} \frac{\partial a_{n}}{\partial C_{n}} \left(C_{n-1} \frac{\partial f_{n}}{\partial x_{n}} + \frac{\partial i_{n}}{\partial x_{n}} \tilde{a}_n + i_{n} \frac{\partial \tilde{a}_{n}}{\partial \tilde{C}_{n}}\frac{\partial \tilde{C_{n}}}{\partial x_{n}}\right) \\
+    &=  a_{n} \frac{\partial o_{n}}{\partial z_{n}} \frac{\partial z_{n}}{\partial x_{n}} + 
+    o_{n} \frac{\partial a_{n}}{\partial C_{n}} \left( C_{n-1} \frac{\partial f_{n}}{\partial s_{n}} \frac{\partial s_{n}}{\partial x_{n}} + \frac{\partial i_{n}}{\partial r_{n}}\frac{\partial r_{n}}{\partial x_{n}} \tilde{a}_n + i_{n} \frac{\partial \tilde{a}_{n}}{\partial \tilde{C}_{n}} \frac{\partial \tilde{C_{n}}}{\partial u_{n}}\frac{\partial u_{n}}{\partial x_{n}} \right) \\
+    \begin{split}
+    &= a_{n} o_{n}(1-o_{n}) w_o + o_{n} \frac{\partial{a_n}}{\partial{C_n}} \Bigg(
+        C_{n-1} f_{n}(1-f_{n}) w_{f} + i_{n} (1-i_{n}) w_{i} \tilde{a}_n + \\
+        &\quad\; i_{n}  \frac{\partial \tilde{a_{n}}}{\partial \tilde{C}_{n}}
+        \tilde{C}_{n}(1-\tilde{C}_{n})w_{c}
+        \Bigg)
+    \end{split}
+\end{align*}
+
+
+% \begin{eqnarray}
+%     i_{n} &=& \sigma(w_{i} x_{n} + w_{ri} h_{n-1} + b_{i}) \\
+%     f_{n} &=& \sigma(w_{f} x_{n} + w_{rf} h_{n-1} + b_{f}) \\
+%     o_{n} &=& \sigma(w_{o} x_{n} + w_{ro} h_{n-1} + b_{o}) \\
+%     \tilde{C_{n}} &=& \sigma(w_{c} x_{n} + w_{rc} h_{n-1} + b_{c}) \\
+%     C_{n} &=& f_{n} C_{n-1} + i_{n} \tanh(\tilde{C_{n}}) \\
+%     h_{n} &=& o_{n} \tanh(C_{n})
+% \end{eqnarray}
+
+Let function $\tanh(\tilde{C_{n}})$ be function $\tilde{a}_n$, $\tanh(C_{n})$ be $a_{n}$
+
+
+
+\begin{align*}
+    \frac{\partial h_n}{\partial x_n} &= \frac{\partial{(o_n \cdot a_n)}}{\partial{x_n}} \\
+    &= a_{n} \frac{\partial o_{n}}{\partial z_{n}} \frac{\partial z_{n}}{\partial x_{n}} + 
+    o_{n} \frac{\partial a_{n}}{\partial C_{n}} \left(C_{n-1} \frac{\partial f_{n}}{\partial x_{n}} + \frac{\partial i_{n}}{\partial x_{n}} \tilde{a}_n + i_{n} \frac{\partial \tilde{a}_{n}}{\partial \tilde{C}_{n}}\frac{\partial \tilde{C_{n}}}{\partial x_{n}}\right) \\
+    &=  a_{n} \frac{\partial o_{n}}{\partial z_{n}} \frac{\partial z_{n}}{\partial x_{n}} + 
+    o_{n} \frac{\partial a_{n}}{\partial C_{n}} \left( C_{n-1} \frac{\partial f_{n}}{\partial s_{n}} \frac{\partial s_{n}}{\partial x_{n}} + \frac{\partial i_{n}}{\partial r_{n}}\frac{\partial r_{n}}{\partial x_{n}} \tilde{a}_n + i_{n} \frac{\partial \tilde{a}_{n}}{\partial \tilde{C}_{n}} \frac{\partial \tilde{C_{n}}}{\partial u_{n}}\frac{\partial u_{n}}{\partial x_{n}} \right) \\
+    \begin{split}
+    &= a_{n} o_{n}(1-o_{n}) w_o + o_{n} (1-a^2_{n}) \Bigg(
+        C_{n-1} f_{n}(1-f_{n}) w_{f} + i_{n} (1-i_{n}) w_{i} \tilde{a}_n + \\
+        &\quad\; i_{n} (1-\tilde{a}^2_{n}) \tilde{C}_{n}(1-\tilde{C}_{n})w_{c}
+        \Bigg)
+    \end{split}
+\end{align*}
+
+The architecture of LSTM we want to compare is shown as following. 
+
+$Input Layer -> LSTM Layer -> Dense Layter -> Output$
+
+The shape of input layer is (1, timestamp, 1) and the output of LSTM layer is (1, timestamp, units), the output shape of dense layer is (1, timestamp, 1)
+We can easily deduce that for a specific $x_n$, it maps to a vector of hidden state $[h^(1), h^(2), \ldots, h^(U)]$, 
+
+\begin{equation*}
+    b_n = \sum_{i=0}^{U} \theta_i h_{n}^{(i)}
+\end{equation*}
+
+\begin{eqnarray*}
+ \frac{\partial{b_n}}{\partial{x_n}} &=& \frac{\sum_{i=0}^{U} \theta_i h_{n}^{(i)}}{\partial{x_n}} \\
+    &=& \sum_{i=0}^{U} \theta_i \frac{\partial{h_n^{(i)}}}{\partial{x_n}}
+\end{eqnarray*}

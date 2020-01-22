@@ -1,0 +1,18 @@
+\documentclass{article}
+\usepackage{tikz}
+\begin{document}
+  \begin{tikzpicture}
+    \draw[] (-3,-3) .. controls (2.5,-3) and (-0.5,3) .. (3,3)
+             .. controls (-2.5,3) and (0.5,-3) ..(-3,-3);
+    \draw[-latex] (-4,0) -- (4,0)node[below]{$u$};
+    \draw[-latex] (0,-4) -- (0,4)node[left]{$x$};
+    % \draw[dashed] (-4,-3) -- (4,-3);
+    % \draw[dashed] (-4,3) -- (4,3);
+    
+    \draw[dashed] (-3,0)node[above]{$u_1$} -- (-3,-3)node[below]{$A$};
+    \node[right] at (0.7, 0) {$B$};
+    \draw[dashed] (3,0)node[above]{$u_2$} -- (3,3)node[above]{$C$};
+    \node[left] at (-0.7, 0) {$D$};
+
+\end{tikzpicture}
+\end{document}

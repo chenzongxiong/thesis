@@ -1,22 +1,21 @@
 \subsection{Demand/Supply price formation\label{sec:chapter3:demand-supply-price-formation}}
-In this model, we assume that the stock exchange accommodates two types of agents, which we call D and N and describe below. We assume that the time takes values $n=0, 1, 2, , \ldots$, and denote the price at time $n$ by $p_n$. By defnition, $p_n$ is the price of last transaction at time $n$. We will see below that demand equals supply at times $n$, but between any two consecutive times $n-1$ and $n$, this need not be the case and there may occur many transactions until demand will have become supply.
+In this model, we assume that the stock exchange accommodates two types of agents, which we call D and N and describe below. We assume that the time takes values $n=0, 1, 2, , \ldots$, and denote the price at time $n$ by $p_n$. By definition, $p_n$ is the price of last transaction at time $n$. We will see below that demand equals supply at times $n$, but between any two consecutive times $n-1$ and $n$, this need not be the case and there may occur many transactions until demand will have become supply.
 
 \begin{assumption}\label{assumption:chapter3:strategy-of-agentD}
-  (Strategy of agents D). Agents D keep track of a trend. They buy stocks iff the price goes up and sell stocks iff the pric goes down. The total amount of stocks that are in possession of all the agents D can be described as a Prandtl-Ishlinksii operator whose input is the price p. We denote this operator by
+  (Strategy of agents D). Agents D keep track of a trend. They buy stocks iff the price goes up and sell stocks iff the price goes down. The total amount of stocks that are in possession of all the agents D can be described as a Prandtl-Ishlinksii operator whose input is the price p. We denote this operator by
   $$P_D(p)$$
-\end{assuption}
+\end{assumption}
 \begin{assumption}\label{assumption:chapter3:strategy-of-agentN}
-  (Strategy of agents N). The strategy of each of the agents N is characterized by a non-ideal relay with two fixed threshold $p_1 < p_2$ (different for different agents). The relay is in state 0 if the price higher than $p_2$ and in state 1 if the price is lower than $p_1$. The agent buys one stock whenever his relay switches from 0 to 1 and sells one stock whenever his relay switches frmo 1 to 0. The total amount of stocks that are in possession of all the agents N can be described as a Preisach operator whose input is the price $p$. We denote this operator by
+  (Strategy of agents N). The strategy of each of the agents N is characterized by a non-ideal relay with two fixed threshold $p_1 < p_2$ (different for different agents). The relay is in state 0 if the price higher than $p_2$ and in state 1 if the price is lower than $p_1$. The agent buys one stock whenever his relay switches from 0 to 1 and sells one stock whenever his relay switches from 1 to 0. The total amount of stocks that are in possession of all the agents N can be described as a Preisach operator whose input is the price $p$. We denote this operator by
   $$P_N(p)$$
 \end{assumption}
 
-The following lemma is direct consequence of the definition of the opeartors $P_D(p)$ and $P_N(p)$.
+The following lemma is direct consequence of the definition of the operators $P_D(p)$ and $P_N(p)$.
 
 \begin{lemma}\label{lemma:chapter3:reaction-to-price-change}
-  \\
   \begin{enumerate}
-    \item If $p$ is increasing, the $P_D(p)$ is increasing (agents D buy) and $P_N(p)$ is descreasing (agents N sell).
-    \item If $p$ is descreasing, the $P_D(p)$ is descreasing (agents D sell) and $P_N(p)$ is increasing (agents N buy).
+    \item If $p$ is increasing, the $P_D(p)$ is increasing (agents D buy) and $P_N(p)$ is decreasing (agents N sell). 
+    \item If $p$ is decreasing, the $P_D(p)$ is decreasing (agents D sell) and $P_N(p)$ is increasing (agents N buy).
   \end{enumerate}
 \end{lemma}
 
@@ -41,7 +40,7 @@ In order to explain how a stabilized price can change stabilize to the next valu
   \begin{equation}\label{eqn:chapter3:stable-price-eqn}
     P_D(p_{n-1}) + P_N(p_{n-1}) = B_{n-1}
   \end{equation}
-  We assue that between time moments $n-1$ and $n$, some external agents E buy or sell some stocks. As a result, the total amount of stocks that is in possession of agents D and N becomes $B_n$. Moreover, we assume that external agents do not stay at the stock exchange, i.e., the operators (thir densities) $P_D(p)$ and $P_N(p)$ do not chagne in time.
+  We assume that between time moments $n-1$ and $n$, some external agents E buy or sell some stocks. As a result, the total amount of stocks that is in possession of agents D and N becomes $B_n$. Moreover, we assume that external agents do not stay at the stock exchange, i.e., the operators (thir densities) $P_D(p)$ and $P_N(p)$ do not change in time.
   If $B_n \le B_{n-1}$, then external agents E buy $|B_{n}-B_{n-1}|$ stocks, which increases the price. As as result, agents D also buy. All the stocks bought by agents E and D are sold by agnets N. This leads to the increase of the price to a new value $p_n^1$, where $p_n^1$ is the smallest solution of the equation
   \begin{equation}\label{eqn:chapter3:new-stable-price-eqn}
     P_D(p_n^1) + P_N(p_n^1) = B_n
@@ -80,4 +79,4 @@ In order to explain how a stabilized price can change stabilize to the next valu
     \end{equation}
   \end{remark}
 
-  Then, formally, the relationship between the price $p_n$ and the noise $B_n$ is the same as Dima's model. \ref{xxx} Though in our second model, there is a number of further restrictions on admissible vlaues of $p_n$ due to Assumption \ref{assumption:chapter3:transitions-between-stabilized-prices}
+  Then, formally, the relationship between the price $p_n$ and the noise $B_n$ is the same as Dima's model. \ref{xxx} Though in our second model, there is a number of further restrictions on admissible values of $p_n$ due to Assumption \ref{assumption:chapter3:transitions-between-stabilized-prices}
