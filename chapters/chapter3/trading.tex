@@ -1,125 +1,125 @@
-\section{Trading\label{sec:chapter3:trading}}
+% \section{Trading\label{sec:chapter3:trading}}
 
-\subsection{Dima's model assumptions}
-\label{sec:chapter3:assumption}
-Assume, we observe prices \(p_1, p_2, ..., p_N\) for a fixed \(N > 0\). Based on Dima's paper\cite{analytical_solution_for_a_class_of_network_dynamics_with_mechanical_and_financial_application},
-assume that the price $p_{n}$ hysteretically depends on the underlying noise $b_n$, with $b_n$ being a
-Brownian motion. Using the notation
+% \subsection{Dima's model assumptions}
+% \label{sec:chapter3:assumption}
+% Assume, we observe prices \(p_1, p_2, ..., p_N\) for a fixed \(N > 0\). Based on Dima's paper\cite{analytical_solution_for_a_class_of_network_dynamics_with_mechanical_and_financial_application},
+% assume that the price $p_{n}$ hysteretically depends on the underlying noise $b_n$, with $b_n$ being a
+% Brownian motion. Using the notation
 
-\begin{equation*}
-   \mathcal{B}_n := (b_1, b_2, \ldots, b_n), \quad \mathcal{P}_n := (p_1, p_2, \ldots, p_n)
-\end{equation*}
+% \begin{equation*}
+%   \mathcal{B}_n := (b_1, b_2, \ldots, b_n), \quad \mathcal{P}_n := (p_1, p_2, \ldots, p_n)
+% \end{equation*}
 
-we have
-\begin{equation}
-b_{0} = 0, \quad b_{n} \thicksim \mathcal{N} (b_{n-1} + \mu_{b}, \sigma_{b})
-\end{equation}
-\begin{equation}
-p_{n} = F(\mathcal{B}_n, W_{p})
-\end{equation}
+% we have
+% \begin{equation}
+% b_{0} = 0, \quad b_{n} \thicksim \mathcal{N} (b_{n-1} + \mu_{b}, \sigma_{b})
+% \end{equation}
+% \begin{equation}
+% p_{n} = F(\mathcal{B}_n, W_{p})
+% \end{equation}
 
-Based on Dima's paper again, the underlying noise $b_n$ can be expressed as a hysteresis operator depending on
-the observed prices $p_n$, i.e.,
-\begin{equation}
-b_n=G(\mathcal{P}_n, W_b)
-\end{equation}
+% Based on Dima's paper again, the underlying noise $b_n$ can be expressed as a hysteresis operator depending on
+% the observed prices $p_n$, i.e.,
+% \begin{equation}
+% b_n=G(\mathcal{P}_n, W_b)
+% \end{equation}
 
-\mytodo{This is very nice as long as F and G are Prandtl-Ishlinskii operators. However, if one explicitly adds N's strategy,
-G becomes Preisach and F is not Preisach anymore. It is not clear how well it can be approximated by compositions of
-plays and nonlinear functions}
-
-
-\subsection{Direct Learning}
-\label{sec:chapter3:direct_learning}
-We learn the parameters \(W_b, \mu_b, \sigma_b\) and the initial state \(p_0\) of the network \(G\) by maximizing
-the likelihood of \(\mathcal{P}\). Since \(\mathcal{P}\) is the determenistic function of a random variable
-$\mathcal{B}$, its probability density is given by
-
-\begin{equation}
-\begin{aligned}
-p(\mathcal{P}) &= p(p_1, p_2, ..., p_N) \\
-               &= p_b(b_1, b_2, ..., b_N) \left|\det \mathcal{J(P)}\right| \\
-               &= p_b(G(\mathcal{P}_1, W_b), G(\mathcal{P}_2, W_b), \ldots, G(\mathcal{P}_N, W_b)) \left|\det \mathcal{J(P)}\right|
-\end{aligned}
-\end{equation}
-
-where
-\begin{equation}
-\begin{aligned}
-p_b({\mathcal{B}}) &= \prod_{n=1}^{N} p_b(b_1, b_2, ..., b_N) \\
-                   &= \prod_{n=1}^{N} p_b(b_n|b_{n-1}) \\
-                   &= \prod_{n=1}^{N} \frac{1}{\sqrt{2 \pi} \sigma} \exp\left(-\frac{(b_{n}-b_{n-1}-\mu_{b})^2}{2 \sigma^2}\right)
-\end{aligned}
-\end{equation}
-is the probability distribution of \(\mathcal{B}\) and \(\mathcal{J(P)}\) is the Jacobian matrix. Recall that \(G\) has the
-causality property, hence \(\mathcal{J(P)}\) is a triangular matrix. Therefore, yield
-\begin{equation}
-\begin{aligned}
-p(\mathcal{P}) &= p_b(G(\mathcal{P}_1, W_b), G(\mathcal{P}_2, W_b), \ldots, G(\mathcal{P}_N, W_b)) \left|\det \mathcal{J(P)}\right| \\
-               &= \prod_{n=1}^{N} \frac{1}{\sqrt{2 \pi} \sigma} \exp\left(-\frac{(b_{n}-b_{n-1}-\mu_{b})^2}{2 \sigma^2}\right)
-                   \prod_{n=1}^{N} \left| \frac{\partial b_n}{\partial p_n} \right| \\
-               &= \prod_{n=1}^{N} \frac{1}{\sqrt{2 \pi} \sigma} \exp\left(-\frac{(b_{n}-b_{n-1}-\mu_{b})^2}{2 \sigma^2}\right) \left|\frac{\partial b_n}{\partial p_n}\right|
-\end{aligned}
-\end{equation}
-
-Thus, maximizing the log-likelihood of \(p(\mathcal{P})\) is equivalent to the following:
-\begin{equation}
-\begin{aligned}
-L = \ln p(\mathcal{P}) &\thicksim \sum_{n=1}^{N} \left(- \frac{(b_n-b_{n-1}-\mu_{b})^2}{2 \sigma_{b}^2} - \ln \sigma_{b} + \ln \left|\frac{\partial b_n}{\partial p_n}\right|\right) \\
-  &= - \frac{1}{2} \sum_{n=1}^{N} \left[\left(\frac{b_n - b_{n-1} - \mu_{b}}{\sigma_b} \right)^2 + 2 \ln \sigma_{b} - 2 \ln \left|\frac{\partial b_n}{\partial p_n}\right|\right]
-\end{aligned}
-\end{equation}
-It's also equivalent to minimize the loss function as following:
-\begin{equation}
-\begin{aligned}
-\min_{W_b, p_0} L &=& \min_{W_b, p_0} \sum_{n=1}^{N} \left[\left(\frac{b_n - b_{n-1} - \mu_{b}}{\sigma_b} \right)^2 - 2 \ln \left|\frac{\partial b_n}{\partial p_n}\right|\right] \\
-       &=& \min_{W_b, p_0} \sum_{n=1}^{N} \left[\left( b_n - b_{n-1} - \mu_{b}\right)^2 - 2 \sigma_{b}^2 \ln \left|\frac{\partial b_n}{\partial p_n}\right|\right]
-\end{aligned}
-\end{equation}
-
-From the target loss function, the only parameters we need to known is \(\mu_b\).
-
-Consider second part of loss function, \(\ln \frac{\partial b_{n}}{\partial p_{n}}\), we reformulate it to \(\ln \frac{\partial f_{j}}{\partial x_{j}} = \ln h_{j}\)
-
-\begin{eqnarray}
-\frac{ \partial \ln h_j}{\partial w^{k}} &=& \frac{1}{h_j} * \frac{\partial h_j} { \partial w^k}
-\end{eqnarray}
-
-\subsection{\mytodo{MSE and MLE}}
-\label{sec:org69ccd66}
-
-\begin{eqnarray}
-y &\thicksim& \mathcal{N} \left( y | G(x, w), \sigma^2 \right)
-\end{eqnarray}
-
-\begin{eqnarray}
-p(y) &=& \frac{1}{\sqrt{2 \pi} \sigma} \exp \left(-\frac{(y-G(x, w))^2}{\sigma^2} \right)
-\end{eqnarray}
-
-\begin{eqnarray}
-p(\mathcal{Y}) &=& p (y_1, y_2, ..., y_N) \\
-               &=& \prod_{i}^N p(y_i)
-\end{eqnarray}
-
-\begin{eqnarray}
-\ln p(\mathcal{Y}) &=& \sum_{i} \left( -\frac{1}{2}\ln 2 \pi - \ln \sigma - \frac{(y_i - G(x_i, w)^2}{\sigma^2} \right)
-\end{eqnarray}
-
-Assume \(z_i = f(y_i)\), we obtain
-\begin{eqnarray}
-p(z_i) = p(f(y_i)) \left(\frac{\partial f}{\partial y_i}\right)^{-1} f^{-1}(z_i)
-\end{eqnarray}
-\(\max (\mu, \sigma, w)\) s.t. \(p(z_i)\) is maximal
+% \mytodo{This is very nice as long as F and G are Prandtl-Ishlinskii operators. However, if one explicitly adds N's strategy,
+% G becomes Preisach and F is not Preisach anymore. It is not clear how well it can be approximated by compositions of
+% plays and nonlinear functions}
 
 
-\subsection{How to determine undetermined direction of random walk ?}
+% \subsection{Direct Learning}
+% \label{sec:chapter3:direct_learning}
+% We learn the parameters \(W_b, \mu_b, \sigma_b\) and the initial state \(p_0\) of the network \(G\) by maximizing
+% the likelihood of \(\mathcal{P}\). Since \(\mathcal{P}\) is the determenistic function of a random variable
+% $\mathcal{B}$, its probability density is given by
 
-\label{sec:org50e1a00}
-If external agents buy stocks from the market, then the total number of stocks in market decreases, leading to increasing the prices.
+% \begin{equation}
+% \begin{aligned}
+% p(\mathcal{P}) &= p(p_1, p_2, ..., p_N) \\
+%               &= p_b(b_1, b_2, ..., b_N) \left|\det \mathcal{J(P)}\right| \\
+%               &= p_b(G(\mathcal{P}_1, W_b), G(\mathcal{P}_2, W_b), \ldots, G(\mathcal{P}_N, W_b)) \left|\det \mathcal{J(P)}\right|
+% \end{aligned}
+% \end{equation}
 
-In other words, the amount of stocks in market decreases if price rises. And the amount of stocks increases if prices go down.
+% where
+% \begin{equation}
+% \begin{aligned}
+% p_b({\mathcal{B}}) &= \prod_{n=1}^{N} p_b(b_1, b_2, ..., b_N) \\
+%                   &= \prod_{n=1}^{N} p_b(b_n|b_{n-1}) \\
+%                   &= \prod_{n=1}^{N} \frac{1}{\sqrt{2 \pi} \sigma} \exp\left(-\frac{(b_{n}-b_{n-1}-\mu_{b})^2}{2 \sigma^2}\right)
+% \end{aligned}
+% \end{equation}
+% is the probability distribution of \(\mathcal{B}\) and \(\mathcal{J(P)}\) is the Jacobian matrix. Recall that \(G\) has the
+% causality property, hence \(\mathcal{J(P)}\) is a triangular matrix. Therefore, yield
+% \begin{equation}
+% \begin{aligned}
+% p(\mathcal{P}) &= p_b(G(\mathcal{P}_1, W_b), G(\mathcal{P}_2, W_b), \ldots, G(\mathcal{P}_N, W_b)) \left|\det \mathcal{J(P)}\right| \\
+%               &= \prod_{n=1}^{N} \frac{1}{\sqrt{2 \pi} \sigma} \exp\left(-\frac{(b_{n}-b_{n-1}-\mu_{b})^2}{2 \sigma^2}\right)
+%                   \prod_{n=1}^{N} \left| \frac{\partial b_n}{\partial p_n} \right| \\
+%               &= \prod_{n=1}^{N} \frac{1}{\sqrt{2 \pi} \sigma} \exp\left(-\frac{(b_{n}-b_{n-1}-\mu_{b})^2}{2 \sigma^2}\right) \left|\frac{\partial b_n}{\partial p_n}\right|
+% \end{aligned}
+% \end{equation}
 
-The root cause of amount changing in our assumption is the behavior of external agents.
-We model the behavior of external agents as markov chain(random walk).
+% Thus, maximizing the log-likelihood of \(p(\mathcal{P})\) is equivalent to the following:
+% \begin{equation}
+% \begin{aligned}
+% L = \ln p(\mathcal{P}) &\thicksim \sum_{n=1}^{N} \left(- \frac{(b_n-b_{n-1}-\mu_{b})^2}{2 \sigma_{b}^2} - \ln \sigma_{b} + \ln \left|\frac{\partial b_n}{\partial p_n}\right|\right) \\
+%   &= - \frac{1}{2} \sum_{n=1}^{N} \left[\left(\frac{b_n - b_{n-1} - \mu_{b}}{\sigma_b} \right)^2 + 2 \ln \sigma_{b} - 2 \ln \left|\frac{\partial b_n}{\partial p_n}\right|\right]
+% \end{aligned}
+% \end{equation}
+% It's also equivalent to minimize the loss function as following:
+% \begin{equation}
+% \begin{aligned}
+% \min_{W_b, p_0} L &=& \min_{W_b, p_0} \sum_{n=1}^{N} \left[\left(\frac{b_n - b_{n-1} - \mu_{b}}{\sigma_b} \right)^2 - 2 \ln \left|\frac{\partial b_n}{\partial p_n}\right|\right] \\
+%       &=& \min_{W_b, p_0} \sum_{n=1}^{N} \left[\left( b_n - b_{n-1} - \mu_{b}\right)^2 - 2 \sigma_{b}^2 \ln \left|\frac{\partial b_n}{\partial p_n}\right|\right]
+% \end{aligned}
+% \end{equation}
 
-Since we observe a series of prices in advance, we can determine the direction of random walk.
+% From the target loss function, the only parameters we need to known is \(\mu_b\).
+
+% Consider second part of loss function, \(\ln \frac{\partial b_{n}}{\partial p_{n}}\), we reformulate it to \(\ln \frac{\partial f_{j}}{\partial x_{j}} = \ln h_{j}\)
+
+% \begin{eqnarray}
+% \frac{ \partial \ln h_j}{\partial w^{k}} &=& \frac{1}{h_j} * \frac{\partial h_j} { \partial w^k}
+% \end{eqnarray}
+
+% \subsection{\mytodo{MSE and MLE}}
+% \label{sec:org69ccd66}
+
+% \begin{eqnarray}
+% y &\thicksim& \mathcal{N} \left( y | G(x, w), \sigma^2 \right)
+% \end{eqnarray}
+
+% \begin{eqnarray}
+% p(y) &=& \frac{1}{\sqrt{2 \pi} \sigma} \exp \left(-\frac{(y-G(x, w))^2}{\sigma^2} \right)
+% \end{eqnarray}
+
+% \begin{eqnarray}
+% p(\mathcal{Y}) &=& p (y_1, y_2, ..., y_N) \\
+%               &=& \prod_{i}^N p(y_i)
+% \end{eqnarray}
+
+% \begin{eqnarray}
+% \ln p(\mathcal{Y}) &=& \sum_{i} \left( -\frac{1}{2}\ln 2 \pi - \ln \sigma - \frac{(y_i - G(x_i, w)^2}{\sigma^2} \right)
+% \end{eqnarray}
+
+% Assume \(z_i = f(y_i)\), we obtain
+% \begin{eqnarray}
+% p(z_i) = p(f(y_i)) \left(\frac{\partial f}{\partial y_i}\right)^{-1} f^{-1}(z_i)
+% \end{eqnarray}
+% \(\max (\mu, \sigma, w)\) s.t. \(p(z_i)\) is maximal
+
+
+% \subsection{How to determine undetermined direction of random walk ?}
+
+% \label{sec:org50e1a00}
+% If external agents buy stocks from the market, then the total number of stocks in market decreases, leading to increasing the prices.
+
+% In other words, the amount of stocks in market decreases if price rises. And the amount of stocks increases if prices go down.
+
+% The root cause of amount changing in our assumption is the behavior of external agents.
+% We model the behavior of external agents as markov chain(random walk).
+
+% Since we observe a series of prices in advance, we can determine the direction of random walk.

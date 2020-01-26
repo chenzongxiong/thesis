@@ -20,7 +20,7 @@
 % 5,3,4,7
 % \end{filecontents*}
 
-\pgfplotstableread[col sep=comma]{mu-0-sigma-110.0-points-2000.csv}\mydata
+\pgfplotstableread[col sep=comma]{analysis-hnn-lstm-pavel-sequence.csv}\mydata
 % \pgfplotstabletypeset[
 %     columns               ={\#noise,\#price,\#kn,\#walk},
 %     % columns/f/.style      ={column name=$f (\hertz)$,sci},
@@ -47,25 +47,23 @@
 \begin{groupplot}[    
     group style = {group size = 1 by 4},
      height=5cm, width=20cm,
-     xmin=0, xmax=100,
+     xmin=50, xmax=200,
      % horizontal sep=2cm, 
      % vertical sep=5cm
     % xticklabels from table = {\Data}{Day}, xtick = {1,...,19},
     % xticklabel style = {rotate = 90, xshift = -0.8ex, anchor = mid east}
+    legend pos=north west
     ]
-    \nextgroupplot[ylabel=Bn]
-    \addplot[color=red,mark=*] table[x index={6}, y index={3}]{\mydata}; % random walk
-    \nextgroupplot[ylabel=price]
-    \addplot[color=blue,mark=*] table[x index={6}, y index={2}]{\mydata}; % price
-    \nextgroupplot[ylabel=stocks]
-    \addplot[color=black,mark=*] table[x index={6}, y index={0}]{\mydata}; % stocks
-    \nextgroupplot[ylabel=external agents]
-    % \addplot[green] table[x index={6}, y index={1}]{\mydata}; % noise
-    \foreach \t in \mydata {
-    }
-    % \nextgroupplot[ylabel=external agents]
+    \nextgroupplot[ylabel=outputs]
+    \addplot[color=blue,mark=.,thick] table[x index={0}, y index={2}]{\mydata}; % ground truth
+    \addplot[color=red,dashed, mark=.,thick] table[x index={0}, y index={3}]{\mydata}; % lstm results
+    \addplot[color=green,dashdotted, mark=.,thick] table[x index={0}, y index={9}]{\mydata}; % hnn results
+    \addlegendentry{ground truth}
+    \addlegendentry{LSTM predictions}
+    \addlegendentry{HNN predictions}
 
-    
+    % \nextgroupplot[ylabel=outputs]
+    % \addplot[color=blue,mark=.] table[x index={0}, y index={2}]{\mydata}; % ground truth
 \end{groupplot}
 \end{tikzpicture}
 \end{document}

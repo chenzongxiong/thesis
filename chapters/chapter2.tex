@@ -1,133 +1,140 @@
-\chapter{Financial Market Model\label{cha:chapter2}}
-% In this chapter, it presents two different typesof agents in the financial market and shows how to generate synthetic data for trainingand test.  
-In this chapter, we show our financial market model based on hysteresis operators and provide a practical way to generate synthetic data to simulate this model.
-\section{Demand/Supply price formation\label{sec:chapter3:demand-supply-price-formation}}
-In this model, we assume that the stock exchange accommodates two types of agents, which we call \textit{D agent} and \textit{N agent} and describe below. We assume that the time takes values $n=0, 1, 2, , \ldots$, and denote the price at time $n$ by $x_n$. By definition, $x_n$ is the price of last transaction at time $n$. We will see below that demand equals supply at times $n$, but between any two consecutive times $n-1$ and $n$, this need not be the case and there may occur many transactions until demand will have become supply.
+\chapter{Hysteretic neural networks\label{cha:chapter2}}
 
-\begin{assumption}\label{assumption:chapter3:strategy-of-agentD}
-  (Strategy of agents D\citep{dima2014}). Agents D keep track of a trend. They buy stocks iff the price goes up and sell stocks iff the price goes down. The total amount of stocks that are in possession of all the agents D can be described as a Prandtl-Ishlinksii operator\lackref{} whose input is the price $x$. We denote this operator by
-  $$P_D(x)$$
-\end{assumption}
-\begin{assumption}\label{assumption:chapter3:strategy-of-agentN}
-  (Strategy of agents N). The strategy of each of the agents N is characterized by a non-ideal relay\lackref{} with two fixed threshold $x_1 < x_2$ (different for different agents). The relay is in state 0 if the price higher than $x_2$ and in state 1 if the price is lower than $x_1$. The agent buys one stock whenever his relay switches from 0 to 1 and sells one stock whenever his relay switches from 1 to 0. The total amount of stocks that are in possession of all the agents N can be described as a Preisach operator\lackref{} whose input is the price $x$. We denote this operator by
-  $$P_N(x)$$
-\end{assumption}
+% section{Hysteretic neural networks\label{sec:chapter2:hnn}}
+\section{Play and Prandtl-Ishlinskii networks\label{sec:chapter2:play-and-pi-networks}}
 
-\mytodo{add assumption of agents E}
+Consider $K > 0$ play operators. Each of them maps an initial state $p_{0}^{k} \in \mathbb{R} $ and an input sequence $x_1, x_2, \ldots$ to an output sequence $p_{1}^{k}, p_{2}^{k}, \ldots \ $, i.e.,
 
-The following lemma is direct consequence of the definition of the operators $P_D(x)$ and $P_N(x)$.
+\begin{equation*}
+  p_{0}^{k}, (x_1, x_2, \ldots) \mapsto (p_{1}^{k}, p_{2}^{k}, \ldots), k = 1, \ldots, K
+\end{equation*}
 
-\begin{lemma}\label{lemma:chapter3:reaction-to-price-change}
-  \begin{enumerate}
-    \item If $x$ is increasing, the $P_D(x)$ is increasing (agents D buy) and $P_N(x)$ is decreasing (agents N sell). 
-    \item If $x$ is decreasing, the $P_D(x)$ is decreasing (agents D sell) and $P_N(x)$ is increasing (agents N buy).
-  \end{enumerate}
-\end{lemma}
+The $k$th play operator is given by:
 
-\begin{remark}\label{remark:chapter3:1}
-  Since $P_D(x)$ and $P_N(x)$ are not functions but operators, the monotone curves described in \ref{lemma:chapter3:reaction-to-price-change} are not defined only by the current value of $x$, but depend on its prehistory.
-\end{remark}
+\begin{equation}\label{eqn:chapter2:play-operator}
+  p_{n}^{k} = G(x_{n}, p_{n-1}^{k}, w^{k}) := p_{n-1}^{k} + \Phi(w^{k} x_{n} - p_{n-1}^{k}), n = 1, 2, \ldots, N
+\end{equation}
 
-Denote by $b_n$ the total amount of stocks that are in possession of all the agents D and N at time $n$. We will see below in \ref{assumption:chapter3:transitions-between-stabilized-prices}
+where $w^{k}$ are parameters and
 
-\begin{assumption}\label{assumption:chapter3:demand/supply-price-formation}
-  At each moment $n$, the price $x_n$ is a stable solution of equation
-  \begin{equation}\label{eqn:chapter3:demand-supply-price-formation}
-    P_D(x_n) + P_N(x_n) = b_n
-  \end{equation}
-  where the stability notion is explained in \myfigref{xxxx}, We will say that $x_n$ is a stabilized price.
-\end{assumption}
+\begin{equation}\label{eqn:chapter2:phi}
+  \begin{aligned}
+    \Phi(x) =
+    \begin{cases}
+      x - 0.5, & x > 0.5 \\
+      0,               & -0.5 \le x \le 0.5 \\
+      x + 0.5, & x < 0.5
+    \end{cases}
+  \end{aligned}
+\end{equation}
 
-In order to explain how a stabilized price can change stabilize to the next value, we make the next assumption.
+See \myfigref{fig:chapter2:phi}
 
-\begin{assumption}\label{assumption:chapter3:transitions-between-stabilized-prices}
-  Suppose $x_{n-1}$ is a stabilized price as time $n-1$. In particular, it is a stable solution of equation
-  \begin{equation}\label{eqn:chapter3:stable-price-eqn}
-    P_D(x_{n-1}) + P_N(x_{n-1}) = b_{n-1}
-  \end{equation}
-  We assume that between time moments $n-1$ and $n$, some external agents E buy or sell some stocks. As a result, the total amount of stocks that is in possession of agents D and N becomes $b_n$. Moreover, we assume that external agents do not stay at the stock exchange, i.e., the operators (thir densities) $P_D(x)$ and $P_N(x)$ do not change in time.
-  If $b_n \le b_{n-1}$, then external agents E buy $|b_{n}-b_{n-1}|$ stocks, which increases the price. As as result, agents D also buy. All the stocks bought by agents E and D are sold by agnets N. This leads to the increase of the price to a new value $x_n^1$, where $x_n^1$ is the smallest solution of the equation
-  \begin{equation}\label{eqn:chapter3:new-stable-price-eqn}
-    P_D(x_n^1) + P_N(x_n^1) = b_n
-  \end{equation}
-  satisfying the inequality
-  \begin{equation}
-    x_n^1 \ge x_{n-1}
-  \end{equation}
+\begin{figure}[htb]
+    \centering
+    \subfloat[$\Phi(x)$]{
+        \input{./tikz/phi}
+        \label{fig:chapter2:phi}
+    }
+    \subfloat[$\text{Play(x)}$]{
+        \input{./tikz/play-by-phi}
+        \label{fig:chapter2:play-by-phi}
+    }
+    \caption{hello}
+\end{figure}
 
-  Note that small values $|b_n - b_{n-1}|$ may correspond to small change of the price as in \myfigref{xxxx} or large changes as in \myfigref{xxxx}. In the latter case, the price jumps up due to the fold bifurcation\lackref{}.
+It can be represented as a recurrent neural network, see Fig. \ref{fig:chapter2:phi}. Note that in such a form the network is not feed-forward.
+One can unfold it to make it feed-forward, see Fig. \ref{fig:chapter2:play-operator}
 
-  If $x_n^1$ is a stable of equation \ref{eqn:chapter3:new-stable-price-eqn}, the, by definition, it coincides with the new stabilized price:
-  \begin{equation}\label{eqn:new-price}
-    x_n := x_n^1
-  \end{equation}
-  Otherwise, the price makes several jumps taking semi-stable values $x_n^2, \ldots, x_n^{m-1}$ and a stable value $x_n^m$ (\textbf{hopefully with a finite} m) such that
-  \begin{equation}
-    x_{n}^1 > x_{n}^2, \quad x_{n}^3 > x_{n}^2, \quad x_{n}^3 > x_{n}^4,\quad x_{n}^{5} > x_{n}^4, \ldots
-  \end{equation}
-  By definition, we set
-  \begin{equation}
-    x_n := x_n^m
-  \end{equation}
-  Analogously, the price will leave the stable value $x_{n-1}$ if $b_n > b_{n-1}$. In this case external agents E sell $b_n - b_{n-1}$ stocks, which decreases the price. As a result, agents D also sell. All the stocks sold by agents E and D are bought by agents N.
-\end{assumption}
+\begin{definition}
+We call this network a \textsl{play network}. If there are \textsl{m} elements in the sequence ${x_n}$, we say the unfolded network is \textsl{m-unfolded}
+\end{definition}
 
-  The last assumption concerns the strategy of \textit{external agents E}.
-  \begin{assumption}\label{assumption:chapter2:b_sequence}
-    $b_n$ is a Markov chain. For example, $b_n \sim \mathcal{N}(b_{n-1} + \mu, \sigma)$ with some mean $\mu$ and standard deviation $\sigma > 0$
-  \end{assumption}
-
-  \begin{remark}\label{remark:chapter3:TODO}
-    Set
-    \begin{equation}
-      G(x) := P_D(x) + P_N(x)
-    \end{equation}
-  \end{remark}
-
-  Then, formally, the relationship between the price $p_n$ and the noise $b_n$ is the same as \citet{dima2014}'s model, cf.\lackref{} \myformularef{eqn:chapter1:dima-model-assumption} and \myformularef{eqn:chapter3:demand-supply-price-formation}. \ref{xxx} Though in our second model, there is a number of further restrictions on admissible values of $p_n$ due to Assumption \ref{assumption:chapter3:transitions-between-stabilized-prices}
-
-\begin{remark}\label{remark:chapter3:practical-analysis}
-\begin{itemize}
-% \item agents N/agents D 持有股票和没有持有股票的数量应该差不多. 如果大量agents N 持有股票，只有少数的agent N 没有持有股票，那么如果价格升高，大量的 agents D 打算卖出股票，而且数量远大于agents N 没有持有股票的数量，导致市场上有多余的股票，即使价格无论升的多高，都无法消耗完。根据Assumption \ref{assumpation:chapter2:b_sequence}, 理论上agents E 能够消耗掉所有agent N 没有消耗完的股票。 但是由于 $b_n - b_{n-1}$ 属于高斯分布，在实际工程实现的时候，如果 agents E 需要消耗的股票远大于 3 $\sigma$, 那我们很难保证一次性采样成功。反之，亦是如此。
-
-% \item 如果大量的agents N 有相同的 threshold, 那就意味这在某个股票价格，会有大量的agents N会选择买入或者卖出股票，如果此时 agents D的threshold分布相对均匀，就会出现完全 agents D无法消耗市场内剩余的股票，则会出现 上面出现的情况。
-
-\end{itemize}
-\end{remark}
-
-\section{Practical approaches}
-\mytodo{explain why we should we this approach to intialize our market model}
-
-\subsection{Agents N}
-We should choose the following parameters
-\begin{itemize}
-    \item $\delta$ - maximum amount of assets which an agent can spend;
-    \item $\alpha \in \mathbb{R} $ - the step of the strategy (width of the relay);
-    \item $\alpha_{0} \in (-\alpha, +\alpha)$ - the middle layer of the strategy;
-    \item $n \in \mathbb{N}_0$ - number of layers above middle layer;
-    \item $L = L{\delta}$ - number of real agents with this strategy.
-\end{itemize}
-
-\begin{itemize}
-    \item 
-\end{itemize}
-First we should choose $\delta$. We fix $\delta_0 > 0, \hat{\delta} > 0, k \in \mathbb{N}$ and consider $\delta_0, \delta_1 = \delta_0 + \hat{\delta}, \ldots, \delta_{k} = \delta_0 + k \hat{\delta}$. So, we just consider finite sequence of $\delta_i$ with fixed step. For each $\delta_{i}$ we should find $L(\delta_{i})$. For this purpose we need so-called gamma distribution\lackref{}. We take one with parameters, $k, \theta, C$. We set $L(\delta_{i}) = C \Gamma_1{(k, \theta)}(\delta_i)$. 
-Each real agent with strategy corresponding to parameters $\alpha, \alpha_0, n$ s represented
-by $2n$ relays with thresholds $\big(\alpha_0 - n \alpha, \alpha_0 - (n-1) \alpha \big),\big(\alpha_0 - (n-1) \alpha, \alpha_0 - (n-2) \alpha \big), \ldots, \big(\alpha_0 + (n-1) \alpha, \alpha_0 + n \alpha \big)$(at these layers agent buy/sell his stock). At the
-beginning agent have $n$ stocks if $\alpha_0 \ge 0$ and $n-1$ otherwise.
-
-We choose $\alpha$ also using gamma distribution $\Gamma_2$. $\alpha_0$ we choose using the uniform distribution between $-\alpha$ and $\alpha$. $n$ we find as a root of the equation 
-
-$$\delta = \frac{e^{-\alpha}(1-e^{-\alpha n})}{1-e^{-\alpha}}$$
-
-\subsection{Agents D}
-We should choose parameter $\beta$ (when price rise/drop $\beta$ points we buy/sell) and decide whether agents have stock at the very beginning. We consider sequence $\beta_i$ with fixed step. We also fix gamma distribution $\Gamma_3$ with some parameters and multiply it by number $B$. We want to give the same amount of stocks for \textit{agents N} and \textit{agents D}, so B we can found from the equation
-$$\sum_{\alpha, \delta} n(\alpha, \delta) L(\delta) = \sum D_{\textbf{1}}(\beta_i) = B \sum_i \Gamma_3(\beta_i)$$
-where $D_{\textbf{1}}(\beta_i)$ is number of agents D corresponded to $\beta_i$ with stock at the very beginning. We also assume that $D_{\textbf{0}}(\beta_i) = D_{\textbf{1}}(\beta_i)$ where $D_{\textbf{0}}(\beta_i)$ is the number of agents D corresponded to $\beta_i$ without stock at the very beginning.
+For example, the network in Fig. \ref{fig:chapter2:unfolded-nn} is 2-unfolded.
 
 
 
-\section{xxxx}
-\mytodo{how to generate dataset, why does it make sense to use these synthesis data
-input single, 0.3*np.sin(1.3 t) + N(0, 8)
-input signal 1.0*cos(0.1t) + N(0, 2) or N(0,1)}
+\section{Training a PI network\label{sec:chapter2:training-pi-network}}
+Assume we are given an input sequence $x_1, x_2, \ldots, x_N$ and an output sequence $q_1, q_2, \ldots, q_N$. We perform the following steps in cycle until convergence.
+
+\begin{enumerate}
+\item Preparing initial states for the $m$-unfolded network: Fix a vector of initial states $P_0$ and all the weights (denoted by $W$). For each $k=1, \ldots, K$, we calculate recursively $p_{1}^{k}, p_{2}^{k}, \ldots, p_{N}^{k}$ by formula \ref{eqn:chapter2:play-operator}. We denote the corresponding (intermediate) states of the \textbf{PI} operator by
+  \begin{equation*}
+    P_n = (p_{n}^{1}, \ldots, p_{n}^{K}), n = 1, \ldots, N.
+  \end{equation*}
+\item Preparing inputs for the $m$-unfolded network: We fix $m$ and group the input sequence into $m$-tuples:
+  \begin{equation*}
+    \mathbf{x_1} := (x_1, \ldots, x_m), \quad \mathbf{x_2} := (x_2, \ldots, x_{m+1}), \quad \ldots,
+  \end{equation*}
+  which gives $M := N-m$ tuples $\mathbf{x_1}, \ldots, \mathbf{x_M}$. Next we form a new set of inputs for the $m$-unfolded network, attaching the vectors of intermediate states:
+  \begin{equation*}
+    \mathbf{y_1} := (P_0, \mathbf{x_1}), \quad \mathbf{y_2} := (P_1, \mathbf{x_2}), \quad \ldots,
+  \end{equation*}
+
+\item Training the $m$-unfolded network: We train by stochastic gradient descent the feed-forward $m$-unfolded \textbf{PI} network
+  \begin{equation*}
+    \mathbb{R}^{K} \times \mathbb{R}^{m} \ni \mathbf{y} \mapsto F_{m}(\mathbf{y}) \in \mathbb{R}^m
+  \end{equation*}
+  with the inputs $\mathbf{y_1}, \ldots, \mathbf{y_M}$ and the true targets $\mathbf{q_1}, \ldots, \mathbf{q_M}$, where
+  \begin{equation*}
+    \begin{aligned}
+      \mathbf{q_1} = (q_1, \ldots, q_m), \quad 
+      \mathbf{q_2} = (q_2,\ldots, q_{m+1}), \quad 
+      \ldots
+    \end{aligned}
+  \end{equation*}
+
+% \item We update the initial state $P_0$:
+%   \begin{equation*}
+%     P_{0}^{new} := P_{0} - \nabla_{P_0} (F_m(P_0, \mathbf{x_1}) - \mathbf{q_1})^2
+%   \end{equation*}
+\item Updating weights $W$ and initial state $P_0$ 
+  \begin{eqnarray*}
+    W^{new} := W - \nabla_{W} (F_m(P_0, \mathbf{x_1}) - \mathbf{q_1})^2 \\
+    % P_{0}^{new} := P_{0} - \nabla_{P_0}(F_m(P_0, \mathbf{x_1}) - \mathbf{q_1})^2
+  \end{eqnarray*}
+% \item \mytodo{TODO: Training state}
+% \item \todo{TODO: Training weights}
+
+\end{enumerate}
+
+% \subsection{Analysis of $p_0$}
+% For $k>0$
+% \begin{equation}
+%   \begin{aligned}
+%     \Phi(x) =
+%     \begin{cases}
+%       k(x - \frac{1}{2}), & x \in [\frac{1}{2}, +\infty) \\
+%       0,               &  x \in (-\frac{1}{2}, \frac{1}{2}) \\
+%       k(x + \frac{1}{2}), & x \in (-\infty, \frac{1}{2}]
+%     \end{cases}
+%   \end{aligned}
+% \end{equation}
+
+% \begin{eqnarray*}
+% p_n &=& \Phi(w x_{n} - p_{n-1})- p_{n-1} \\
+% \frac{\partial p_{n}}{\partial p_{n-1}} &=& 1- \frac{\partial \Phi(u_n)}{\partial u_n}\Bigr|_{\substack{u_n=w x_{n} - p_{n-1}}} 
+% \end{eqnarray*}
+
+% \begin{equation}\label{eqn:chapter2:derviation-phi}
+%   \begin{aligned}
+%     \frac{\partial \Phi(u_i)}{\partial u_i} =
+%     \begin{cases}
+%       k, & p_{n-1} \in (-\infty, w x_{n}-\frac{1}{2}] \cup [w x_{n}+\frac{1}{2}, +\infty) \\
+%       0, &  p_{n-1} \in (w x_{n}-\frac{1}{2}, w x_{n}+\frac{1}{2})
+%     \end{cases}
+%   \end{aligned}
+% \end{equation}
+
+% \begin{equation}\label{eqn:chapter2:dynamic-p0}
+% \frac{\partial p_{n}}{\partial p_0}= \prod_{i=1}^{n} \frac{\partial p_{i}}{\partial p_{i-1}} = \prod_{i=1}^{n} \left(1- \frac{\partial \Phi(u_i)}{\partial u_i}\Bigr|_{\substack{u_i=w x_{i} - p_{i-1}}}\right)
+% \end{equation}
+
+
+% Combining \ref{eqn:chapter2:derviation-phi} and \ref{eqn:chapter2:dynamic-p0}, if $n$ is sufficiently large, we conclude that 
+% \begin{enumerate}
+%     \item $k \in (0, 2]$, gradient on $p_0$ vanishes
+%     \item $k \in (2, +\infty)$, gradient on $p_0$ explodes.
+% \end{enumerate}
+
+% Solution: using batch training method may avoid gradient vanishing and exploding, however, the batch size cannot be too large. 
