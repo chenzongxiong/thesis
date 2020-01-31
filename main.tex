@@ -34,9 +34,16 @@
 \newtheorem{remark}{Remark}[section]
 \pgfplotsset{compat=1.11}
 
-\usepgfplotslibrary{groupplots}
+% \usepgfplotslibrary{groupplots}
 \usepackage{pgfplotstable}
 \usepackage{booktabs}      % <-- required in preamble
+\usepackage{xstring}
+\usepackage{catchfile}
+
+\usepackage{pgfplotstable}
+% \usepackage{pgfplotstable} % <-- required in preamble
+\usepackage{booktabs}      % <-- required in preamble
+\usepackage{tikz}
 \usepackage{xstring}
 \usepackage{catchfile}
 
@@ -62,6 +69,10 @@
 \newcommand\mypaper[1]{\textcolor{blue}{PAPER #1}}
 \newcommand\myfigref[1]{\Cref{#1}}
 \newcommand\myformularef[1]{(\ref{#1})}
+\newcommand\myremarkref[1]{\textbf{Remark \ref{#1}}}
+\newcommand\myassumptionref[1]{\textbf{Assumption \ref{#1}}}
+\newcommand\mychapterref[1]{Chapter \ref{#1}}
+\newcommand\mysectionref[1]{Section \ref{#1}}
 
 \begin{document}
 % ---------------------------------------------------------------
@@ -101,9 +112,9 @@
 \mainmatter % comment single chapters for faster compilation
 
     \input{./chapters/chapter1}
-    \input{./chapters/chapter2}
-    \input{./chapters/chapter3}
-    \input{./chapters/chapter4}
+    % \input{./chapters/chapter2}
+    % \input{./chapters/chapter3}
+    % \input{./chapters/chapter4}
     % \input{./chapters/chapter5}
     % \input{./chapters/chapter6}
     % \input{./chapters/chapter7}

@@ -8,11 +8,14 @@ Consider $K > 0$ play operators. Each of them maps an initial state $p_{0}^{k} \
 \begin{equation*}
   p_{0}^{k}, (x_1, x_2, \ldots) \mapsto (p_{1}^{k}, p_{2}^{k}, \ldots), k = 1, \ldots, K
 \end{equation*}
-
 The $k$th play operator is given by:
 
+% \begin{equation}\label{eqn:chapter2:play-operator}
+%   p_{n}^{k} = G(x_{n}, p_{n-1}^{k}, w^{k}) := p_{n-1}^{k} + \Phi(w^{k} x_{n} - p_{n-1}^{k}), n = 1, 2, \ldots, N
+% \end{equation}
+
 \begin{equation}\label{eqn:chapter2:play-operator}
-  p_{n}^{k} = G(x_{n}, p_{n-1}^{k}, w^{k}) := p_{n-1}^{k} + \Phi(w^{k} x_{n} - p_{n-1}^{k}), n = 1, 2, \ldots, N
+  p_{n}^{k} := p_{n-1}^{k} + \Phi(w^{k} x_{n} - p_{n-1}^{k}), n = 1, 2, \ldots, N
 \end{equation}
 
 where $w^{k}$ are parameters and

@@ -3,7 +3,7 @@
 \documentclass[border=10pt]{standalone}
 \usepackage{pgfplots}
 % \usepackage{filecontents}
-\usepgfplotslibrary{groupplots}
+% \usepgfplotslibrary{groupplots}
 \usepackage{pgfplotstable}
 % \usepackage{pgfplotstable} % <-- required in preamble
 \usepackage{booktabs}      % <-- required in preamble
@@ -16,20 +16,21 @@
 
 
 \begin{tikzpicture}
-\begin{groupplot}[    
-    group style = {group size = 1 by 4},
+\begin{axis}[    
+    % group style = {group size = 1 by 4},
      height=5cm, width=20cm,
      xmin=50, xmax=200,
      ymax=20,
-    legend pos=north west
+     legend pos=north west,
+     xlabel=\large{time steps, n},
+     ylabel=\large{outputs}
     ]
-    \nextgroupplot[ylabel=outputs]
     \addplot[color=blue,mark=.,thick] table[x index={0}, y index={2}]{\mydata}; % ground truth
     \addplot[color=red,dashed, mark=.,thick] table[x index={0}, y index={3}]{\mydata}; % lstm results
     \addplot[color=green,dashdotted, mark=.,thick] table[x index={0}, y index={4}]{\mydata}; % hnn results
     \addlegendentry{ground truth}
     \addlegendentry{LSTM predictions}
     \addlegendentry{HNN predictions}
-\end{groupplot}
+\end{axis}
 \end{tikzpicture}
 \end{document}

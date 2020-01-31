@@ -113,19 +113,6 @@ Consider second part of loss function, \(\ln \frac{\partial b_{n}}{\partial p_{n
 % \(\max (\mu, \sigma, w)\) s.t. \(p(z_i)\) is maximal
 
 
-\section{How to determine undetermined direction of random walk ?}
-
-\label{sec:org50e1a00}
-If external agents buy stocks from the market, then the total number of stocks in market decreases, leading to increasing the prices.
-
-In other words, the amount of stocks in market decreases if price rises. And the amount of stocks increases if prices go down.
-
-The root cause of amount changing in our assumption is the behavior of external agents.
-We model the behavior of external agents as markov chain(random walk).
-
-Since we observe a series of prices in advance, we can determine the direction of random walk.
-
-
 
 \section{Gradient of networks}\label{sec:chapter4:gradient-networks}
 First we only consider \textbf{one} generalized play
@@ -204,4 +191,19 @@ our derivation is:
                = \frac{1}{P} \sum_{k=1}^{P} \frac{\partial {y_{j}^{k}}}{\partial {p_{j}^{k}}} \frac{\partial {p_{j}^{k}}}{\partial {x_{j}}} \\
                = \frac{1}{P} \sum_{k=1}^{P}  \sum_{i=1}^{S} \tilde{\theta_{i}^{k}} \theta_{i}^{k} w^{k} \frac{\partial f(z_{j}^{k})}{\partial z_{j}^{k}} \frac{\partial{\Phi(\sigma_{j}^{k})}}{\partial{\sigma_{j}^{k}}}
 \end{equation}
+
+\section{\mytodo{analysis $\sigma$ is corresponded to scale only, it won't affect our final predictions}}
+
+\section{How to determine undetermined direction of random walk ?}
+
+\label{sec:org50e1a00}
+If external agents buy stocks from the market, then the total number of stocks in market decreases, leading to increasing the prices.
+
+In other words, the amount of stocks in market decreases if price rises. And the amount of stocks increases if prices go down.
+
+The root cause of amount changing in our assumption is the behavior of external agents.
+We model the behavior of external agents as markov chain(random walk).
+
+Since we observe a series of prices in advance, we can determine the direction of random walk.
+
 
