@@ -1,0 +1,137 @@
+% http://pgfplots.sourceforge.net/gallery.html
+% https://tex.stackexchange.com/questions/120441/plot-the-probability-density-function-of-the-gamma-distribution
+\documentclass[border=5pt]{standalone}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+    % \pgfplotsset{
+    %     % use this `compat' level or higher to position the bars in one group
+    %     % next to each other
+    %     compat=1.16,
+    % }
+    % % load the data table ...
+    % \pgfplotstableread[col sep=comma]{virtual-agentn-distribution.csv}{\loadedtable}
+        % and store the number of columns in `\NoOfCols'
+        % (minus 1 because counting in `\foreach' starts with zero
+        %\pgfplotstablegetcolsof{\loadedtable}
+        % \pgfmathtruncatemacro{\NoOfCols}{\pgfplotsretval-1}
+        
+        
+        
+\begin{filecontents}{data.csv}
+2.0,1
+2.5,2
+3.0,3
+3.5,6
+4.0,10
+4.5,13
+5.0,17
+5.5,20
+6.0,22
+6.5,23
+7.0,24
+7.5,23
+8.0,22
+8.5,21
+9.0,19
+9.5,17
+10.0,14
+10.5,12
+11.0,10
+11.5,9
+12.0,7
+12.5,6
+13.0,5
+13.5,4
+14.0,3
+14.5,2
+15.0,2
+15.5,1
+16.0,1
+16.5,1
+17.0,1
+\end{filecontents}    
+% \pgfplotstableread[col sep=comma]{virtual-agentn-distribution.csv}{\loadedtable}
+\pgfplotstableread[col sep=comma]{data.csv}{\loadedtable}
+
+\usepackage{pst-func}
+\usepackage{auto-pst-pdf}
+
+\begin{document}
+\begin{tikzpicture}[ declare function={gamma(\z)=
+    (2.506628274631*sqrt(1/\z) + 0.20888568*(1/\z)^(1.5) + 0.00870357*(1/\z)^(2.5) - (174.2106599*(1/\z)^(3.5))/25920 - (715.6423511*(1/\z)^(4.5))/1244160)*exp((-ln(1/\z)-1)*\z);},
+    declare function={gammapdf(\x,\k,\theta) = \x^(\k-1)*exp(-\x/\theta) / (\theta^\k*gamma(\k+1)/\k);}
+]
+    \begin{axis}[
+        % adjust the `width' a bit by keeping the default `height'
+        width=2*\axisdefaultwidth,
+        height=\axisdefaultheight,
+        % set appropriate `ymax' value so the `nodes near coords' fit to the plot
+        % (adjusting the `ymin' value is just to make it look a little bit better)
+        ymin=0,
+        ymax=25,
+        % there should be no gap between the bars in one group
+        ybar=0pt,
+        xlabel=blance,
+        ylabel={\# Real agents N},
+        % use data from the table for the xticklabels
+        xtick=data,
+        xticklabel style={font=\tiny, xshift=0.3ex},
+        % xticklabels from table={\loadedtable}{COUNT},
+        % to start the bars from the bottom edge of the plot
+        % (otherwise they would start from 10^0
+        %  borrowed from <http://tex.stackexchange.com/a/86688/95441)
+        % log origin=infty,
+        % adjust the size of the bars so they don't overlap
+        % (you can play with the numerator to change the gap between the groups)
+        bar width=0.5,
+        % enlarge the x limits so all of the bars are shown
+        % (play with the value to adjust the gap on the sides of the plot)
+        % enlarge x limits={abs=0.6},
+        % and position the legend outside of the plot to not overlap with the data
+        % legend pos=outer north east,
+        % add `nodes near coords'
+        nodes near coords={
+            % because internally PGFPlots works with floating point numbers, we
+            % change them to fixed point numbers
+            % \pgfkeys{
+            %     /pgf/fpu=true,
+            %     /pgf/fpu/output format=fixed,
+            % }
+            %
+            % % check if numbers are greater than 1000 and if so, divide them by
+            % % 1000 to convert them from ms to s scale
+            % \pgfmathparse{
+            %     ifthenelse(
+            %         \pgfplotspointmeta < 1000,
+            %         \pgfplotspointmeta,
+            %         \pgfplotspointmeta/1000
+            %     )
+            % }%
+            % % to now decide which of the two cases we have, we compare the
+            % % point meta value, but because `\ifnum' compares integers, we first
+            % % have to convert the fixed number to an integer
+            %     \pgfmathtruncatemacro{\Y}{\pgfplotspointmeta}%
+            % \ifnum\Y<1000
+            %     \pgfmathprintnumber{\pgfmathresult}
+            % \else
+            %     \pgfmathprintnumber{\pgfmathresult}
+            % \fi
+        },
+        % set the style of the `nodes near coords'
+        % nodes near coords style={
+        %     font=\tiny,
+        %     rotate=90,
+        %     anchor=west,
+        % },
+        % as basis for the `nodes near coords' use the raw y values
+        % point meta=rawy,
+    ]
+        {
+             \addplot table[x index={0}, y index={1}]{\loadedtable};
+             \addplot [smooth, domain=0:20, red] {160*gammapdf(x,8,1.0)};
+             \addlegendentry{Real agents N distribution}
+             \addlegendentry{$\frac{x^{k-1} e^{-x/\theta} }{\theta^{k}\Gamma(k)}, k=8, \theta=1$}
+        }
+    \end{axis}
+\end{tikzpicture}
+\end{document}
