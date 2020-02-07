@@ -1,5 +1,5 @@
 \chapter{Financial Market Model\label{cha:chapter3}}
-In this chapter, we show our financial market model based on hysteresis operators and provide a practical way to generate synthetic data to simulate this model.
+\mytodo{In this chapter, we show our financial market model based on hysteresis operators and provide a practical way to generate synthetic data to simulate this model.}
 
 \section{Demand/Supply price formation\label{sec:chapter3:demand-supply-price-formation}}
 In this model, we assume that the stock exchange accommodates two types of agents, which we call \textit{agents D} and \textit{agents N} and describe below. We assume that the time takes values $n=0, 1, 2, , \ldots$, and denote the price at time $n$ by $x_n$. By definition, $x_n$ is the price of last transaction at time $n$. We will see below that demand equals supply at times $n$, but between any two consecutive times $n-1$ and $n$, this need not be the case and there may occur many transactions until demand will have become supply.
@@ -149,6 +149,26 @@ where $D_{\textbf{1}}(\beta_i)$ is number of agents D corresponded to $\beta_i$ 
 \mytodo{add distribution of virtual agents D} \\
 \mytodo{add distribution of virtual agents N to show it follows gamma distribution} \\
 \mytodo{add plot of alpha to show it follows gamma distribution} \\
+\mytodo{show that both agents N and D taking part in the simulation}
+\begin{figure}
+    \centering
+    \subfloat[]{
+        \includegraphics[width=\textwidth]{market-real-agents-n-distribution}
+    }
+    \subfloat[]{
+            \includegraphics[width=\textwidth]{market-real-agents-alpha-distribution}
+    }
+    \hfill
+    \subfloat[]{
+            \includegraphics[width=\textwidth]{market-virtual-agents-d-distribution}
+    }
+    \subfloat[]{
+            \includegraphics[width=\textwidth]{market-virtual-agents-n-distribution}
+    }
+    
+    \caption{Caption}
+    \label{fig:my_label}
+\end{figure}
 % \mytodo{how to generate dataset, why does it make sense to use these synthesis data
 % input single, 0.3*np.sin(1.3 t) + N(0, 8)
 % input signal 1.0*cos(0.1t) + N(0, 2) or N(0,1)}

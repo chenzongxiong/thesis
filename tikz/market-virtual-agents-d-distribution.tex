@@ -1,0 +1,325 @@
+% http://pgfplots.sourceforge.net/gallery.html
+% https://tex.stackexchange.com/questions/120441/plot-the-probability-density-function-of-the-gamma-distribution
+\documentclass[border=5pt]{standalone}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+    % \pgfplotsset{
+    %     % use this `compat' level or higher to position the bars in one group
+    %     % next to each other
+    %     compat=1.16,
+    % }
+    % % load the data table ...
+    % \pgfplotstableread[col sep=comma]{virtual-agentn-distribution.csv}{\loadedtable}
+        % and store the number of columns in `\NoOfCols'
+        % (minus 1 because counting in `\foreach' starts with zero
+        %\pgfplotstablegetcolsof{\loadedtable}
+        % \pgfmathtruncatemacro{\NoOfCols}{\pgfplotsretval-1}
+        
+        
+% NOTE: including sell and buy
+% inside code, we set B = 1.3 since we only calculate buyer and double it 
+\begin{filecontents}{data.csv}
+0.006999999999999999,2
+0.008499999999999999,2
+0.009999999999999998,2
+0.011499999999999998,2
+0.012999999999999998,4
+0.014499999999999997,4
+0.015999999999999997,4
+0.017499999999999998,4
+0.019,6
+0.0205,6
+0.022000000000000002,6
+0.023500000000000004,6
+0.025000000000000005,8
+0.026500000000000006,8
+0.028000000000000008,8
+0.02950000000000001,8
+0.03100000000000001,10
+0.03250000000000001,10
+0.03400000000000001,10
+0.03550000000000001,10
+0.03700000000000001,10
+0.03850000000000001,12
+0.040000000000000015,12
+0.041500000000000016,12
+0.04300000000000002,12
+0.04450000000000002,12
+0.04600000000000002,12
+0.04750000000000002,12
+0.04900000000000002,14
+0.050500000000000024,14
+0.052000000000000025,14
+0.05350000000000003,14
+0.05500000000000003,14
+0.05650000000000003,14
+0.05800000000000003,14
+0.05950000000000003,14
+0.06100000000000003,14
+0.06250000000000003,14
+0.06400000000000003,16
+0.06550000000000003,16
+0.06700000000000003,16
+0.06850000000000003,16
+0.07000000000000003,16
+0.07150000000000004,16
+0.07300000000000004,16
+0.07450000000000004,16
+0.07600000000000004,16
+0.07750000000000004,16
+0.07900000000000004,16
+0.08050000000000004,16
+0.08200000000000005,16
+0.08350000000000005,16
+0.08500000000000005,16
+0.08650000000000005,16
+0.08800000000000005,16
+0.08950000000000005,16
+0.09100000000000005,16
+0.09250000000000005,16
+0.09400000000000006,16
+0.09550000000000006,16
+0.09700000000000006,16
+0.09850000000000006,16
+0.10000000000000006,14
+0.10150000000000006,14
+0.10300000000000006,14
+0.10450000000000007,14
+0.10600000000000007,14
+0.10750000000000007,14
+0.10900000000000007,14
+0.11050000000000007,14
+0.11200000000000007,14
+0.11350000000000007,14
+0.11500000000000007,14
+0.11650000000000008,14
+0.11800000000000008,14
+0.11950000000000008,14
+0.12100000000000008,14
+0.12250000000000008,14
+0.12400000000000008,14
+0.12550000000000008,12
+0.12700000000000009,12
+0.1285000000000001,12
+0.1300000000000001,12
+0.1315000000000001,12
+0.1330000000000001,12
+0.1345000000000001,12
+0.1360000000000001,12
+0.1375000000000001,12
+0.1390000000000001,12
+0.1405000000000001,12
+0.1420000000000001,12
+0.1435000000000001,12
+0.1450000000000001,10
+0.1465000000000001,10
+0.1480000000000001,10
+0.1495000000000001,10
+0.1510000000000001,10
+0.1525000000000001,10
+0.1540000000000001,10
+0.1555000000000001,10
+0.1570000000000001,10
+0.1585000000000001,10
+0.16000000000000011,10
+0.16150000000000012,10
+0.16300000000000012,10
+0.16450000000000012,10
+0.16600000000000012,8
+0.16750000000000012,8
+0.16900000000000012,8
+0.17050000000000012,8
+0.17200000000000013,8
+0.17350000000000013,8
+0.17500000000000013,8
+0.17650000000000013,8
+0.17800000000000013,8
+0.17950000000000013,8
+0.18100000000000013,8
+0.18250000000000013,8
+0.18400000000000014,8
+0.18550000000000014,8
+0.18700000000000014,8
+0.18850000000000014,8
+0.19000000000000014,6
+0.19150000000000014,6
+0.19300000000000014,6
+0.19450000000000014,6
+0.19600000000000015,6
+0.19750000000000015,6
+0.19900000000000015,6
+0.20050000000000015,6
+0.20200000000000015,6
+0.20350000000000015,6
+0.20500000000000015,6
+0.20650000000000016,6
+0.20800000000000016,6
+0.20950000000000016,6
+0.21100000000000016,6
+0.21250000000000016,6
+0.21400000000000016,6
+0.21550000000000016,6
+0.21700000000000016,4
+0.21850000000000017,4
+0.22000000000000017,4
+0.22150000000000017,4
+0.22300000000000017,4
+0.22450000000000017,4
+0.22600000000000017,4
+0.22750000000000017,4
+0.22900000000000018,4
+0.23050000000000018,4
+0.23200000000000018,4
+0.23350000000000018,4
+0.23500000000000018,4
+0.23650000000000018,4
+0.23800000000000018,4
+0.23950000000000018,4
+0.2410000000000002,4
+0.2425000000000002,4
+0.2440000000000002,4
+0.2455000000000002,4
+0.2470000000000002,4
+0.2485000000000002,4
+0.25000000000000017,4
+0.25150000000000017,4
+0.25300000000000017,4
+0.25450000000000017,4
+0.25600000000000017,2
+0.2575000000000002,2
+0.2590000000000002,2
+0.2605000000000002,2
+0.2620000000000002,2
+0.2635000000000002,2
+0.2650000000000002,2
+0.2665000000000002,2
+0.2680000000000002,2
+0.2695000000000002,2
+0.2710000000000002,2
+0.2725000000000002,2
+0.2740000000000002,2
+0.2755000000000002,2
+0.2770000000000002,2
+0.2785000000000002,2
+0.2800000000000002,2
+0.2815000000000002,2
+0.2830000000000002,2
+0.2845000000000002,2
+0.2860000000000002,2
+0.2875000000000002,2
+0.2890000000000002,2
+0.2905000000000002,2
+0.2920000000000002,2
+0.2935000000000002,2
+0.2950000000000002,2
+0.2965000000000002,2
+0.2980000000000002,2
+0.2995000000000002,2
+0.3010000000000002,2
+0.3025000000000002,2
+0.3040000000000002,2
+0.3055000000000002,2
+0.3070000000000002,2
+0.3085000000000002,2
+0.3100000000000002,2
+0.3115000000000002,2
+0.3130000000000002,2
+0.3145000000000002,2
+0.3160000000000002,2
+0.3175000000000002,2
+0.31900000000000023,2
+0.32050000000000023,2
+0.32200000000000023,2
+0.32350000000000023,2
+0.32500000000000023,2
+0.32650000000000023,2
+0.32800000000000024,2
+0.32950000000000024,2
+\end{filecontents}
+% \pgfplotstableread[col sep=comma]{virtual-agentn-distribution.csv}{\loadedtable}
+\pgfplotstableread[col sep=comma]{data.csv}{\loadedtable}
+
+\usepackage{pst-func}
+\usepackage{auto-pst-pdf}
+\pgfplotsset{scaled y ticks=false}
+\pgfplotsset{scaled x ticks=false}
+
+\begin{document}
+\begin{tikzpicture}[ declare function={gamma(\z)=
+    (2.506628274631*sqrt(1/\z) + 0.20888568*(1/\z)^(1.5) + 0.00870357*(1/\z)^(2.5) - (174.2106599*(1/\z)^(3.5))/25920 - (715.6423511*(1/\z)^(4.5))/1244160)*exp((-ln(1/\z)-1)*\z);},
+    declare function={gammapdf(\x,\k,\theta) = \x^(\k-1)*exp(-\x/\theta) / (\theta^\k*gamma(\k+1)/\k);}
+]
+    \begin{axis}[
+        % adjust the `width' a bit by keeping the default `height'
+        width=2*\axisdefaultwidth,
+        height=\axisdefaultheight,
+        % set appropriate `ymax' value so the `nodes near coords' fit to the plot
+        % (adjusting the `ymin' value is just to make it look a little bit better)
+        ymin=0,
+        ymax=20,
+        % there should be no gap between the bars in one group
+        ybar=0pt,
+        xlabel=blance,
+        ylabel={\# Virtual agents D},
+        % use data from the table for the xticklabels
+        % xtick=data,
+        xticklabel style={font=\tiny, xshift=0.3ex, /pgf/number format/fixed},
+        % xticklabels from table={\loadedtable}{COUNT},
+        % to start the bars from the bottom edge of the plot
+        % (otherwise they would start from 10^0
+        %  borrowed from <http://tex.stackexchange.com/a/86688/95441)
+        % log origin=infty,
+        % adjust the size of the bars so they don't overlap
+        % (you can play with the numerator to change the gap between the groups)
+        bar width=0.5,
+        % enlarge the x limits so all of the bars are shown
+        % (play with the value to adjust the gap on the sides of the plot)
+        % enlarge x limits={abs=0.6},
+        % and position the legend outside of the plot to not overlap with the data
+        % legend pos=outer north east,
+        % add `nodes near coords'
+        nodes near coords={
+            % because internally PGFPlots works with floating point numbers, we
+            % change them to fixed point numbers
+            % \pgfkeys{
+            %     /pgf/fpu=true,
+            %     /pgf/fpu/output format=fixed,
+            % }
+            %
+            % % check if numbers are greater than 1000 and if so, divide them by
+            % % 1000 to convert them from ms to s scale
+            % \pgfmathparse{
+            %     ifthenelse(
+            %         \pgfplotspointmeta < 1000,
+            %         \pgfplotspointmeta,
+            %         \pgfplotspointmeta/1000
+            %     )
+            % }%
+            % % to now decide which of the two cases we have, we compare the
+            % % point meta value, but because `\ifnum' compares integers, we first
+            % % have to convert the fixed number to an integer
+            %     \pgfmathtruncatemacro{\Y}{\pgfplotspointmeta}%
+            % \ifnum\Y<1000
+            %     \pgfmathprintnumber{\pgfmathresult}
+            % \else
+            %     \pgfmathprintnumber{\pgfmathresult}
+            % \fi
+        },
+        % set the style of the `nodes near coords'
+        % nodes near coords style={
+        %     font=\tiny,
+        %     rotate=90,
+        %     anchor=west,
+        % },
+        % as basis for the `nodes near coords' use the raw y values
+        % point meta=rawy,
+    ]
+        {
+             \addplot table[x index={0}, y index={1}]{\loadedtable};
+             \addplot [smooth, domain=0:0.4, red] {2.6*gammapdf(x,2.6,0.05)};
+             \addlegendentry{Virtual agents D distribution}
+             \addlegendentry{$B\frac{x^{k-1} e^{-x/\theta} }{\theta^{k}\Gamma(k)}, k=2.6, \theta=0.05, B=2.6$}
+        }
+    \end{axis}
+\end{tikzpicture}
+\end{document}

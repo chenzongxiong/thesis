@@ -12,39 +12,37 @@
     \tikzstyle{activation neuron}=[neuron, fill=blue!50, rectangle, rounded corners=3pt, minimum size=13pt];
     \tikzstyle{play output neuron}=[neuron, fill=red!50, rectangle, rounded corners=3pt, minimum size=13pt];
     %% draw neurons
-    \foreach \x in {1} {
-        \node[input neuron] (x_\x) at (\x, 0) {$x_{\scaleto{n}{3px}}$};
+    \foreach \x in {1,2,3} {
+        \node[input neuron] (x_\x) at (\x, 0) {$x_{\scaleto{\x}{3pt}}$};
         \node[hidden neuron] (phi_\x) at (\x,-40pt) {${\Phi}$};
     } 
-    \foreach \x in {0}
-        \node[hidden neuron] (p_\x) at (\x, -80pt) {${p^k}_{\scaleto{n-1}{4px}}$};
-   \foreach \x in {1}
-       \node[hidden neuron] (p_\x) at (\x, -80pt) {${p^k}_{\scaleto{n}{3px}}$};
-    
-    % \node[input neuron] (x_n) at (5,0) {$x_{\scaleto{n}{3pt}}$};
-    % \node[hidden neuron] (phi_n) at (5,-40pt) {$\Phi$};
-    % \node[hidden neuron] (p_n) at (5,-80pt) {${p^k}_{\scaleto{n}{3pt}}$};
+    \foreach \x in {0,1,2,3}
+        \node[hidden neuron] (p_\x) at (\x, -80pt) {${p^k}_{\scaleto{\x}{3pt}}$};
+
+    \node[input neuron] (x_n) at (5,0) {$x_{\scaleto{n}{3pt}}$};
+    \node[hidden neuron] (phi_n) at (5,-40pt) {$\Phi$};
+    \node[hidden neuron] (p_n) at (5,-80pt) {${p^k}_{\scaleto{n}{3pt}}$};
 
     %% draw connections between nodes
-    \foreach \x in {1} {
+    \foreach \x in {1,2,3} {
         \draw [->,color=blue!50!black] (x_\x) to node [left,color=red!50!black] {$w^k$} (phi_\x);
         \draw [->,color=red!50!black] (phi_\x) to node [left,color=red!50!black] {1} (p_\x);
     }
-    \foreach \x / \y in {0/1} {
+    \foreach \x / \y in {0/1,1/2,2/3} {
         \draw [->,color=blue!50!black] (p_\x) to node [left, color=blue!50!black] {-1} (phi_\y);
         \draw [->,color=blue!50!black] (p_\x) to node [below,color=blue!50!black] {1} (p_\y);
     }
     
-    % \draw [->,color=red!50!black] (x_n) to node [left,color=red!50!black] {$w^k$} (phi_n);
-    % \draw [->,color=red!50!black] (phi_n) to node [left,color=red!50!black] {1} (p_n);
-    % \draw [->,color=blue!50!black] (p_3) to node [below,color=blue!50!black] {1} (p_n);
+    \draw [->,color=red!50!black] (x_n) to node [left,color=red!50!black] {$w^k$} (phi_n);
+    \draw [->,color=red!50!black] (phi_n) to node [left,color=red!50!black] {1} (p_n);
+    \draw [->,color=blue!50!black] (p_3) to node [below,color=blue!50!black] {1} (p_n);
 
-    % \path (x_3) -- (x_n) node[midway,scale=2,font=\bfseries] {\dots};
-    % \path (phi_3) -- (phi_n) node[midway,scale=2,font=\bfseries] {\dots};
+    \path (x_3) -- (x_n) node[midway,scale=2,font=\bfseries] {\dots};
+    \path (phi_3) -- (phi_n) node[midway,scale=2,font=\bfseries] {\dots};
     
     %% draw rectangle to include inputs/intermediate outputs
-    % \draw[dashed,thin,blue!50!black] (0.5,-25pt) rectangle (5.5, -110pt);
-    % \draw (4.5, -104pt) node [fill=blue!25!white] {\tiny Play Layer};
+    \draw[dashed,thin,blue!50!black] (0.5,-25pt) rectangle (5.5, -110pt);
+    \draw (4.5, -104pt) node [fill=blue!25!white] {\tiny Play Layer};
 
     % \draw[dashed,thin,green!50!black] (0.5,-12pt) rectangle (5.5, 12pt);
     % \node[] at (7, 0) {$X=[x_1,x_2,...,x_n]$};
