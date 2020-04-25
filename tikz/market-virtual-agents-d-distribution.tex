@@ -316,8 +316,10 @@
     ]
         {
              \addplot table[x index={0}, y index={1}]{\loadedtable};
-             \addplot [smooth, domain=0:0.4, red] {2.6*gammapdf(x,2.6,0.05)};
-             \addlegendentry{Virtual agents D distribution}
+                          \addlegendentry{Virtual agents D distribution}
+                 \addlegendimage{line legend,red}
+
+             \addplot [smooth, domain=0:0.4, red,dashed,line width=1] {2.6*gammapdf(x,2.6,0.05)};
              \addlegendentry{$B\frac{x^{k-1} e^{-x/\theta} }{\theta^{k}\Gamma(k)}, k=2.6, \theta=0.05, B=2.6$}
         }
     \end{axis}

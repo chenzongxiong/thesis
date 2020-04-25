@@ -1,0 +1,263 @@
+\section{Hysteretical loop trace}
+\mytodo{Analysis of debug data}
+\mytodo{show animation plots that indicate hnn could capture minor loops whereas lstm fails} 
+\mytodo{show mse loss, network complexity} 
+\mytodo{HERE the ground-truth activation of data sets. P and D is None, not tanh}
+
+\textbf{Data sets.} We generate two simple synthetic data sets to identify whether LSTM network and HNN could capture the micro loops of a hysteretical process. 
+
+The set $D$ (see \myfigref{fig:chapter5:dima-seq}) consists 1000 points. We repeat sequence $0, 3, 5, 0, 1, 5$ to generate the input $x(n)$ for $D$. We also insert $0, -100$ at the very beginning of the input $x(n)$ in order to erase the memory in the hysteretical process. The first 600 points is used as training set and the rest 400 points is test set. We scale the input of test set by 1/10, 1/7, 1/6, 1/5, 1/4, 1/3, 1/1, 1/0.5 every 50 points in order to identify inner loops.  
+
+As for the set $P$ (see \myfigref{fig:chapter5:pavel-seq}), it also contains 1000 points. The inputs $x(n)$ is sampled from a periodical function $5cos(0.1n)$ with random noise $noise$. Repeatedly, $noise$ is drawn from different normal distributions, which standard deviations are $0.1, 0.5, 1, 2, 3, 4, 5$. 
+
+\textbf{Results.} 
+\mytableref{tbl:chapter5:dima-pavel-seq-results} shows the measure values of the different methods. We exploit hyper parameters and pick the best results achieve by two methods (\todo{see appendix for detail results}). We mark a result in bold if it is significantly better than other methods. We see that HNN achieve the best RMSE results on both data sets. Additionally, HNN also uses fewer parameters to achieve performance.
+
+In order to inspect the inner loop, we interpolate the original test set. 
+% \begin{algorithm}[H]
+% \SetAlgoLined
+% % \KwResult{train\_input\, train\_output\, test\_input\, test\_output}
+%  % initialization\
+%  \caption{How to generate set $D$}
+%  \SetKwInOut{Input}{Inputs}\SetKwInOut{Output}{Outputs}
+%  \SetKwFunction{HystereticOperator}{HystereticOperator}
+%  \SetKwFunction{Append}{Append}
+%   \SetKwFunction{Insert}{Insert}
+%   \SetKwFunction{Scale}{Scale}
+
+%  \SetKwRepeat{Repeat}{repeat}{until}
+%  \SetKwFunction{len}{len}
+%  % \Input{Number of points to generate $points$}
+%  \Output{Set $D$ consists $train\_input$, $train\_output$, $test\_input$, $test\_output$}
+%  \BlankLine
+%  \Begin{
+%   $points$ $\leftarrow$ 1000;
+%   $seq$ $\leftarrow$ [ 0, 3, 5, 0, 1, 5 ]\;
+%   $chunk\_size$ $\leftarrow$ \len{$seq$}\;
+%   $chunks$ $\leftarrow$ $\left\lceil{points/chunk\_size}\right\rceil$ \;
+%   $input$ $\leftarrow$ [ ]\;
+%   \Repeat{chunk = 0}{
+%   \tcp{append seq to list input}
+%   $\Append{input, seq}$\;
+%   $chunk$ $\leftarrow$ $chunk-1$\;
+%   }
+%   \tcp{insert 0 at index 0 in list input}
+%   $\Insert{input, 0, 0}$\;
+%   \tcp{insert -100 at index 1 in list input}
+%   $\Insert{input, 1, -100}$\;
+%   $input[600, \ldots, 700]$ $\leftarrow$ $input[600, \ldots, 700] / 10$\;
+%   $input[700, \ldots, 750]$ $\leftarrow$ $input[700, \ldots, 750] / 7$\;
+%   $input[750, \ldots, 800]$ $\leftarrow$ $input[600, \ldots, 800] / 6$\;
+%   $input[600, \ldots, 700]$ $\leftarrow$ $input[800, \ldots, 850] / 5$\;
+%   $input[600, \ldots, 700]$ $\leftarrow$ $input[850, \ldots, 900] / 4$\;
+%   $input[600, \ldots, 700]$ $\leftarrow$ $input[900, \ldots, 950] / 3$\;
+%   $input[600, \ldots, 700]$ $\leftarrow$ $input[950, \ldots, 1000] / 1$\;
+
+%   $output$ $\leftarrow$ $\HystereticOperator{input}$\;
+  
+%   }
+% \end{algorithm}
+
+%% dima sequence
+% \begin{table}
+% \begin{adjustbox}{angle=0}
+% \begin{tabular}{||c|c|c||}
+% \hline 
+% network & \#parameters & RMSE 
+% \\ \hline
+% lstm-unit-1 & -1 & -1
+% \\ \hline
+% lstm-unit-8 & -1 & -1 
+% \\ \hline
+% lstm-unit-32 & -1 & -1 
+% \\ \hline
+% lstm-unit-64 & -1 & -1
+% \\ \hline
+% lstm-unit-128 & -1 &  -1 
+% \\ \hline
+% lstm-unit-256 & -1 & -1
+% \\ \hline
+% hnn & -1 & -1
+% \\ \hline
+% \end{tabular}
+% \end{adjustbox}
+% \caption{Debug dima's sequence, current data is error}
+% \end{table}
+%% pavel sequence
+% \begin{table}
+% \begin{adjustbox}{angle=0}
+% \begin{tabular}{||c|c|c||}
+% \hline 
+% network & \#parameters & RMSE 
+% \\ \hline
+% lstm-unit-1 & -1 & 195.9835414 
+% \\ \hline
+% lstm-unit-8 & -1 & 48.41417433 
+% \\ \hline
+% lstm-unit-16-wrong & -1 & 48.41417433 
+% \\ \hline
+% lstm-unit-32 & -1 & 57.1906319 
+% \\ \hline
+% lstm-unit-64 & -1 & 41.58575212 
+% \\ \hline
+% lstm-unit-128 & -1 &  28.23940151 
+% \\ \hline
+% lstm-unit-256 & -1 & 26.58386238 
+% \\ \hline \\ \hline
+% hnn-unit-10-play-10 & 301 & 1.025883887
+% \\ \hline
+% hnn-unit-10-play-25 & 751 & 0.6680698
+% \\ \hline
+% hnn-unit-25-play-25 & 1876 & 0.818362062
+% \\ \hline
+% hnn-unit-50-play-50 & 7501 & 0.755888696
+% \\ \hline
+% hnn-unit-100-play-50 & 15001 & 0.844860596
+% \\ \hline
+% \end{tabular}
+% \end{adjustbox}
+% \caption{Debug pavel's sequence}
+% \end{table}
+
+\begin{figure}[htb!]
+    \centering
+    \subfloat[]{
+    \includegraphics[width=\textwidth]{thesis/img/debug-input-output-dima.pdf}
+    }
+    \caption{Data set D. The first and second plots are inputs vs. time step $n$ and outputs vs. time step $n$, respectively. Time step $n$ is between 10 and 1000. The last one is outputs vs. inputs, only showing $y(n) \in [-0.5, 45]$}
+    \label{fig:chapter5:dima-seq}
+\end{figure}
+
+\begin{figure}[htb!]
+    \centering
+    \includegraphics[width=\textwidth]{thesis/img/debug-input-output-pavel.pdf}
+    \caption{Data set P. The first and second plots are inputs vs. time step $n$ and outputs vs. time step $n$, respectively. Time step $n$ is from 0 to 1000. The last one is outputs vs. inputs, only showing $y(n) \in [-0.5, 45]$}
+    \label{fig:chapter5:pavel-seq}
+\end{figure}
+
+% \begin{figure}[htb!]
+%     \includegraphics[width=\textwidth]{thesis/img/debug-pavel-dima-loss}
+%     \caption{MSE loss for the data sets D and P}
+%     \label{fig:chapter5:debug-pavel-dima-loss}
+% \end{figure}
+
+\begin{table}[htb!]
+\centering
+\begin{adjustbox}{angle=0}
+\begin{tabular}{||c|c|ccc||}
+\hline 
+Data sets & networks & hyper parameters & \#parameters & RMSE ($\mu \pm \sigma$)\\
+\hline \hline
+\multirow{13}{4em}{D set} & \multirow{7}{4em}{LSTM} & 1 & 12 & 24.81032497 \\ 
+                         &                         & 8 & 320 & 19.85390591 \\ 
+                         &                         & 16 & 1152 & 17.48037802 \\ 
+                         &                         & 32 & 4352 & 16.06781662 \\ 
+                         &                         & 64 & 16896 & 14.63439806 \\ 
+                         &                         & 128 & 66560 & 13.01503744 \\ 
+                         &                         & 256 & 264192 & \textcolor{red}{19.58295805} \\ 
+\cline{2-5}
+                         & \multirow{6}{4em}{HNN}  & (10, 10) & 301 & 3.656722178 \\
+                         &                         & (25, 10) & 751 & 3.602981637 \\ 
+                         &                         & (25, 25) & 1876 & 3.072664308 \\ 
+                         &                         & (50, 25) & 7501 & 3.02593742 \\ 
+                         &                         & (100, 50) & 15001 & 3.040274771 \\ 
+                         
+\hline \hline
+\multirow{13}{4em}{P set} & \multirow{7}{4em}{LSTM} & 1 & 12 & 8.483617024 \\ 
+                         &                         & 8 & 320 & 6.119787051 \\ 
+                         &                         & 16 & 1152 & 5.875860054 \\ 
+                         &                         & 32 & 4352 & 5.63547034 \\ 
+                         &                         & 64 & 16896 & \textbf{4.440258711} \\ 
+                         &                         & 128 & 66560 & 5.027775369 \\ 
+                         &                         & 256 & 264192 & \textcolor{red}{39.95634943} \\ 
+\cline{2-5}
+                         & \multirow{6}{4em}{HNN}  & (10, 10) & 301 & 1.025883887 \\
+                         &                         & (25, 10) & 751 & \textbf{0.6680698} \\ 
+                         &                         & (25, 25) & 1876 & 0.818362062 \\ 
+                         &                         & (50, 50) & 7501 & 0.755888696 \\ 
+                         &                         & (100, 50) & 15001 & 0.844860596 \\        
+\hline
+\end{tabular}
+\end{adjustbox}
+\caption{RMSE for the data sets D and P}
+\label{tbl:chapter5:dima-pavel-seq-results}
+\end{table}
+
+
+The following plots are the motion of inner loops for LSTM network and HNN.
+%% lstm motion
+\begin{figure}[h]
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{lstm-inspection/debug-lstm-400-1.jpg}
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{lstm-inspection/debug-lstm-400-2.jpg}
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{lstm-inspection/debug-lstm-400-3.jpg}
+    }
+        \hfill
+
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{lstm-inspection/debug-lstm-400-4.jpg}
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{lstm-inspection/debug-lstm-400-5.jpg}
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{lstm-inspection/debug-lstm-400-6.jpg}
+    }
+    \hfill
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{lstm-inspection/debug-lstm-400-7.jpg}
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{lstm-inspection/debug-lstm-400-8.jpg}
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{lstm-inspection/debug-lstm-400-10.jpg}
+    }
+    \caption{The motion of inner loops for a hysteretical process. The dot line in blue is the motion of ground truth and the black one is the motion of prediction generated by LSTM network}
+    \label{fig:chapter5:motion}
+\end{figure}
+%% hnn motion
+\begin{figure}[h]
+    \subfloat[]{
+
+    \includegraphics[width=\textwidth/3]{hnn-inspection/debug-hnn-400-1.jpg}
+    }
+       \subfloat[]{
+
+    \includegraphics[width=\textwidth/3]{hnn-inspection/debug-hnn-400-2.jpg}
+    }
+       \subfloat[]{
+
+    \includegraphics[width=\textwidth/3]{hnn-inspection/debug-hnn-400-3.jpg}
+    }
+    \hfill
+       \subfloat[]{
+
+    \includegraphics[width=\textwidth/3]{hnn-inspection/debug-hnn-400-4.jpg}
+    }
+    \subfloat[]{
+
+    \includegraphics[width=\textwidth/3]{hnn-inspection/debug-hnn-400-5.jpg}
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{hnn-inspection/debug-hnn-400-6.jpg}
+    }
+        \hfill
+
+     \subfloat[]{
+    \includegraphics[width=\textwidth/3]{hnn-inspection/debug-hnn-400-7.jpg}
+    }
+     \subfloat[]{
+    \includegraphics[width=\textwidth/3]{hnn-inspection/debug-hnn-400-8.jpg}
+    }
+      \subfloat[]{
+    \includegraphics[width=\textwidth/3]{hnn-inspection/debug-hnn-400-10.jpg}
+    }
+    \caption{The motion of inner loops for a hysteretical behaviour. The dot line in blue is the motion of ground truth and the black one is the motion of prediction generated by HNN}
+    \label{fig:my_label}
+\end{figure}
+

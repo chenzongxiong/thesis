@@ -1,6 +1,6 @@
 \chapter{Hysteretic neural networks\label{cha:chapter2}}
 
-\mytodo{In this chapter, we derive how to build play operator from elementary non-linear function such as phi function defined in this thesis.}
+First, we derive \textit{play networks} based on elementary non-linear function $\Phi(x)$ defined in this thesis. Then we use \textit{play networks} to generate \textit{generalized Prandtl-Ishlinskii (PI) networks}. In the end, we also provide a method how to train this PI networks. 
 
 \section{Play networks\label{sec:chapter2:play-network}}
 
@@ -8,7 +8,7 @@ Consider $K > 0$ play operators. Each of them maps an initial state $p_{0}^{k} \
 \begin{equation*}
   p_{0}^{k}, (x_1, x_2, \ldots) \mapsto (p_{1}^{k}, p_{2}^{k}, \ldots), k = 1, \ldots, K
 \end{equation*}
-The $k$th (generalized) play operator is given by:
+The $k$th play operator is given by:
 \begin{equation}\label{eqn:chapter2:play-operator}
   p_{n}^{k} = \mathcal{P}(x_{n}, p_{n-1}^{k}, w^{k}) := p_{n-1}^{k} + \Phi(w^{k} x_{n} - p_{n-1}^{k}), n = 1, 2, \ldots, N
 \end{equation}
@@ -34,7 +34,7 @@ where $w^{k}$ is a parameter and $\Phi(x)$ (see \myfigref{fig:chapter2:phi}) is 
         \input{./tikz/play-by-phi}
         \label{fig:chapter2:play-by-phi}
     }
-    \caption{(\myfigref{fig:chapter2:phi}) The graph of $\Phi(x)$. (\myfigref{fig:chapter2:play-by-phi}) There are three different dynamical progresses which initialize with different states.}
+    \caption{(\myfigref{fig:chapter2:phi}) The graph of $\Phi(x)$. (\myfigref{fig:chapter2:play-by-phi}). There are three different dynamical progresses which initialize with different initial states.}
     \label{fig:chapter2:phi-and-play-by-phi}
 \end{figure}
 
@@ -51,129 +51,86 @@ where $w^{k}$ is a parameter and $\Phi(x)$ (see \myfigref{fig:chapter2:phi}) is 
         \input{./tikz/nn-play-rnn}
         \label{fig:chapter2:nn-play-rnn}
     }
-    \caption{The neural network cell of \myformularef{eqn:chapter2:play-operator}. The arrows show how data flows in the cell, and the number of $w^k, 1, -1$ beside the arrow line is the weights of this cell. Note that only parameter $w_k$ is learnable since parameters $-1, +1$ are fixed.}
+    \caption{The neural network cell of \myformularef{eqn:chapter2:play-operator}. The arrows show how data flows in the cell, and the number of $w^k, 1, -1$ beside the arrow line is the weights of this cell. Note that only parameter $w_k$ is learnable in this network since parameters $-1, +1$ are fixed.}
     
 \end{figure}
 The dynamics of \myformularef{eqn:chapter2:play-operator} is shown in \myfigref{fig:chapter2:play-by-phi}, and it can be represented as a recurrent neural network (see \myfigref{fig:chapter2:nn-play-rnn}), using the elementary neural network cell displayed in \myfigref{fig:chapter2:nn-play-stepwise}.
 % It can be represented as a RNN. Note that in such a form the network is not feed-forward.
 % One can unfold it to make it feed-forward, see Fig. \ref{fig:chapter2:play-operator}
 
+\begin{definition}\label{def:chapter2:play-networks}
+If a network represents \myformularef{eqn:chapter2:play-operator}, we call this network a \textsl{play network}. If we apply nonlinear operators on this network to create a new network $\mathcal{P}$, we call $\mathcal{P}$ network generalized play network. 
+\end{definition}
+% \mytodo{add formula of generalized play network in appendix}
+
+\begin{definition}\label{def:chapter2:m-unfolded}
+If there are $N$ elements in the sequence $\{x_n\}$, we say the unfolded network is $N$-$unfolded$.
+\end{definition}
+For example, the network in \myfigref{fig:chapter2:nn-play-rnn} is N-unfolded.
+% \mytodo{add picture/plot for 2-unfolded play network for example}
+
+\section{Generalized Prandtl-Ishlinskii networks\label{sec:chapter2:pi-network}}
 \begin{definition}
-If a network represents \myformularef{eqn:chapter2:play-operator}, we call this network a \textsl{play network}. If we apply nonlinear operators on this network to create a new network $\mathcal{P}$, we call $\mathcal{P}$ network generalized play network.
+If a network $\mathcal{G}$ network is the linear combination of generalized play networks, we call this network generalized Prandtl-Ishlinskii network, or generalized PI network. If the length of input sequence is m, we call PI networks as $m$-unfolded PI networks.
 \end{definition}
 
-\section{Generalized Prandtl-Ishlinskii (PI) networks\label{sec:chapter2:pi-network}}
-\begin{definition}
-If a network $\mathcal{G}$ is the linear combination of generalized play networks, we call this network generalized Prandtl-Ishlinskii network, or generalized PI network. 
-\end{definition}
+% \mytodo{add generalized play networks}
 
-Denote the initial state of $\mathcal{G}$ network $p_0$ 
+We consider a $\mathcal{G}$ network contains K $\mathcal{P}$ networks. Denote the initial states of $\mathcal{G}$ network 
+% $p_0$. 
 % and the output sequence of $k$th $\mathcal{P}$ network by
-% \begin{equation*}
-%     P^{k} := (p^k_1, p^k_2, \ldots) \in \mathbb{R}^N
-% \end{equation*}
-The generalized Prandtl-Ishlinskii operator maps
 \begin{equation*}
-    p_0, (x_1, x_2, \ldots) \mapsto (y_1, y_2, \ldots)
+    P_0 := (p^1_0, \ldots, p^K_0) \in \mathbb{R}^K
+\end{equation*}
+
+The generalized Prandtl-Ishlinskii (PI) operator maps
+\begin{equation*}
+    P_0, (x_1, x_2, \ldots) \mapsto (y_1, y_2, \ldots)
 \end{equation*}
 and is given by:
-\begin{equation*}
-    y_n = \sum_{k=1}^{K} \hat{\theta^{k}} p^k_n + \hat{\theta^{0}} = \sum_{k=1}^{K} \hat{\theta^{k}} \mathcal{P}(x_n, p^k_{n-1}, w^k) + \hat{\theta^{0}}
-\end{equation*}
-where $\hat{\theta^{k}},\hat{\theta^{0}}$ are parameters and $p^k_n$ are given by \myformularef{eqn:chapter2:play-operator}. It corresponds to a layer of plays or a PI network, see \myfigref{fig:chapter1:nn-play}.
-% For example, the network in Fig. \ref{fig:chapter2:unfolded-nn} is 2-unfolded.
+% \begin{equation*}
+%     y_n = \sum_{k=1}^{K} \hat{\theta^{k}} p^k_n + \hat{\theta^{0}} = \sum_{k=1}^{K} \hat{\theta^{k}} \mathcal{P}(x_n, p^k_{n-1}, w^k) + \hat{\theta^{0}}
+% \end{equation*}
+\begin{equation}\label{eqn:chapter2:pi-contains-one-play}
+    y_{n} = \sum_{k=1}^{K} \sum_{s=1}^{S} \hat{\theta}^{k}_{s} p^k_n + \hat{\theta}^{k}_{0} = \sum_{k=1}^{K} \sum_{s=1}^{S} \hat{\theta}^{k}_{s} \mathcal{P}(x_n, p^k_{n-1}, w^k) + \hat{\theta}^{k}_{0}, \quad n = 1,2,\ldots
+\end{equation}
+where $\hat{\theta}^{k}_{s},\hat{\theta}^{k}_{0}$ are parameters and $p^k_n$ are given by \myformularef{eqn:chapter2:play-operator}. It corresponds to a layer of plays or a \textit{PI network}, see \myfigref{fig:chapter1:nn-pi}.
 
+% \section{Analysis of initial state $p_0$}
 
-% \section{Training a PI network\label{sec:chapter2:training-pi-network}}
-% Assume we are given an input sequence $x_1, x_2, \ldots, x_N$ and an output sequence $y_1, y_2, \ldots, y_N$. We perform the following steps in cycle until convergence.
-
-% \begin{enumerate}
-% \item Preparing initial states for the $m$-unfolded network: Fix a vector of initial states $P_0$ and all the weights (denoted by $W$). For each $k=1, \ldots, K$, we calculate recursively $p_{1}^{k}, p_{2}^{k}, \ldots, p_{N}^{k}$ by formula \ref{eqn:chapter2:play-operator}. We denote the corresponding (intermediate) states of the \textbf{PI} operator by
-%   \begin{equation*}
-%     P_n = (p_{n}^{1}, \ldots, p_{n}^{K}), n = 1, \ldots, N.
-%   \end{equation*}
-% \item Preparing inputs for the $m$-unfolded network: We fix $m$ and group the input sequence into $m$-tuples:
-%   \begin{equation*}
-%     \mathbf{x_1} := (x_1, \ldots, x_m), \quad \mathbf{x_2} := (x_2, \ldots, x_{m+1}), \quad \ldots,
-%   \end{equation*}
-%   which gives $M := N-m$ tuples $\mathbf{x_1}, \ldots, \mathbf{x_M}$. Next we form a new set of inputs for the $m$-unfolded network, attaching the vectors of intermediate states:
-%   \begin{equation*}
-%     \mathbf{y_1} := (P_0, \mathbf{x_1}), \quad \mathbf{y_2} := (P_1, \mathbf{x_2}), \quad \ldots,
-%   \end{equation*}
-
-% \item Training the $m$-unfolded network: We train by stochastic gradient descent the feed-forward $m$-unfolded \textbf{PI} network
-%   \begin{equation*}
-%     \mathbb{R}^{K} \times \mathbb{R}^{m} \ni \mathbf{y} \mapsto F_{m}(\mathbf{y}) \in \mathbb{R}^m
-%   \end{equation*}
-%   with the inputs $\mathbf{y_1}, \ldots, \mathbf{y_M}$ and the true targets $\mathbf{q_1}, \ldots, \mathbf{q_M}$, where
-%   \begin{equation*}
-%     \begin{aligned}
-%       \mathbf{q_1} = (q_1, \ldots, q_m), \quad 
-%       \mathbf{q_2} = (q_2,\ldots, q_{m+1}), \quad 
-%       \ldots
-%     \end{aligned}
-%   \end{equation*}
-
-% % \item We update the initial state $P_0$:
-% %   \begin{equation*}
-% %     P_{0}^{new} := P_{0} - \nabla_{P_0} (F_m(P_0, \mathbf{x_1}) - \mathbf{q_1})^2
-% %   \end{equation*}
-% \item Updating weights $W$ and initial state $P_0$ 
-%   \begin{eqnarray*}
-%     W^{new} := W - \nabla_{W} (F_m(P_0, \mathbf{x_1}) - \mathbf{q_1})^2 \\
-%     % P_{0}^{new} := P_{0} - \nabla_{P_0}(F_m(P_0, \mathbf{x_1}) - \mathbf{q_1})^2
-%   \end{eqnarray*}
-% % \item \mytodo{TODO: Training state}
-% % \item \todo{TODO: Training weights}
-
-% \end{enumerate}
-
-% \subsection{Analysis of $p_0$}
-% For $k>0$
-% \begin{equation}
-%   \begin{aligned}
-%     \Phi(x) =
-%     \begin{cases}
-%       k(x - \frac{1}{2}), & x \in [\frac{1}{2}, +\infty) \\
-%       0,               &  x \in (-\frac{1}{2}, \frac{1}{2}) \\
-%       k(x + \frac{1}{2}), & x \in (-\infty, \frac{1}{2}]
-%     \end{cases}
-%   \end{aligned}
+% Considering derivative of $p_n$ with respect to $p_0$, it's defined as
+% \begin{equation}\label{eqn:chapter2:dynamic-p0}
+% \frac{\partial p_{n}}{\partial p_0} = \prod_{i=1}^{n} \frac{\partial p_{i}}{\partial p_{i-1}} = \prod_{i=1}^{n} \left(1- \frac{\partial \Phi(u_i)}{\partial u_i}\Bigr|_{\substack{u_i=w x_{i} - p_{i-1}}}\right)
 % \end{equation}
 
-% \begin{eqnarray*}
-% p_n &=& \Phi(w x_{n} - p_{n-1})- p_{n-1} \\
-% \frac{\partial p_{n}}{\partial p_{n-1}} &=& 1- \frac{\partial \Phi(u_n)}{\partial u_n}\Bigr|_{\substack{u_n=w x_{n} - p_{n-1}}} 
-% \end{eqnarray*}
-
+% where $\frac{\partial \Phi(u_i)}{\partial u_i}$ is given by
 % \begin{equation}\label{eqn:chapter2:derviation-phi}
 %   \begin{aligned}
 %     \frac{\partial \Phi(u_i)}{\partial u_i} =
 %     \begin{cases}
-%       k, & p_{n-1} \in (-\infty, w x_{n}-\frac{1}{2}] \cup [w x_{n}+\frac{1}{2}, +\infty) \\
-%       0, &  p_{n-1} \in (w x_{n}-\frac{1}{2}, w x_{n}+\frac{1}{2})
+%       1, & p_{i-1} \in (-\infty, w x_{i}-0.5) \cup (w x_{i}+0.5, +\infty) \\
+%       0, &  p_{i-1} \in (w x_{i}-0.5, w x_{i}+0.5)
 %     \end{cases}
 %   \end{aligned}
 % \end{equation}
 
-% \begin{equation}\label{eqn:chapter2:dynamic-p0}
-% \frac{\partial p_{n}}{\partial p_0}= \prod_{i=1}^{n} \frac{\partial p_{i}}{\partial p_{i-1}} = \prod_{i=1}^{n} \left(1- \frac{\partial \Phi(u_i)}{\partial u_i}\Bigr|_{\substack{u_i=w x_{i} - p_{i-1}}}\right)
-% \end{equation}
+% From \myformularef{eqn:chapter2:derviation-phi} and \myformularef{eqn:chapter2:dynamic-p0}, 
+% it's obvious that gradient on $p_0$ is trapped in vanishing situation if there exists a pair $(u_i, \Phi(u_i))$ where $u_i$ isn't on the horizontal part of $\Phi(u)$, see \myfigref{fig:chapter2:phi}. 
 
 
-% Combining \ref{eqn:chapter2:derviation-phi} and \ref{eqn:chapter2:dynamic-p0}, if $n$ is sufficiently large, we conclude that 
+% If $n$ is sufficiently large,
 % \begin{enumerate}
 %     \item $k \in (0, 2]$, gradient on $p_0$ vanishes
 %     \item $k \in (2, +\infty)$, gradient on $p_0$ explodes.
 % \end{enumerate}
 
-% Solution: using batch training method may avoid gradient vanishing and exploding, however, the batch size cannot be too large. 
+% \textbf{Solution.} We can split the input sequence into multiple batches and train the network on these smaller sequences to avoid gradient vanishing and exploding.
 
+\mytodo{update parameters notation of architecture in chapter1}
 \section{Training a PI network\label{sec:chapter2:training-pi-network}}
-Assume we are given an input sequence $x_1, x_2, \ldots, x_N$ and an output sequence $y_1, y_2, \ldots, y_N$. We perform the following steps in cycle until convergence.
-
+Assume we are given an input sequence $x_1, x_2, \ldots, x_N$ and an output sequence $y_1, y_2, \ldots, y_N$. We perform the following steps in cycle until convergence. 
 \begin{enumerate}
-\item Preparing initial states for the network: Fix a vector of initial states $P_0$ and all the weights (denoted by $W$). For each $k=1, \ldots, K$, we calculate recursively $p_{1}^{k}, p_{2}^{k}, \ldots, p_{N}^{k}$ by \myformularef{eqn:chapter2:play-operator}. We denote the corresponding states of the PI network by
+\item Preparing initial states for the network: Fix a vector of initial states $P_0$ and all the weights (denoted by $W$, a collection of $w^k, \theta^{k}_{s}, \hat{\theta}^{k}_{s}, \theta^{k}_{s,0}, \hat{\theta}^{k}_{0}$). For each $k=1, \ldots, K$, we calculate recursively $p_{1}^{k}, p_{2}^{k}, \ldots, p_{N}^{k}$ by \myformularef{eqn:chapter2:play-operator}. We denote the corresponding states of the PI network by
   \begin{equation*}
     P_n = (p_{n}^{1}, \ldots, p_{n}^{K}), n = 1, \ldots, N.
   \end{equation*}
@@ -183,34 +140,45 @@ Assume we are given an input sequence $x_1, x_2, \ldots, x_N$ and an output sequ
   \end{equation*}
   which gives $M := N-m$ tuples $\mathbf{x_1}, \ldots, \mathbf{x_M}$. Next we form a new set of inputs for the $m$-unfolded network, attaching the vectors of intermediate states:
   \begin{equation*}
-    \mathbf{y_1} := (P_0, \mathbf{x_1}), \quad \mathbf{y_2} := (P_1, \mathbf{x_2}), \quad \ldots,
+    \mathbf{\tilde{x}_1} := (P_0, \mathbf{x_1}), \quad \mathbf{\tilde{x}_2} := (P_1, \mathbf{x_2}), \quad \ldots,
   \end{equation*}
 
-\item Training the $m$-unfolded network: We train by stochastic gradient descent the feed-forward $m$-unfolded \textbf{PI} network
+\item Training the $m$-unfolded network: We use adam optimizer \citep{kingma2014adam} to train the $m$-unfolded \textit{PI network}
   \begin{equation*}
-    \mathbb{R}^{K} \times \mathbb{R}^{m} \ni \mathbf{y} \mapsto F_{m}(\mathbf{y}) \in \mathbb{R}^m
+    \mathbb{R}^{K} \times \mathbb{R}^{m} \ni \mathbf{\tilde{x}} \mapsto F_{m}(\mathbf{\tilde{x}}) \in \mathbb{R}^m
   \end{equation*}
-  with the inputs $\mathbf{y_1}, \ldots, \mathbf{y_M}$ and the true targets $\mathbf{q_1}, \ldots, \mathbf{q_M}$, where
+  with the inputs $\mathbf{\tilde{x}_1}, \ldots, \mathbf{\tilde{x}_M}$ and the true targets $\mathbf{y_1}, \ldots, \mathbf{y_M}$, where
   \begin{equation*}
     \begin{aligned}
-      \mathbf{q_1} = (q_1, \ldots, q_m), \quad 
-      \mathbf{q_2} = (q_2,\ldots, q_{m+1}), \quad 
+      \mathbf{y_1} = (y_1, \ldots, y_m), \quad 
+      \mathbf{y_2} = (y_2,\ldots, y_{m+1}), \quad 
       \ldots
     \end{aligned}
   \end{equation*}
 
+\item Updating weights $W$.
+
+% \begin{remark}\label{remark:chapter2:1}
+%   Since $P_D(x)$ and $P_N(x)$ are not functions but operators, the monotone curves described in \ref{lemma:chapter3:reaction-to-price-change} are not defined only by the current value of $x$, but depend on its prehistory.
+% \end{remark}
+
+% $ At this step, we only update the weights $W$, but not the initial state $P_0$
 % \item We update the initial state $P_0$:
 %   \begin{equation*}
 %     P_{0}^{new} := P_{0} - \nabla_{P_0} (F_m(P_0, \mathbf{x_1}) - \mathbf{q_1})^2
 %   \end{equation*}
-\item Updating weights $W$
-  \begin{eqnarray*}
-    W^{new} := W - \nabla_{W} (F_m(P_0, \mathbf{x_1}) - \mathbf{q_1})^2 \\
-    % P_{0}^{new} := P_{0} - \nabla_{P_0}(F_m(P_0, \mathbf{x_1}) - \mathbf{q_1})^2
-  \end{eqnarray*}
-% \item \mytodo{TODO: Training state}
-% \item \todo{TODO: Training weights}
+% \item Updating weights $W$
+%   \begin{eqnarray*}
+%     W^{new} := W - \nabla_{W} (F_m(P_0, \mathbf{x_1}) - \mathbf{q_1})^2 \\
+%     % P_{0}^{new} := P_{0} - \nabla_{P_0}(F_m(P_0, \mathbf{x_1}) - \mathbf{q_1})^2
+%   \end{eqnarray*}
+% % \item \mytodo{TODO: Training state}
+% % \item \todo{TODO: Training weights}
 
 \end{enumerate}
-\mytodo{explain regularization a bit}
-\mytodo{explain why we don't train initial states}
+
+
+\begin{remark}
+For a hysteretical process trained by HNN, it will catch up with the trace after finite time steps even through the initial state is incorrect.
+\mytodo{see evaluation results}
+\end{remark}

@@ -1,5 +1,26 @@
-\chapter{Financial Market Model\label{cha:chapter3}}
-\mytodo{In this chapter, we show our financial market model based on hysteresis operators and provide a practical way to generate synthetic data to simulate this model.}
+\chapter{Financial Market Model\label{cha:chapter3}}s
+% \mytodo{how to generate dataset, why does it make sense to use these synthesis data
+% input single, 0.3*np.sin(1.3 t) + N(0, 8)
+% input signal 1.0*cos(0.1t) + N(0, 2) or N(0,1)}
+% \begin{figure}[htb]
+%     \centering
+%     % \subfloat[]{
+%     % \input{./tikz/market-ground-truth-dataset}
+%     % \input{./tikz/market-ground-truth-dataset}
+%     % }
+%     \includegraphics[]{}
+%     \caption{ground-truth dataset}
+%     \label{fig:chapter3:market-ground-truth-dataset}
+% \end{figure}
+
+% \section{Discussion $\alpha$ and $n$ in Equation \ref{eqn:chapter3:root-of-real-agents-n}}
+
+% \begin{equation}
+%     n = \frac{-\ln{\big(1-\frac{\delta (1 - e^{-\alpha})}{e^{-\alpha}}}\big)}{\alpha}
+% \end{equation}
+
+% We deduce $0 < \alpha < \ln{(1 + \frac{1}{\delta})}$ since $\alpha, n > 0$. We should draw $\delta$ and $\alpha$ from gamma distribution carefully to make sure the constraints meet.
+In this chapter, we show our financial market model based on hysteresis operators in details and provide a practical way to generate synthetic data from this model.
 
 \section{Demand/Supply price formation\label{sec:chapter3:demand-supply-price-formation}}
 In this model, we assume that the stock exchange accommodates two types of agents, which we call \textit{agents D} and \textit{agents N} and describe below. We assume that the time takes values $n=0, 1, 2, , \ldots$, and denote the price at time $n$ by $x_n$. By definition, $x_n$ is the price of last transaction at time $n$. We will see below that demand equals supply at times $n$, but between any two consecutive times $n-1$ and $n$, this need not be the case and there may occur many transactions until demand will have become supply.
@@ -97,7 +118,7 @@ In order to explain how a stabilized price can change stabilize to the next valu
 \end{remark}
 
 \section{Practical approaches}
-According to \myremarkref{remark:chapter3:practical-analysis}, we introduce two auxiliary concepts of agents, \textit{real agents N} and \textit{real agents D}, and suggest the following general practical approach to generate synthetic data for our market model.
+According to \myremarkref{remark:chapter3:practical-analysis}, we introduce two auxiliary concepts of agents, \textit{real agents N} and \textit{real agents D}, and suggest the following general practical approach to generate synthetic data sets for our market model.
 
 \begin{definition}[Real agents N] 
 A real agents N consists of many a agents N with different relay threshold. 
@@ -108,7 +129,7 @@ A real agents D consists of many a agents D with different play threshold.
 \end{definition}
 
 \subsection{Real agents N}
-We should choose the following parameters
+We should choose the following parameters:
 \begin{itemize}
     \item $\delta$ - maximum amount of assets which an agent can spend;
     \item $\alpha \in \mathbb{R} $ - the step of the strategy (width of the relay);
@@ -119,7 +140,7 @@ We should choose the following parameters
 
 First we should choose $\delta$. We fix $\delta_0 > 0, \hat{\delta} > 0, k \in \mathbb{N}$ and consider $\delta_0, \delta_1 = \delta_0 + \hat{\delta}, \ldots, \delta_{k} = \delta_0 + k \hat{\delta}$. So, we just consider finite sequence of $\delta_i$ with fixed step. For each $\delta_{i}$ we should find $L(\delta_{i})$. For this purpose we need so-called gamma distribution \citep{wiki:gamma-distribution}. We take one with parameters, $k, \theta, C$. We set $L(\delta_{i}) = C \Gamma_1{(k, \theta)}(\delta_i)$. 
 Each real agent with strategy corresponding to parameters $\alpha, \alpha_0, n$ s represented
-by $2n$ relays with thresholds $\big(\alpha_0 - n \alpha, \alpha_0 - (n-1) \alpha \big),\big(\alpha_0 - (n-1) \alpha, \alpha_0 - (n-2) \alpha \big), \ldots, \big(\alpha_0 + (n-1) \alpha, \alpha_0 + n \alpha \big)$(at these layers agent buy/sell his stock). At the
+by $2n$ relays with thresholds $\big(\alpha_0 - n \alpha, \alpha_0 - (n-1) \alpha \big),\big(\alpha_0 - (n-1) \alpha, \alpha_0 - (n-2) \alpha \big), \ldots, \big(\alpha_0 + (n-1) \alpha, \alpha_0 + n \alpha \big)$(at these layers agent buys/sells his stock). At the
 beginning agent have $n$ stocks if $\alpha_0 \ge 0$ and $n-1$ otherwise.
 
 We choose $\alpha$ also using gamma distribution $\Gamma_2$. $\alpha_0$ we choose using the uniform distribution between $-\alpha$ and $\alpha$. $n$ we find as a root of the equation 
@@ -129,63 +150,73 @@ We choose $\alpha$ also using gamma distribution $\Gamma_2$. $\alpha_0$ we choos
 \end{equation}
 
 \subsection{Real agents D}
-We should choose parameter $\beta$ (when price rise/drop $\beta$ points we buy/sell) and decide whether agents have stock at the very beginning. We consider sequence $\beta_i$ with fixed step. We also fix gamma distribution $\Gamma_3$ with some parameters and multiply it by number $B$. We want the amount of stocks for \textit{agents N} and \textit{agents D} keeps the follow equation,
+We should choose parameter $\beta$ (when price rises/drops $\beta$ points we buy/sell) and decide whether agents have stock at the very beginning. We consider sequence $\beta_i$ with fixed step. We also fix gamma distribution $\Gamma_3$ with some parameters and multiply it by number $B$. We want the amount of stocks for \textit{agents N} and \textit{agents D} keeps the follow equation,
 $$\sum_{\alpha, \delta} n(\alpha, \delta) L(\delta) = \sum D_{\textbf{1}}(\beta_i) = B \sum_i \Gamma_3(\beta_i)$$
 where $D_{\textbf{1}}(\beta_i)$ is number of agents D corresponded to $\beta_i$ with stock at the very beginning. We also assume that $D_{\textbf{0}}(\beta_i) = D_{\textbf{1}}(\beta_i)$ where $D_{\textbf{0}}(\beta_i)$ is the number of agents D corresponded to $\beta_i$ without stock at the very beginning.
 
+\mytodo{maybe we need change to exponential distribution} \\
+% \mytodo{https://en.wikipedia.org/wiki/Pareto_distribution} \\ 
+% \mytodo{https://en.wikipedia.org/wiki/Pareto_distribution} \\
+% \mytodo{https://en.wikipedia.org/wiki/Lorenz_curve} \\
+
 \begin{remark}
 \begin{enumerate}
-\item why should we choose gamma distribution ? \\
-      since the probability density function of gamma distribution is in *first quadrant*, and it's continuous.
-\item why should we assume that the amount of money belonged to people is following to gamma distribution ? \\
-    In reality, it makes sense that most people only possess medium wealth. 
-\item why should we assume that the width of relay($\alpha$) is following to gamma distribution ? \\
-    In reality, most people will have the same strategy to react to the change of stock price.
+% \item Why should we choose gamma distribution ? \\
+%       The probability density function of gamma distribution is in the first quadrant, and it's continuous.
+\item Why should we assume that the amount of wealth belonged to people is followed by gamma distribution ? \\
+    According to \citep{wiki:pareto-distribution}, it makes sense that only a few people possess a large volume of wealth in reality. One of advantages using gamma distribution instead of pareto distribution is that gamma distribution is continuous. And we can tune the shape of gamma distribution to approximate pareto distribution.
+    
+\item Why should we assume that the width of relay($\alpha$) is followed by gamma distribution ? \\
+    In reality, most people will have the same strategy to react to the change of stock price. (TODO: need reference ?)
 \end{enumerate}
 \end{remark}
 
 \section{Synthetic data sets}\label{sec:chapter3:synthetic-datasets}
-\mytodo{add plot about ground-truth dataset} \\
-\mytodo{add distribution of virtual agents D} \\
-\mytodo{add distribution of virtual agents N to show it follows gamma distribution} \\
-\mytodo{add plot of alpha to show it follows gamma distribution} \\
-\mytodo{show that both agents N and D taking part in the simulation}
-\begin{figure}
+Following the practical mentioned in previous section, we obtain the following artificial data sets. See \myfigref{fig:chapter3:agents-distribution,fig:chapter3:market-participanted-agents,fig:chapter3:market-ground-truth-dataset}
+\mytodo{add distribution of real agent D, virtual agent N}
+\begin{figure}[htb!]
+    % \left
+    %\subfloat[]{
+        %\raisebox{0px} {
+            % \adjustimage{width=\textwidth/2}{
+            \includegraphics[width=\textwidth/2]{market-real-agents-n-distribution}\label{fig:chapter3:market-real-agents-n-distribution}
+            \includegraphics[width=\textwidth/2]{market-virtual-agents-d-distribution}\label{fig:chapter3:market-virtual-agents-d-distribution}
+             
+            % \adjustimage{width=\textwidth/2}{market-virtual-agents-d-distribution}\label{fig:chapter3:market-virutal-agents-d-distribution}
+
+        % }
+    % }
+
+    % \subfloat[]{
+    %         \includegraphics[width=\textwidth/2]{market-virtual-agents-d-distribution}
+    %                                 \label{fig:chapter3:market-virutal-agents-d-distribution}
+
+    % }
+    % \hfill
+    %     \subfloat[]{
+             % \adjustimage{width=\textwidth/2,left}{market-real-agents-alpha-distribution}
+             % \label{fig:chapter3:market-real-agents-alpha-distribution}
+            \includegraphics[width=\textwidth/2]{market-real-agents-alpha-distribution}\label{fig:chapter3:market-real-agents-alpha-distribution}
+
+    % }
+    \caption{\myfigref{fig:chapter3:market-real-agents-n-distribution} shows the distribution of real agents N. \myfigref{fig:chapter3:market-real-agents-alpha-distribution} shows the distribution of $\alpha$ for each agent. \myfigref{fig:chapter3:market-virutal-agents-d-distribution} shows the distribution of virtual agents D}
+    \label{fig:chapter3:agents-distribution}
+\end{figure}
+
+\begin{figure}[t!]
     \centering
     \subfloat[]{
-        \includegraphics[width=\textwidth]{market-real-agents-n-distribution}
+    \includegraphics[width=\textwidth]{market-participanted-agents}
     }
-    \subfloat[]{
-            \includegraphics[width=\textwidth]{market-real-agents-alpha-distribution}
-    }
-    \hfill
-    \subfloat[]{
-            \includegraphics[width=\textwidth]{market-virtual-agents-d-distribution}
-    }
-    \subfloat[]{
-            \includegraphics[width=\textwidth]{market-virtual-agents-n-distribution}
-    }
-    
-    \caption{Caption}
-    \label{fig:my_label}
+    \caption{The detailed behaviours of agents taken part in the market during simulation}
+    \label{fig:chapter3:market-participanted-agents}
 \end{figure}
-% \mytodo{how to generate dataset, why does it make sense to use these synthesis data
-% input single, 0.3*np.sin(1.3 t) + N(0, 8)
-% input signal 1.0*cos(0.1t) + N(0, 2) or N(0,1)}
-% \begin{figure}[htb]
-%     \centering
-%     % \subfloat[]{
-%     % \input{./tikz/market-ground-truth-dataset}
-%     % \input{./tikz/market-ground-truth-dataset}
-%     % }
-%     \includegraphics[]{}
-%     \caption{ground-truth dataset}
-%     \label{fig:chapter3:market-ground-truth-dataset}
-% \end{figure}
-\section{Discussion $\alpha$ and $n$ in Equation \ref{eqn:chapter3:root-of-real-agents-n}}
 
-\begin{equation}
-    n = \frac{-\ln{\big(1-\frac{\delta (1 - e^{-\alpha})}{e^{-\alpha}}}\big)}{\alpha}
-\end{equation}
-
-We deduce $0 < \alpha < \ln{(1 + \frac{1}{\delta})}$ since $\alpha, n > 0$. We should draw $\delta$ and $\alpha$ from gamma distribution carefully to make sure the constraint meets.
+\begin{figure}[t!]
+    \centering
+    \subfloat[]{
+        \includegraphics[width=\textwidth]{market-ground-truth-dataset}
+    }
+    \caption{The synthetic data sets generated from the model. The top one is the random walk, which is underline in the real market, of the simulation. The middle one is the fluctuation of price based on the model. And the bottom one the change of the total number of stocks in the market, which is following to random walk.}
+    \label{fig:chapter3:market-ground-truth-dataset}
+\end{figure}

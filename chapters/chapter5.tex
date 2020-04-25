@@ -1,21 +1,78 @@
 \chapter{Evaluation\label{cha:chapter5}}
 
-\section{Attribute to compare}\label{}
-\mytodo{complexity of synthesis data set (nb plays/nb units/random weights/noise)} \\
-\mytodo{number of sequence length (points)} \\
-\mytodo{number of parameters to use in the network, our network is smaller and can  achieve the same performance as (lstm/rnn/gru)} \\
-\mytodo{training loss curve} \\
-\mytodo{time consumption during train/prediction} \\
-\mytodo{(mean square error/cross entropy) on prediction data set}
+% \section{Attribute to compare}\label{}
+% \mytodo{complexity of synthesis data set (nb plays/nb units/random weights/noise)} 
+% \mytodo{number of sequence length (points)} 
+% \mytodo{number of parameters to use in the network, our network is smaller and can  achieve the same performance as (lstm/rnn/gru)} 
+% \mytodo{training loss curve} 
+% \mytodo{time consumption during train/prediction} 
+% \mytodo{(mean square error/cross entropy) on prediction data set}
 
-\section{HNN}\label{}
-\mytodo{show animation plots that indicate hnn could capture minor loops whereas lstm fails} \\
-\mytodo{show mse loss, network complexity} 
+\section{Architectures}
+\textbf{LSTM network.} We use one LSTM layer with tanh nonlinearities and one dense layer. We use the default settings of hyper parameters in tensorflow \citep{abadi2016tensorflow} except the hidden units $units$ in LSTM layer. We grid search a sequence of hidden units, $1, 8, 16, 32, 64, 128, 256$, to find out the best results achieved by LSTM networks. As for the loss functions, we minimize mean squared error (MSE) and minimize negative maximal likelihood estimator (MLE). The total number of parameters used in this architecture is given by
+\begin{equation*}
+    \text{\#parameters} = 4 * ({\text{\#\_\_units\_\_}}^2 + 2*\text{\#\_\_units\_\_}) + \text{\#\_\_units\_\_} + 1
+\end{equation*}
+% where $\#units$ is the number of hidden units.
+
+\textbf{HNN.}  We use architecture shown in \mychapterref{cha:chapter1}, see \myfigref{fig:chapter1:nn-arch}. We also exploit hyper parameters $plays$. $units$ in HNN. The number of parameters $\#parameters$ used in HNN is
+\begin{equation*}
+    \text{\#parameters} = 3 * \text{\#\_\_plays\_\_} * \text{\#\_\_units\_\_} + 1
+\end{equation*}
+% where $\#play$ is the number of plays and $\#units$ is the number of units.
+
+\textbf{Hyper parameters}
+In this evaluation, we focus on optimizing the following hyper parameters in LSTM networks and HNN.
+\begin{table}[h!]
+\begin{center}
+    \begin{tabular}{||c|c||}
+    \hline
+    Name                  & Explanation \\
+    \hline 
+    \#nb\_plays           & the number of $plays$ in ground-truth data sets \\
+    \hline
+    \#units               & the number of $units$ in ground-truth data sets \\
+    \hline
+     \#\_\_nb\_plays\_\_  & the number of $plays$ used in training phase \\
+     \hline
+     \#\_\_units\_\_      & the number of $units$ used in training phase \\
+    \hline
+    \end{tabular}
+    \caption{Hyper parameters used for evaluation}
+\end{center}
+\end{table}
+
+\section{Measure}
+The overall \textit{root mean squared error} (RMSE) is used to measure the quality of fit if loss function is MSE. It's defined as following,
+\begin{equation}
+\text{RMSE} = \sqrt{\frac{\sum_{i=1}^{N}(\hat{y}_i - y_i)^2}{N}}
+\end{equation}
+\mytodo{For MLE, we use alternative criteria to measure the result of mu and sigma.}
+
+
+\input{thesis/chapters/chapter5/debug-mse}
+\input{thesis/chapters/chapter5/hnn-invertable}
+
+\input{thesis/chapters/chapter5/debug-mle}
+
+
+\mytodo{HERE we want to show that we use less parameters. Training faster, high precious.} 
+% \mytodo{same weights but different nb plays}
+% \mytodo{different weights and different plays  no noise}
+% \mytodo{different weights  and different plays noise} 
+
+% \input{thesis/chapters/chapter5/same-weights-no-noise}
+% \input{thesis/chapters/chapter5/different-weights-no-noise}
+% \input{thesis/chapters/chapter5/different-weights-noise}
+\mytodo{show that the initial state can be ignored, no need to be trained}
+
 
 \section{HNN for market model}\label{}
-\mytodo{compare network complexity, mle loss} \\
-\mytodo{compare the markov chain obtain by lstm and hnn} \\
-\mytodo{show animation that lstm performs worse due to cannot capture minor loops.} \\
-\mytodo{show that hnn can reconstruct agents behavior} \\
-\mytodo{show that hnn can give a distribution of price, not average of price} \\
-\mytodo{show that hnn can explain the avalanche of market} \\
+\mytodo{hnn for markov chain dataset}
+\mytodo{compare network complexity, mle loss} 
+\mytodo{compare the markov chain obtain by lstm and hnn} 
+\mytodo{show animation that lstm performs worse due to cannot capture minor loops.} 
+\mytodo{show that hnn can reconstruct agents behavior}
+\mytodo{show that hnn can give a distribution of price, not average of price} 
+\mytodo{show that hnn can explain the avalanche of market} 
+

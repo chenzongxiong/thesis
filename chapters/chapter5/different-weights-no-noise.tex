@@ -1,0 +1,111 @@
+\section{different-weights-no-noise, sigma-0}
+\begin{table}
+\begin{adjustbox}{angle=0}
+\begin{tabular}{||c|c|c|c||}
+\hline 
+\#play (\#unit) & network & \#parameters & RMSE 
+\\ \hline
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+50 & lstm-unit-1 & 12 & 2.210005733
+\\ \hline
+50 & lstm-unit-8 & 320 & 2.96759788
+
+\\ \hline
+50 & lstm-unit-16 & 1,152 & 2.138047736
+
+\\ \hline
+50 & lstm-unit-32 & 4,352 & 2.385471522
+
+\\ \hline
+50 & lstm-unit-64 & 16,896 & 2.60343689
+
+\\ \hline
+50 & lstm-unit-128 & 66,560 &  2.176426255
+
+\\ \hline
+50 & lstm-unit-256 & 264,192 & 2.176366421
+
+\\ \hline
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+100 & lstm-unit-1 & 12 & 4.792876647
+
+\\ \hline
+100 & lstm-unit-8 & 320 & 3.100921422
+
+\\ \hline
+100 & lstm-unit-16 & 1,152 & 1.459150006
+
+\\ \hline
+100 & lstm-unit-32 & 4,352 & 2.49986648
+
+\\ \hline
+100 & lstm-unit-64 & 16,896 & 2.514736698
+
+\\ \hline
+100 & lstm-unit-128 & 66,560 & 2.105919619
+
+\\ \hline
+100 & lstm-unit-256 & 264,192 & 2.105532431
+\\ \hline
+\end{tabular}
+\end{adjustbox}
+\caption{lstm different weights no noise}
+\end{table}
+
+
+\begin{table}
+\begin{adjustbox}{angle=0}
+\begin{tabular}{||c|c|c|c||}
+\hline 
+\#play (\#unit) & network & \#parameters & RMSE 
+\\ \hline
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 1& hnn-play-1-unit-1 & 4 & 0.181846233
+% \\ \hline
+% 1 & hnn-play-2-unit-2 & 13 & 0.18374151
+% \\ \hline
+% 1 & hnn-play-8-unit-8 & 193 & 0.168357833
+% \\ \hline
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+50 & hnn-play-10-unit-10 & 301 & 0.520737239
+\\ \hline
+50 & hnn-play-25-unit-10 & 751 & 0.481243223
+
+\\ \hline
+50 & hnn-play-25-unit-25 & 1,876 & 0.657608419
+
+\\ \hline
+50 & hnn-play-50-unit-50 & 7,501 &  0.678940872
+
+\\ \hline
+50 & hnn-play-100-unit-50 & 15,001 &  0.669122054
+
+
+\\ \hline
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+100 &  hnn-play-25-unit-25 & 1,876 & 0.650535543
+
+\\ \hline
+100 &  hnn-play-50-unit-25 & 3,751 & 0.618666728
+
+\\ \hline
+100 &  hnn-play-50-unit-50 & 7,501 & 0.642434578
+
+\\ \hline
+100 &  hnn-play-100-unit-50 & 15,001 & 0.65746967
+
+\\ \hline
+100 &  hnn-play-100-unit-100 & 30,001 & 0.639300454
+
+\\ \hline
+100 &  hnn-play-200-unit-25 & 15,001 & 0.343120708
+
+\\ \hline
+100 &  hnn-play-200-unit-100 & 60,001 & 0.466267496
+
+\\ \hline
+\end{tabular}
+\end{adjustbox}
+\caption{hnn different weights no noise using elu as activation}
+\end{table}

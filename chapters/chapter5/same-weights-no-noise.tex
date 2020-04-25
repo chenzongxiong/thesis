@@ -1,0 +1,116 @@
+\section{hnn-lstm-all-sigma-0}
+
+\begin{table}[h]
+\begin{adjustbox}{angle=0}
+\begin{tabular}{||c|c|c|c||}
+\hline 
+\#play (\#unit) & network & \#parameters & RMSE 
+\\ \hline
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+1& lstm-unit-1 & 12 & 0.293196103
+\\ \hline
+1 & lstm-unit-8 & 320 & 0.3420867
+\\ \hline
+1 & lstm-unit-16 & 1,152 & 0.288819476
+\\ \hline
+1 & lstm-unit-32 & 4,352 & 0.291840419
+\\ \hline
+1 & lstm-unit-64 & 16,896 & 0.453519368
+\\ \hline
+1 & lstm-unit-128 & 66,560 &  0.261012763
+\\ \hline
+1 & lstm-unit-256 & 264,192 & 0.387604944
+\\ \hline
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+50 & lstm-unit-1 & 12 & 7.24246318
+\\ \hline
+50 & lstm-unit-8 & 320 & 11.47440343
+\\ \hline
+50 & lstm-unit-16 & 1,152 & 6.699965269
+\\ \hline
+50 & lstm-unit-32 & 4,352 & 5.361344497
+\\ \hline
+50 & lstm-unit-64 & 16,896 & 6.257610363
+\\ \hline
+50 & lstm-unit-128 & 66,560 & 16.18529624
+\\ \hline
+50 & lstm-unit-256 & 264,192 & 14.22657381
+\\ \hline
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+100 & lstm-unit-1 & 12 & 23.56603552
+\\ \hline
+100 & lstm-unit-8 & 320 & 7.714270118
+\\ \hline
+100 & lstm-unit-16 & 1,152 & 9.293488583
+\\ \hline
+100 & lstm-unit-32 & 4,352 & 8.239636524
+\\ \hline
+100 & lstm-unit-64 & 16,896 & 42.83023104
+\\ \hline
+100 & lstm-unit-128 & 66,560 &  40.50239738
+\\ \hline
+100 & lstm-unit-256 & 264,192 & 31.05811984
+\\ \hline
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 500 & lstm-unit-1 & -1 & 14.27020212
+% \\ \hline
+% 500 & lstm-unit-8 & -1 & 15.04781055
+% \\ \hline
+% 500 & lstm-unit-16 & -1 & 18.72035688
+% \\ \hline
+% 500 & lstm-unit-32 & -1 & 13.1013827
+% \\ \hline
+% 500 & lstm-unit-64 & -1 & 42.8302338
+% \\ \hline
+% 500 & lstm-unit-128 & -1 &  40.50240013
+% \\ \hline
+% 500 & lstm-unit-256 & -1 & 40.50240013
+% \\ \hline
+
+\end{tabular}
+\end{adjustbox}
+\caption{lstm same weights no noise}
+\end{table}
+
+% currently, it is given by the following formula
+% \begin{equation}
+%         \#parameter = \#play * (3\#unit+1)
+% \end{equation}
+
+\begin{table}[h]
+\begin{adjustbox}{angle=0}
+\begin{tabular}{||c|c|c|c||}
+\hline 
+\#play (\#unit) & network & \#parameters & RMSE 
+\\ \hline
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+1& hnn-play-1-unit-1 & 4 & 0.181846233
+\\ \hline
+1 & hnn-play-2-unit-2 & 13 & 0.18374151
+\\ \hline
+1 & hnn-play-8-unit-8 & 193 & 0.168357833
+\\ \hline
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+50 & hnn-play-50-unit-50 & 7,501 & 6.352061288
+\\ \hline
+50 & hnn-play-100-unit-100 & 30,001 & 6.18795001
+
+\\ \hline
+50 & hnn-play-200-unit-200 & 120,001 &  6.163790714
+
+\\ \hline
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+100 &  hnn-play-50-unit-50 & 7,501 & 12.71635473
+\\ \hline
+100 &  hnn-play-100-unit-100 & 30,001 & 12.42587169
+
+\\ \hline
+100 &  hnn-play-200-unit-200 & 120,001 & 11.97417496
+\\ \hline
+\end{tabular}
+\end{adjustbox}
+\caption{hnn same weights no noise using elu as activation}
+\end{table}

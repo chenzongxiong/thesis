@@ -20,7 +20,9 @@
 % 5,3,4,7
 % \end{filecontents*}
 
-\pgfplotstableread[col sep=comma]{mu-0-sigma-110.0-points-2000.csv}\mydata
+% \pgfplotstableread[col sep=comma]{mu-0-sigma-110.0-points-2000.csv}\mydata
+\pgfplotstableread[col sep=comma]{mu-0-sigma-80.0-points-1800.csv}\mydata
+
 % \pgfplotstabletypeset[
 %     columns               ={\#noise,\#price,\#kn,\#walk},
 %     % columns/f/.style      ={column name=$f (\hertz)$,sci},
@@ -47,22 +49,22 @@
 \begin{groupplot}[    
     group style = {group size = 1 by 4},
      height=5cm, width=20cm,
-     xmin=0, xmax=100,
+     xmin=0, xmax=1800,
      % horizontal sep=2cm, 
      % vertical sep=5cm
     % xticklabels from table = {\Data}{Day}, xtick = {1,...,19},
     % xticklabel style = {rotate = 90, xshift = -0.8ex, anchor = mid east}
     ]
-    \nextgroupplot[ylabel=Bn]
-    \addplot[color=red,mark=*] table[x index={6}, y index={3}]{\mydata}; % random walk
+    \nextgroupplot[ylabel=B]
+    \addplot[color=red,mark=.] table[x index={0}, y index={5}]{\mydata}; % random walk (practical)
     \nextgroupplot[ylabel=price]
-    \addplot[color=blue,mark=*] table[x index={6}, y index={2}]{\mydata}; % price
-    \nextgroupplot[ylabel=stocks]
-    \addplot[color=black,mark=*] table[x index={6}, y index={0}]{\mydata}; % stocks
-    \nextgroupplot[ylabel=external agents]
+    \addplot[color=blue,mark=.] table[x index={0}, y index={3}]{\mydata}; % price
+    \nextgroupplot[ylabel=stocks, xlabel={time steps, $n$}]
+    \addplot[color=black,mark=.] table[x index={0}, y index={1}]{\mydata}; % stocks
+    % \nextgroupplot[ylabel=external agents]
     % \addplot[green] table[x index={6}, y index={1}]{\mydata}; % noise
-    \foreach \t in \mydata {
-    }
+    % \foreach \t in \mydata {
+    % }
     % \nextgroupplot[ylabel=external agents]
 
     

@@ -128,8 +128,11 @@
     ]
         {
              \addplot table[x index={0}, y index={1}]{\loadedtable};
-             \addplot [smooth, domain=0:20, red] {160*gammapdf(x,8,1.0)};
-             \addlegendentry{Real agents N distribution}
+                          \addlegendentry{Real agents N distribution}
+
+                 \addlegendimage{line legend,red}
+
+             \addplot [smooth, domain=0:20, red,dashed] {160*gammapdf(x,8,1.0)};
              \addlegendentry{$B*\frac{x^{k-1} e^{-x/\theta} }{\theta^{k}\Gamma(k)}, k=8, \theta=1,B=160$}
         }
     \end{axis}
