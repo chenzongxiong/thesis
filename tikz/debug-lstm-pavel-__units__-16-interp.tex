@@ -1,0 +1,92 @@
+% https://olivierpieters.be/blog/2015/10/23/latex-plotting-from-file
+
+\documentclass[border=10pt]{standalone}
+\usepackage{pgfplots}
+% \usepackage{filecontents}
+\usepgfplotslibrary{groupplots}
+\usepackage{pgfplotstable}
+% \usepackage{pgfplotstable} % <-- required in preamble
+\usepackage{booktabs}      % <-- required in preamble
+\usepackage{tikz}
+\usepackage{xstring}
+\usepackage{catchfile}
+
+\pgfplotstableread[col sep=comma]{debug-lstm-pavel-__units__-16-interp.csv}\mydata
+\pgfplotsset{select coords between index/.style 2 args={
+    x filter/.code={
+        \ifnum\coordindex<#1\def\pgfmathresult{}\fi
+        \ifnum\coordindex>#2\def\pgfmathresult{}\fi
+    }
+}}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{groupplot}[
+        group style = {group size = 3 by 3}
+        ]
+        \nextgroupplot[xlabel=$a$]
+        \addplot [color=green,select coords between index={0}{59},line width=1pt] table [x index={0}, y index={1}]{\mydata};   % ground truth 
+        \addplot [color=red,select coords between index={0}{59},line width=1pt] table [x index={0}, y index={2}]{\mydata};   %lstm
+        \addplot[select coords between index={0}{400},mark=*,only marks,scatter,mark size=0.1pt,point meta={5},] table[x index={0}, y index={1}]{\mydata}; % ground truth 
+        \addplot[select coords between index={0}{400},mark=*,only marks,scatter,mark size=0.1pt,point meta={5},] table[x index={0}, y index={2}]{\mydata};
+          
+         
+        \nextgroupplot[xlabel=$b$]
+        \addplot [color=green,select coords between index={40}{99},line width=1pt] table [x index={0}, y index={1}]{\mydata};   % ground truth 
+        \addplot [color=red,select coords between index={40}{99},line width=1pt] table [x index={0}, y index={2}]{\mydata};   %lstm
+        \addplot[select coords between index={0}{400},mark=*,only marks,scatter,mark size=0.1pt,point meta={5},] table[x index={0}, y index={1}]{\mydata}; % ground truth 
+        \addplot[select coords between index={0}{400},mark=*,only marks,scatter,mark size=0.1pt,point meta={5},] table[x index={0}, y index={2}]{\mydata};
+    
+        \nextgroupplot[xlabel=$c$]
+        \addplot [color=green,select coords between index={80}{139},line width=1pt] table [x index={0}, y index={1}]{\mydata};   % ground truth 
+        \addplot [color=red,select coords between index={80}{139},line width=1pt] table [x index={0}, y index={2}]{\mydata};   %lstm
+        \addplot[select coords between index={0}{400},mark=*,only marks,scatter,mark size=0.1pt,point meta={5},] table[x index={0}, y index={1}]{\mydata}; % ground truth 
+        \addplot[select coords between index={0}{400},mark=*,only marks,scatter,mark size=0.1pt,point meta={5},] table[x index={0}, y index={2}]{\mydata};
+        
+        
+        \nextgroupplot[xlabel=$d$]
+        \addplot [color=green,select coords between index={120}{179},line width=1pt] table [x index={0}, y index={1}]{\mydata};   % ground truth 
+        \addplot [color=red,select coords between index={120}{179},line width=1pt] table [x index={0}, y index={2}]{\mydata};   %lstm
+        \addplot[select coords between index={0}{400},mark=*,only marks,scatter,mark size=0.1pt,point meta={5},] table[x index={0}, y index={1}]{\mydata}; % ground truth 
+        \addplot[select coords between index={0}{400},mark=*,only marks,scatter,mark size=0.1pt,point meta={5},] table[x index={0}, y index={2}]{\mydata};
+
+        
+        \nextgroupplot[xlabel=$e$]
+        \addplot [color=green,select coords between index={160}{219},line width=1pt] table [x index={0}, y index={1}]{\mydata};   % ground truth 
+        \addplot [color=red,select coords between index={160}{219},line width=1pt] table [x index={0}, y index={2}]{\mydata};   %lstm
+        \addplot[select coords between index={0}{400},mark=*,only marks,scatter,mark size=0.1pt,point meta={5},] table[x index={0}, y index={1}]{\mydata}; % ground truth 
+        \addplot[select coords between index={0}{400},mark=*,only marks,scatter,mark size=0.1pt,point meta={5},] table[x index={0}, y index={2}]{\mydata};
+        
+        
+        
+        % \nextgroupplot[xlabel=$f$]
+        % \addplot [color=green,select coords between index={200}{259},line width=1pt] table [x index={0}, y index={1}]{\mydata};   % ground truth 
+        % \addplot [color=red,select coords between index={200}{259},line width=1pt] table [x index={0}, y index={2}]{\mydata};   %lstm
+        % \addplot[select coords between index={0}{400},mark=*,only marks,scatter,mark size=0.1pt,point meta={5},] table[x index={0}, y index={1}]{\mydata}; % ground truth 
+        % \addplot[select coords between index={0}{400},mark=*,only marks,scatter,mark size=0.1pt,point meta={5},] table[x index={0}, y index={2}]{\mydata};
+
+
+    %   \nextgroupplot[xlabel=$g$]
+    %     \addplot [color=green,select coords between index={240}{299},line width=1pt] table [x index={0}, y index={1}]{\mydata};   % ground truth 
+    %     \addplot [color=red,select coords between index={240}{299},line width=1pt] table [x index={0}, y index={2}]{\mydata};   %lstm
+    %     \addplot[select coords between index={0}{400},mark=*,only marks,scatter,mark size=0.1pt,point meta={5},] table[x index={0}, y index={1}]{\mydata}; % ground truth 
+    %     \addplot[select coords between index={0}{400},mark=*,only marks,scatter,mark size=0.1pt,point meta={5},] table[x index={0}, y index={2}]{\mydata};
+        
+ 
+    %     \nextgroupplot[xlabel=$h$]
+    %     \addplot [color=green,select coords between index={280}{339},line width=1pt] table [x index={0}, y index={1}]{\mydata};   % ground truth 
+    %     \addplot [color=red,select coords between index={280}{339},line width=1pt] table [x index={0}, y index={2}]{\mydata};   %lstm
+    %     \addplot[select coords between index={0}{400},mark=*,only marks,scatter,mark size=0.1pt,point meta={5},] table[x index={0}, y index={1}]{\mydata}; % ground truth 
+    %     \addplot[select coords between index={0}{400},mark=*,only marks,scatter,mark size=0.1pt,point meta={5},] table[x index={0}, y index={2}]{\mydata};
+ 
+    %     \nextgroupplot[xlabel=$i$]
+    %     \addplot [color=green,select coords between index={320}{389},line width=1pt] table [x index={0}, y index={1}]{\mydata};   % ground truth 
+    %     \addplot [color=red,select coords between index={320}{389},line width=1pt] table [x index={0}, y index={2}]{\mydata};   %lstm
+    %     \addplot[select coords between index={0}{400},mark=*,only marks,scatter,mark size=0.1pt,point meta={5},] table[x index={0}, y index={1}]{\mydata}; % ground truth 
+    %     \addplot[select coords between index={0}{400},mark=*,only marks,scatter,mark size=0.1pt,point meta={5},] table[x index={0}, y index={2}]{\mydata};
+        
+\end{groupplot}
+\end{tikzpicture}
+
+\end{document}

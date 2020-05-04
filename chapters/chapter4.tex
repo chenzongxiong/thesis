@@ -1,6 +1,7 @@
 \chapter{HNN for Market\label{cha:chapter4}}
 
-In this chapter, we combine the market model and HNN together, and using HNN to train our market model and do prediction.
+In this chapter, we introduce a method to train the market model described in \mychapterref{cha:chapter3} using HNN.  
+% and using HNN to train our market model and do prediction.
 
 \section{Assumptions}
 \label{sec:chapter4:assumption}
@@ -12,7 +13,7 @@ assume that the price $p_{n}$ hysteretically depends on the underlying noise $b_
 \end{equation*}
 
 we have
-\begin{equation}
+\begin{equation}\label{eqn:chapter4:random-walk}
 b_{0} = 0, \quad b_{n} \thicksim \mathcal{N} (b_{n-1} + \mu_{b}, \sigma_{b})
 \end{equation}
 \begin{equation}
@@ -82,16 +83,34 @@ p(\mathcal{P}) &= p_b(G(\mathcal{P}_1, W_b), G(\mathcal{P}_2, W_b), \ldots, G(\m
 \end{aligned}
 \end{equation}
 
-Thus, maximizing the log-likelihood of \(p(\mathcal{P})\) is equivalent to minimize negative log-likelihood $L$ as following:
+Thus, maximizing the log-likelihood of \(p(\mathcal{P})\) is equivalent to minimize negative log-likelihood $\mathcal{L}_{ML}$ as following:
 \begin{equation}
 \begin{aligned}
-L = -\ln p(\mathcal{P}) &\thicksim \sum_{n=1}^{N} \left(\frac{(b_n-b_{n-1}-\mu_{b})^2}{2 \sigma_{b}^2} + \ln \sigma_{b} - \ln \left|\frac{\partial b_n}{\partial p_n}\right|\right) \\
+\mathcal{L}_{ML} = -\ln p(\mathcal{P}) &= \sum_{n=1}^{N} \left(\frac{(b_n-b_{n-1}-\mu_{b})^2}{2 \sigma_{b}^2} + \frac{1}{2} \ln 2 \pi \sigma^2_{b} - \ln \left|\frac{\partial b_n}{\partial p_n}\right|\right) \\ 
+&\thicksim \sum_{n=1}^{N} \left(\frac{(b_n-b_{n-1}-\mu_{b})^2}{\sigma_{b}^2} + \ln \sigma^2_{b} - \ln \left(\frac{\partial b_n}{\partial p_n}\right)^2 \right) \\
 & \longrightarrow{\min_{W_b, \mu_b, \sigma_b}} 
 %   &= \frac{1}{2} \sum_{n=1}^{N} \left[\left(\frac{b_n - b_{n-1} - \mu_{b}}{\sigma_b} \right)^2 + 2 \ln \sigma_{b} - 2 \ln \left|\frac{\partial b_n}{\partial p_n}\right|\right]
 \end{aligned}
 \end{equation}
 
 As a by-product, we obtain a determenistic sequence $b_1,\ldots,b_N$ of the noise levels, which means that $p(\mathcal{B}|\mathcal{P})$ is a delta-distribution.
+
+\section{Dynamics of $\mu_b, \sigma_b, w$}
+\begin{equation}
+    \mu^{new}_b = \mu_b - \lambda_1 \frac{\partial L}{\partial \mu_b}
+                = \frac{\lambda_1 N + \sigma^2_b}{\sigma^2_b} \mu_b - \frac{\lambda_1}{\sigma^2_b}(b_N-b_0) 
+\end{equation}
+Fixed $\lambda_1, N, \sigma_b, b_0, b_N$, we obtain estimated $\mu^{est}_{b}$
+\begin{equation}
+    \mu^{est}_{b} = \frac{b_N - b_0}{N}
+\end{equation}
+
+
+\begin{equation}
+      \sigma^{new}_b = \sigma_b - \lambda_2 \frac{\partial L}{\partial \sigma_b}, \quad\quad
+    W^{new}_b = W_b - \lambda_3 \frac{\partial L}{\partial W_b}
+\end{equation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \begin{equation}
 % \begin{aligned}
 % L = \ln p(\mathcal{P}) &\thicksim \sum_{n=1}^{N} \left(- \frac{(b_n-b_{n-1}-\mu_{b})^2}{2 \sigma_{b}^2} - \ln \sigma_{b} + \ln \left|\frac{\partial b_n}{\partial p_n}\right|\right) \\
@@ -114,11 +133,35 @@ As a by-product, we obtain a determenistic sequence $b_1,\ldots,b_N$ of the nois
 % \frac{ \partial \ln h_j}{\partial w^{k}} &=& \frac{1}{h_j} * \frac{\partial h_j} { \partial w^k}
 % \end{eqnarray}
 
-% \section{\mytodo{MSE and MLE}}
-% \label{sec:org69ccd66}
+\section{Training with loss function $\mathcal{L}_{ML}$}\label{sec:chapter4:mse-mle}
+In \mychapterref{cha:chapter2}, we provide a practical approach to train HNN using $\mathcal{L}_{SE}$ as loss function. In order to make loss function $\mathcal{L}_{ML}$ also work, we fix $\sigma_b = 1$ and reformulate it as: (\mytodo{later we will show that the $\sigma_b$ only matters the magnitude of the distribution of $\mathcal{B}$, or the trend. In our prediction, we only can the trend, not the exactly value.})
+\begin{equation}
+    \mathcal{L}_{ML} = \sum^{N}_{n=1} (b_n - b_{n-1} - \mu_b)^2 - \sum^{N}_{n=1} \ln \left(\frac{\partial b_n}{\partial p_n} \right)^2 
+\end{equation}
+% Since we cannot observe the real outputs $b_1, \ldots, b_N$ in the market, we assume that the difference between $b_n - b_{n-1} \thicksim \mathcal{N}(\mu_b, \sigma_b)$ i
+
+\begin{equation}
+    \mathcal{L}_{SE} = \frac{1}{N} \sum^{N}_{n=1}(b_n-b^{gt}_n)^2
+\end{equation}
+
+% Set $d_n = b_n - b_{n-1}$, 
+The same is true when one estimates both $\mu_b$ and $\sigma_b$ via maximizing the log-likelihood of a noraml distribution, or, equivalently, minimizing the loss 
+% \begin{equation}
+%     \mathcal{L}_{ML}(\mathcal{D}, \mu_b, \sigma_b) = \frac{1}{N}\sum^N_{n=1} \left( \frac{(d_n - \mu_b)^2}{\sigma^2_b} + 2 \ln \sigma_b \right)
+% \end{equation}
+
+% It is well known that the outliers essentially influence the estimate of the mean $\mu$ if one uses the standard error loss
+
+% The same is true when one estimates both mean $\mu_b$ and precision $\sigma_b$ via maximizing the log-likelihood of a normal distribution, or, equivalently, minimizing the loss
+% \begin{equation}
+%     \mathcal{L}_{SE}(\mathcal{Y}, \mathcal{\hat{Y}}) = \frac{1}{N} \sum^{N}_{n=1}(\hat{y}_i-y_i)^2
+% \end{equation}
+
+The reason is that, in both cases, the derivatives of the loss functions $\mathcal{L}_{SE}$ and $\mathcal{L}_{ML}$ with respect to $\mu_b$ are proportional to $d_n - \mu_b$, while the derivative of $\mathcal{L}_{ML}(\mathcal{D}, \mu_b, \sigma_b)$ with respect to $\sigma_b$ contains even $(d_n - \mu_b)^2$. It turns out that the 
+
 
 % \begin{eqnarray}
-% y &\thicksim& \mathcal{N} \left( y | G(x, w), \sigma^2 \right)
+% y &\thicksim& \mathcal{N} \left( y | G(x, w), \sigma \right)
 % \end{eqnarray}
 
 % \begin{eqnarray}
@@ -139,8 +182,6 @@ As a by-product, we obtain a determenistic sequence $b_1,\ldots,b_N$ of the nois
 % p(z_i) = p(f(y_i)) \left(\frac{\partial f}{\partial y_i}\right)^{-1} f^{-1}(z_i)
 % \end{eqnarray}
 % \(\max (\mu, \sigma, w)\) s.t. \(p(z_i)\) is maximal
-
-
 
 % \section{Gradient of networks}\label{sec:chapter4:gradient-networks}
 % First we only consider \textbf{one} generalized play
@@ -220,7 +261,8 @@ As a by-product, we obtain a determenistic sequence $b_1,\ldots,b_N$ of the nois
 %               = \frac{1}{P} \sum_{k=1}^{P}  \sum_{i=1}^{S} \tilde{\theta_{i}^{k}} \theta_{i}^{k} w^{k} \frac{\partial f(z_{j}^{k})}{\partial z_{j}^{k}} \frac{\partial{\Phi(\sigma_{j}^{k})}}{\partial{\sigma_{j}^{k}}}
 % \end{equation}
 
-% \section{\mytodo{analysis $\sigma$ is corresponded to scale only, it won't affect our final predictions}}
+\section{\mytodo{analysis $\sigma$ is corresponded to scale only, it won't affect our final predictions}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Predicting}
 For the method described in \ref{sec:chapter4:direct_learning}, we predict the next price $p^{predicted}_{N+1}$ as following: 
@@ -228,9 +270,9 @@ For the method described in \ref{sec:chapter4:direct_learning}, we predict the n
     \item Sampling the next random walk $b_{N+1} = b_{N} + \mathcal{N}(\mu_b, \sigma_b)$. 
     \item Determining the direction of price trend: If $b_{N+1} - b_{N} < 0$, we know that external agents buy stocks from the market (see \mychapterref{cha:chapter3}) and the price should rise. In verse, $b_{N+1} - b_{N} > 0$, the price should drop.
     \item Brute force search the next price $\hat{p}_{N+1}$ 
-    : At moment $N$, we already observed price $p_N$. We can set next price $\hat{p}_{N+1} = p_{N} + \Delta$ and check whether the condition $b_{N+1} = G(\hat{p}_{N+1}, W_b)$ satisfied.
+    : At moment $N$, we already observed price $p_N$. We can set next price $\hat{p}_{N+1} = p_{N} + \Delta$ and iterate all possible $\Delta$ until the condition $b_{N+1} = G(\hat{p}_{N+1}, W_b)$ satisfied. 
     \item Repeating from step $1$ to step $3$ multiple times
-    \item Calculating the average the predicted next price $p^{predicted}_{N+1}$
+    \item Calculating the average of the predicted next price $p^{predicted}_{N+1}$
 \end{enumerate}
 
 Once we observed the true price $p_{N+1}$, we predict the next noise level: 

@@ -147,7 +147,7 @@ Assume we are given an input sequence $x_1, x_2, \ldots, x_N$ and an output sequ
   \begin{equation*}
     \mathbb{R}^{K} \times \mathbb{R}^{m} \ni \mathbf{\tilde{x}} \mapsto F_{m}(\mathbf{\tilde{x}}) \in \mathbb{R}^m
   \end{equation*}
-  with the inputs $\mathbf{\tilde{x}_1}, \ldots, \mathbf{\tilde{x}_M}$ and the true targets $\mathbf{y_1}, \ldots, \mathbf{y_M}$, where
+  with the inputs $\mathbf{\tilde{x}_1}, \ldots, \mathbf{\tilde{x}_M}$, the true targets $\mathbf{y_1}, \ldots, \mathbf{y_M}$, where
   \begin{equation*}
     \begin{aligned}
       \mathbf{y_1} = (y_1, \ldots, y_m), \quad 
@@ -155,8 +155,13 @@ Assume we are given an input sequence $x_1, x_2, \ldots, x_N$ and an output sequ
       \ldots
     \end{aligned}
   \end{equation*}
+and mean squared error as loss function $\mathcal{L}_{SE}$, where 
+\begin{equation*}
+    \mathcal{L}_{SE, i} = (F_m(\mathbf{\tilde{x_i}}) - \mathbf{y_i})^2, \quad i = 1,2,\ldots 
+\end{equation*}
 
-\item Updating weights $W$.
+\item Updating weights $W$:  $W^{new} := W - \nabla_{W} \mathcal{L}_{SE, i}$.
+
 
 % \begin{remark}\label{remark:chapter2:1}
 %   Since $P_D(x)$ and $P_N(x)$ are not functions but operators, the monotone curves described in \ref{lemma:chapter3:reaction-to-price-change} are not defined only by the current value of $x$, but depend on its prehistory.

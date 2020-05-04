@@ -474,7 +474,7 @@
     ]
     \addlegendimage{/pgfplots/refstyle=plot:alpha-hist}\addlegendentry{$\alpha$};
     \addlegendimage{line legend,red}
-   \addplot [smooth, domain=0:25, red, dashed] {0.01*gammapdf(x,2,2)};
+    \addplot [smooth, domain=0:25, red, dashed] {0.01*gammapdf(x,2,2)};
     \addlegendentry{$B*\frac{x^{k-1} e^{-x/\theta} }{\theta^{k}\Gamma(k)}, k=2, \theta=2,B=0.01$}
   \end{axis}
 \end{tikzpicture}

@@ -29,7 +29,7 @@
 \begin{tikzpicture}
 \begin{groupplot}[    
     group style = {group size = 1 by 6},
-     height=5cm, width=20cm,
+    %  height=5cm, width=20cm,
      % 
      % horizontal sep=2cm, 
      % vertical sep=5cm
@@ -37,12 +37,14 @@
     % xticklabel style = {rotate = 90, xshift = -0.8ex, anchor = mid east}
     ]
     %% training sets
-    \nextgroupplot[ylabel=inputs,xmin=0,xmax=1000,xlabel={time step, $n$}]
-    \addplot[color=red,mark=.] table[x index={0}, y index={1}]{\mydata}; % random walk (practical)
-    \nextgroupplot[ylabel=outputs,xmin=0, xmax=1000,,xlabel={time step, $n$}]
-    \addplot[color=blue,mark=.] table[x index={0}, y index={2}]{\mydata}; % price
-    \nextgroupplot[ylabel=outputs,xlabel=inputs,ymin=-0.5, ymax=45]
-    \addplot[only marks,scatter,mark size=1pt] table[x index={1}, y index={2}]{\mydata}; % 
+    % \nextgroupplot[ylabel=inputs,xmin=0,xmax=1000,xlabel={time step, $n$}]
+    % \addplot[color=red,mark=.] table[x index={0}, y index={1}]{\mydata}; % random walk (practical)
+    % \nextgroupplot[ylabel=outputs,xmin=0, xmax=1000,,xlabel={time step, $n$}]
+    % \addplot[color=blue,mark=.] table[x index={0}, y index={2}]{\mydata}; % price
+    \nextgroupplot[ylabel=outputs,xlabel=inputs, xmin=-10, xmax=10]
+    % ,ymin=-45, ymax=45]
+    % \nextgroupplot[ylabel=outputs,xlabel=inputs]
+    \addplot[only marks,scatter,mark size=1pt, point meta={1}] table[x index={1}, y index={2}]{\mydata}; % 
 
     %% test sets
     % \nextgroupplot[ylabel=inputs,xmin=601,xmax=1000,xlabel={time step, $n$}]

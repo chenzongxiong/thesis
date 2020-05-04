@@ -154,69 +154,70 @@ We should choose parameter $\beta$ (when price rises/drops $\beta$ points we buy
 $$\sum_{\alpha, \delta} n(\alpha, \delta) L(\delta) = \sum D_{\textbf{1}}(\beta_i) = B \sum_i \Gamma_3(\beta_i)$$
 where $D_{\textbf{1}}(\beta_i)$ is number of agents D corresponded to $\beta_i$ with stock at the very beginning. We also assume that $D_{\textbf{0}}(\beta_i) = D_{\textbf{1}}(\beta_i)$ where $D_{\textbf{0}}(\beta_i)$ is the number of agents D corresponded to $\beta_i$ without stock at the very beginning.
 
-\mytodo{maybe we need change to exponential distribution} \\
 % \mytodo{https://en.wikipedia.org/wiki/Pareto_distribution} \\ 
 % \mytodo{https://en.wikipedia.org/wiki/Pareto_distribution} \\
 % \mytodo{https://en.wikipedia.org/wiki/Lorenz_curve} \\
 
-\begin{remark}
-\begin{enumerate}
-% \item Why should we choose gamma distribution ? \\
-%       The probability density function of gamma distribution is in the first quadrant, and it's continuous.
-\item Why should we assume that the amount of wealth belonged to people is followed by gamma distribution ? \\
-    According to \citep{wiki:pareto-distribution}, it makes sense that only a few people possess a large volume of wealth in reality. One of advantages using gamma distribution instead of pareto distribution is that gamma distribution is continuous. And we can tune the shape of gamma distribution to approximate pareto distribution.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \mytodo{maybe we need change to exponential distribution} 
+% \begin{remark}
+% \begin{enumerate}
+% % \item Why should we choose gamma distribution ? \\
+% %       The probability density function of gamma distribution is in the first quadrant, and it's continuous.
+% \item Why should we assume that the amount of wealth belonged to people is followed by gamma distribution ? \\
+%     According to \citep{wiki:pareto-distribution}, it makes sense that only a few people possess a large volume of wealth in reality. One of advantages using gamma distribution instead of pareto distribution is that gamma distribution is continuous. And we can tune the shape of gamma distribution to approximate pareto distribution.
     
-\item Why should we assume that the width of relay($\alpha$) is followed by gamma distribution ? \\
-    In reality, most people will have the same strategy to react to the change of stock price. (TODO: need reference ?)
-\end{enumerate}
-\end{remark}
+% \item Why should we assume that the width of relay($\alpha$) is followed by gamma distribution ? \\
+%     In reality, most people will have the same strategy to react to the change of stock price. (TODO: need reference ?)
+% \end{enumerate}
+% \end{remark}
 
-\section{Synthetic data sets}\label{sec:chapter3:synthetic-datasets}
-Following the practical mentioned in previous section, we obtain the following artificial data sets. See \myfigref{fig:chapter3:agents-distribution,fig:chapter3:market-participanted-agents,fig:chapter3:market-ground-truth-dataset}
-\mytodo{add distribution of real agent D, virtual agent N}
-\begin{figure}[htb!]
-    % \left
-    %\subfloat[]{
-        %\raisebox{0px} {
-            % \adjustimage{width=\textwidth/2}{
-            \includegraphics[width=\textwidth/2]{market-real-agents-n-distribution}\label{fig:chapter3:market-real-agents-n-distribution}
-            \includegraphics[width=\textwidth/2]{market-virtual-agents-d-distribution}\label{fig:chapter3:market-virtual-agents-d-distribution}
+% \section{Synthetic data sets}\label{sec:chapter3:synthetic-datasets}
+% Following the practical mentioned in previous section, we obtain the following artificial data sets. See \myfigref{fig:chapter3:agents-distribution,fig:chapter3:market-participanted-agents,fig:chapter3:market-ground-truth-dataset}
+% \mytodo{add distribution of real agent D, virtual agent N}
+% \begin{figure}[htb!]
+%     % \left
+%     %\subfloat[]{
+%         %\raisebox{0px} {
+%             % \adjustimage{width=\textwidth/2}{
+%             \includegraphics[height=3cm,width=\textwidth/2]{market-real-agents-n-distribution}\label{fig:chapter3:market-real-agents-n-distribution}
+%             \includegraphics[height=3cm,width=\textwidth/2]{market-virtual-agents-d-distribution}\label{fig:chapter3:market-virtual-agents-d-distribution}
              
-            % \adjustimage{width=\textwidth/2}{market-virtual-agents-d-distribution}\label{fig:chapter3:market-virutal-agents-d-distribution}
+%             % \adjustimage{width=\textwidth/2}{market-virtual-agents-d-distribution}\label{fig:chapter3:market-virutal-agents-d-distribution}
 
-        % }
-    % }
+%         % }
+%     % }
 
-    % \subfloat[]{
-    %         \includegraphics[width=\textwidth/2]{market-virtual-agents-d-distribution}
-    %                                 \label{fig:chapter3:market-virutal-agents-d-distribution}
+%     % \subfloat[]{
+%     %         \includegraphics[width=\textwidth/2]{market-virtual-agents-d-distribution}
+%     %                                 \label{fig:chapter3:market-virutal-agents-d-distribution}
 
-    % }
-    % \hfill
-    %     \subfloat[]{
-             % \adjustimage{width=\textwidth/2,left}{market-real-agents-alpha-distribution}
-             % \label{fig:chapter3:market-real-agents-alpha-distribution}
-            \includegraphics[width=\textwidth/2]{market-real-agents-alpha-distribution}\label{fig:chapter3:market-real-agents-alpha-distribution}
+%     % }
+%     % \hfill
+%     %     \subfloat[]{
+%              % \adjustimage{width=\textwidth/2,left}{market-real-agents-alpha-distribution}
+%              % \label{fig:chapter3:market-real-agents-alpha-distribution}
+%             \includegraphics[height=3cm,width=\textwidth/2]{market-real-agents-alpha-distribution}\label{fig:chapter3:market-real-agents-alpha-distribution}
 
-    % }
-    \caption{\myfigref{fig:chapter3:market-real-agents-n-distribution} shows the distribution of real agents N. \myfigref{fig:chapter3:market-real-agents-alpha-distribution} shows the distribution of $\alpha$ for each agent. \myfigref{fig:chapter3:market-virutal-agents-d-distribution} shows the distribution of virtual agents D}
-    \label{fig:chapter3:agents-distribution}
-\end{figure}
+%     % }
+%     \caption{\myfigref{fig:chapter3:market-real-agents-n-distribution} shows the distribution of real agents N. \myfigref{fig:chapter3:market-real-agents-alpha-distribution} shows the distribution of $\alpha$ for each agent. \myfigref{fig:chapter3:market-virutal-agents-d-distribution} shows the distribution of virtual agents D}
+%     \label{fig:chapter3:agents-distribution}
+% \end{figure}
 
-\begin{figure}[t!]
-    \centering
-    \subfloat[]{
-    \includegraphics[width=\textwidth]{market-participanted-agents}
-    }
-    \caption{The detailed behaviours of agents taken part in the market during simulation}
-    \label{fig:chapter3:market-participanted-agents}
-\end{figure}
+% \begin{figure}[t!]
+%     \centering
+%     \subfloat[]{
+%     \includegraphics[height=7cm,width=\textwidth]{market-participanted-agents}
+%     }
+%     \caption{The detailed behaviours of agents taken part in the market during simulation}
+%     \label{fig:chapter3:market-participanted-agents}
+% \end{figure}
 
-\begin{figure}[t!]
-    \centering
-    \subfloat[]{
-        \includegraphics[width=\textwidth]{market-ground-truth-dataset}
-    }
-    \caption{The synthetic data sets generated from the model. The top one is the random walk, which is underline in the real market, of the simulation. The middle one is the fluctuation of price based on the model. And the bottom one the change of the total number of stocks in the market, which is following to random walk.}
-    \label{fig:chapter3:market-ground-truth-dataset}
-\end{figure}
+% \begin{figure}[t!]
+%     \centering
+%     \subfloat[]{
+%         \includegraphics[height=7cm,width=\textwidth]{market-ground-truth-dataset}
+%     }
+%     \caption{The synthetic data sets generated from the model. The top one is the random walk, which is underline in the real market, of the simulation. The middle one is the fluctuation of price based on the model. And the bottom one the change of the total number of stocks in the market, which is following to random walk.}
+%     \label{fig:chapter3:market-ground-truth-dataset}
+% \end{figure}

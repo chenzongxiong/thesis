@@ -1,0 +1,101 @@
+\section{Micro experiments}
+Before we move the evaluation the performance of HNN, we want to show that the initial states of HNN don't matter if we have enough large data sets. Also, we will show the fact that $G^{-1}$ can be approximate by $F$ within tolerant error.
+
+\subsection{Initial states}
+We use data set $P$ and set different initial states in predicting phase.
+\mytableref{tbl:chapter5:initial-states} shows the influence of different initial states. We see incorrect initial states have bad impacts on RMSE. But these impacts cannot be ignored after 150 time steps. From \myfigref{fig:chapter5:initial-states}, we see that the predictive curves with different initial states are overlapping exactly after 150 time steps. 
+
+In the following analysis, we always set the correct initial states for predicting phase.
+
+\begin{table}[htb!]
+\centering
+\begin{adjustbox}{angle=0}
+\begin{tabular}{||c|c|c|c|c||}
+\hline 
+    Data sets & Initial state & RMSE & RMSE(50) & RMSE(150) \\
+\hline \hline
+\multirow{4}{4em}{$P$} & 1 & 4.97 $\pm$ 0.04 &  2.52 $\pm$ 0.03 & 0.15 $\pm$ 0.03 \\
+                           & 100 & 4.97 $\pm$ 0.04 & 2.52 $\pm$ 0.03 & 0.15 $\pm$ 0.03 \\
+                           & -1 & 0.69 $\pm$ 0.04 & 0.51 $\pm$ 0.03 & 0.15 $\pm$ 0.03 \\
+                           & -100 & 2.90 $\pm$ 0.03 & 1.20 $\pm$ 0.01 & 0.15 $\pm$ 0.03 \\
+                           & \textbf{correct} & \textbf{0.15 $\pm$ 0.04} & \textbf{0.15 $\pm$ 0.03} & \textbf{0.15 $\pm$ 0.03} \\
+\hline
+\hline
+\end{tabular}
+\end{adjustbox}
+\caption{Influence of initial state for predictions}
+\label{tbl:chapter5:initial-states}
+\end{table}
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[height=5cm,width=\textwidth]{thesis/img/debug-initial-state-pavel-seq.pdf}
+    \caption{Different initial states for set $P$}
+    \label{fig:chapter5:initial-states}
+\end{figure}
+
+\subsection{Inverse of HNN}
+
+% We call HNN as $G$ and the inverse function of $G$ is $F$.
+% In this section, we show that the inverse $G$ can be approximated by another network $F$ (trained as \ref{xxx}). 
+% is an experiment to see whether HNN is inverse or not.
+
+% Before we move the evaluation the performance of HNN, we want to show that the initial states of HNN don't matter if we have enough large data sets. Also, we will show the fact that $G^{-1}$ can be approximate by $F$ within tolerant error.
+
+% \textbf{Data sets.} In order to show the HNN is inverse, we generate two data sets by $G$ networks and switch the $outputs$ and $inputs$ of them, we call $\bar{P}$ and $\bar{S}$. Finally, we train HNN network $F$ using method shown in \mysectionref{sec:chapter2:training-pi-network}.
+% $\bar{P}$ respectively.
+\textbf{Setup.} One uses the data sets $S$ and $P$ generated from $G$ network and switch the $inputs$ and $outputs$ of them. We call these new data sets $\bar{S}$ and $\bar{P}$ respectively. One can train the $F$ network with $\bar{S}$ and $\bar{P}$ by training approach provided in \mysectionref{sec:chapter3:training-pi-network} and compare the $outputs$ of $F$ network with $inputs$ in $G$ network.
+\newline
+\textbf{Results.} \mytableref{tbl:chapter5:inverse-of-HNN} shows \mytodo{analysis here}.  
+\myfigref{fig:chapter5:inverse-hnn-confidence-band} shows that all prediction results tightly bound 
+
+\begin{table}[htb!]
+\centering
+\begin{adjustbox}{angle=0}
+\begin{tabular}{||c|c|c|c||}
+\hline 
+Data sets & Length & hyper parameters & RMSE \\
+\hline \hline
+\multirow{3}{4em}{$\bar{S}$ set} & \multirow{1}{4em}{100} & (50, 50) & 0 $\pm$ 0 \\ 
+                          \cline{2-4}
+                          
+                          & \multirow{1}{4em}{1000}  & (50, 50) & 0 $\pm$ 0 \\ 
+                          \cline{2-4}
+                          
+                          & \multirow{1}{4em}{5000}  & (50, 50) & 0 $\pm$ 0 \\ 
+                          \cline{2-4}
+                          
+% \hline                          
+% \multirow{3}{4em}{$\bar{P}$ set} & \multirow{1}{4em}{100}  & (50, 50) & 0 $\pm$ 0 \\ 
+
+%                           \cline{2-4}
+                          
+%                           & \multirow{1}{4em}{1000} & (50, 50) &  0.35 $\pm$ 0.06 \\ 
+                      
+%                           \cline{2-4}
+                          
+%                           & \multirow{1}{4em}{5000}  & (50, 50) & 0 $\pm$ 0 \\ 
+%                           \cline{2-4}                          
+\hline
+\hline
+\end{tabular}
+\end{adjustbox}
+\caption{RMSE for the data sets $\bar{S}$}
+\label{tbl:chapter5:inverse-of-HNN}
+\end{table}
+
+\begin{figure}[htb!]
+    \centering
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{thesis/img/inverse-hnn-pavel-seq-__units__-25-__nb_plays__-25.pdf}
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{thesis/img/inverse-hnn-pavel-seq-__units__-25-__nb_plays__-25.pdf}
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{thesis/img/inverse-hnn-pavel-seq-__units__-25-__nb_plays__-25.pdf}
+    }
+    \caption{The results of confidence band. The curve in red ground-truth $inputs$ in $G$ network and the region in light blue is the maximal and minimal prediction of $F$ network at each time step.}
+    \label{fig:chapter5:inverse-hnn-confidence-band}
+\end{figure}
