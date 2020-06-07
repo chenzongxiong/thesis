@@ -15,10 +15,11 @@ We generate data sets to identify whether LSTM/SimpleRNN/GRU network and HNN cou
 \textbf{Data set $D$.} The set $D$ (see \myfigref{fig:chapter5:dima-seq} and \myfigref{fig:chapter5:dima-seq-2}) consists 1000 points. We repeat sequence $0, 3, 5, 0, 1, 5$ to generate the input $x(n)$ for $D$. We also insert $0, -100$ at the very beginning of the input $x(n)$ to erase the memory in the hysteretic process. The first 600 points are used as a training set, and the rest 400 points are for the test set. We rescale the input of test set by 1/10, 1/7, 1/6, 1/5, 1/4, 1/3, 1/1, 1/0.5 every 50 points to identify inner loops. In this artificial set, only customized hysteretic loops are exposed to networks throughout the training phase.
 % The micro and macro loops in test set  any model during learning. 
 \newline
-\textbf{Data set $P$.} For the set $P$ (see \myfigref{fig:chapter5:pavel-seq} and \myfigref{fig:chapter5:pavel-seq-2}), it also contains 1000 points. The inputs $x(n)$ is sampled from a periodical function $5cos(0.1n)$ with random noise $noise$. Repeatedly, $noise$ is drawn from different normal distributions, which standard deviations are $0.1, 0.5, 1, 2, 3, 4, 5$. \todo{why do I use this data set}
+\textbf{Data set $P$.} For the set $P$ (see \myfigref{fig:chapter5:pavel-seq} and \myfigref{fig:chapter5:pavel-seq-2}), it also contains 1000 points. The inputs $x(n)$ is sampled from a periodical function $5cos(0.1n)$ with random noise $noise$. Repeatedly, $noise$ is drawn from different normal distributions, which standard deviations are $0.1, 0.5, 1, 2, 3, 4, 5$. % \todo{why do I use this data set}
 \newline
-\textbf{Data set $S$.} We generate set $S$ (see \myfigref{fig:chapter5:sin-seq} and \myfigref{fig:chapter5:sin-seq-2}) with different number of points. The inputs $x(n)$ of $S$ is sampled from a periodical signal function $\cos(0.1n) + 0.3\sin(1.3n) + 1.2\sin(0.6n)$. 
-\newline
+% \textbf{Data set $S$.} We generate set $S$ (see \myfigref{fig:chapter5:sin-seq} and \myfigref{fig:chapter5:sin-seq-2}) with different number of points. The inputs $x(n)$ of $S$ is sampled from a periodical signal function $\cos(0.1n) + 0.3\sin(1.3n) + 1.2\sin(0.6n)$. 
+%\newline
+
 % \textbf{Data set $M$} \mytodo{the outputs is a random walk}
 
 % \begin{figure}[h!]
@@ -53,20 +54,20 @@ We generate data sets to identify whether LSTM/SimpleRNN/GRU network and HNN cou
     \centering
 
     \subfloat[]{
-        \includegraphics[width=\textwidth/3]{debug-input-output-dima.pdf}
+        \includegraphics[width=\textwidth/2]{debug-input-output-dima.pdf}
                  \label{fig:chapter5:dima-seq-2}
 
     }
     \subfloat[]{
-        \includegraphics[width=\textwidth/3]{debug-input-output-pavel.pdf}
+        \includegraphics[width=\textwidth/2]{debug-input-output-pavel.pdf}
                          \label{fig:chapter5:pavel-seq-2}
 
     }
-    \subfloat[]{
-        \includegraphics[width=\textwidth/3]{debug-input-output-sin.pdf}
-                         \label{fig:chapter5:sin-seq-2}
+    % \subfloat[]{
+    %     \includegraphics[width=\textwidth/3]{debug-input-output-sin.pdf}
+    %                      \label{fig:chapter5:sin-seq-2}
 
-    }
+    % }
 
     \hfill
     
@@ -87,12 +88,12 @@ We generate data sets to identify whether LSTM/SimpleRNN/GRU network and HNN cou
                  \label{fig:chapter5:pavel-seq}
 
     }
-    \hfill
-    \subfloat[]{
-        \includegraphics[height=3cm,width=\textwidth]{debug-input-output-sin-2.pdf}
-                 \label{fig:chapter5:sin-seq}
+    % \hfill
+    % \subfloat[]{
+    %     \includegraphics[height=3cm,width=\textwidth]{debug-input-output-sin-2.pdf}
+    %              \label{fig:chapter5:sin-seq}
 
-    }
+    % }
     \caption{Data sets.}
     \label{fig:chapter5:data-sets}
 \end{figure}
