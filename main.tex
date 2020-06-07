@@ -58,7 +58,7 @@
 \usepackage{tikz}
 \usepackage{xstring}
 \usepackage{catchfile}
-
+\usepackage[section]{placeins}
 
 % header and footer line - no header & footer line on pages where a new chapter starts
 \pagestyle{scrheadings}
@@ -80,16 +80,23 @@
 \newcommand\mytodo[1]{\textcolor{red}{\, TODO: #1 \\}}
 \newcommand\lackref[1]{\textcolor{red}{#1 \,reference?}}
 % \newcommand\lackref[1]{}
-% \newcommand\mytodo[1]{#1}
+% \newcommand\mytodo[1]{}
 
 \newcommand\mypaper[1]{\textcolor{blue}{PAPER #1}}
+% \newcommand\myfigref[1]{Figure \ref{#1}}
 \newcommand\myfigref[1]{\Cref{#1}}
 \newcommand\myformularef[1]{\Cref{#1}}
 \newcommand\myremarkref[1]{\textbf{Remark \ref{#1}}}
 \newcommand\myassumptionref[1]{\textbf{Assumption \ref{#1}}}
+\newcommand\mylemmaref[1]{\textbf{Lemma \ref{#1}}}
+
+
 \newcommand\mychapterref[1]{Chapter \ref{#1}}
 \newcommand\mysectionref[1]{Section \ref{#1}}
 \newcommand\mytableref[1]{Table \ref{#1}}
+\newcommand\myfigureref[1]{\Cref{#1}}
+\newcommand\myappendixsectionref[1]{Appendix Sec. \ref{#1}}
+
 \newcommand*{\Scale}[2][4]{\scalebox{#1}{$#2$}}%
 \begin{document}
 % \pgfplotstableread[col sep=comma]{./tikz/debug\-pavel\-loss\-data.csv}\mydata
@@ -104,27 +111,27 @@
     % \thispagestyle{empty}
     % \cleardoublepage
 
-    % \include{./misc/self-assertion}
-    % \thispagestyle{empty}
-    % \cleardoublepage
+    \include{./misc/self-assertion}
+    \thispagestyle{empty}
+    \cleardoublepage
 
 
-    % \include{./misc/abstract}
-    % \thispagestyle{empty}
-    % \cleardoublepage
+    \include{./misc/abstract}
+    \thispagestyle{empty}
+    \cleardoublepage
 
     % \include{./misc/abstract_de}
     % \thispagestyle{empty}
     % \cleardoublepage
 
-    % \tableofcontents
-    % \thispagestyle{empty}
+    \tableofcontents
+    \thispagestyle{empty}
 
-    % \listoffigures
-    % \thispagestyle{empty}
+    \listoffigures
+    \thispagestyle{empty}
 
-    % \listoftables
-    % \thispagestyle{empty}
+    \listoftables
+    \thispagestyle{empty}
 
 % --------------------------------------------------------------
 
@@ -135,7 +142,7 @@
     \input{./chapters/chapter3}
     \input{./chapters/chapter4}
     \input{./chapters/chapter5}
-    % \input{./chapters/chapter6}
+    \input{./chapters/chapter6}
     % \input{./chapters/chapter7}
 
 % ---------------------------------------------------------------

@@ -1,0 +1,59 @@
+% https://olivierpieters.be/blog/2015/10/23/latex-plotting-from-file
+
+% \documentclass[border=10pt]{standalone}
+% \usepackage{pgfplots}
+% % \usepackage{filecontents}
+% \usepgfplotslibrary{groupplots}
+% \usepackage{pgfplotstable}
+% % \usepackage{pgfplotstable} % <-- required in preamble
+% \usepackage{booktabs}      % <-- required in preamble
+% \usepackage{tikz}
+% \usepackage{xstring}
+% \usepackage{catchfile}
+\documentclass[border=10pt]{standalone}
+\usepackage{pgfplots}
+% \usepackage{filecontents}
+\usepgfplotslibrary{groupplots}
+\usepackage{pgfplotstable}
+% \usepackage{pgfplotstable} % <-- required in preamble
+\usepackage{booktabs}      % <-- required in preamble
+\usepackage{tikz}
+\usepackage{xstring}
+\usepackage{catchfile}
+\usepgfplotslibrary{fillbetween}
+
+\pgfplotstableread[col sep=comma]{inverse-sin-__nb_plays__-25-__units__-25-point-100.csv}\mydata
+
+
+\begin{document}
+
+\begin{tikzpicture}
+\begin{axis}[    
+    % group style = {group size = 1 by 1},
+    % height=5cm, width=20cm,
+     % 
+     % horizontal sep=2cm, 
+     % vertical sep=5cm
+    % xticklabels from table = {\Data}{Day}, xtick = {1,...,19},
+    % xticklabel style = {rotate = 90, xshift = -0.8ex, anchor = mid east}
+    ylabel=outputs,
+    xmin=0, xmax=39, xlabel={time step, $n$}
+    ]
+    %% training sets
+    % \nextgroupplot[ylabel=outputs,xmin=300,xmax=350,xlabel={time step, $n$}]
+    \addplot[color=blue,mark=.,line width=1.1pt] table[x index={0}, y index={2}]{\mydata}; % ground truth
+    \addplot[color=green,mark=.,line width=1pt] table[x index={0}, y index={5}]{\mydata}; % ensemble
+    
+    \addplot+[color=black!40,mark=.,name path=lower] table[x index={0}, y index={3}]{\mydata}; % lower
+    \addplot+[color=black!40,mark=., name path=higher] table[x index={0}, y index={4}]{\mydata}; % high
+    \addplot[black!40] fill between[of=lower and higher];
+
+  
+    \addlegendentry{ground-truth}
+    \addlegendentry{prediction}
+
+\end{axis}
+\end{tikzpicture}
+
+\end{document}
+

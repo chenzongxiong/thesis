@@ -1,0 +1,75 @@
+\section{Interpolation}\label{sec:appendix:interpolation}
+
+The algorithm to interpolate original data set is given below briefly,
+\newline
+\begin{algorithm}[H]
+\SetAlgoLined
+ \caption{Interpolation results}
+ \SetKwInOut{Input}{Inputs}\SetKwInOut{Output}{Outputs}
+ \SetKwFunction{TrainedHystereticNetwork}{TrainedHystereticNetwork}
+ \SetKwFunction{GroundTruthDatasetGenerator}{GroundTruthDatasetGenerator}
+ \SetKwFunction{CubicInterpolation}{CubicInterpolation}
+ \Input{The original inputs $X$, the number of points to be interpolated between two consecutive points, $interp$}
+ \Output{The interpolated inputs, $X\_\text{interp}$, ground-truth outputs, $Y\_\text{interp}$ and predicted outputs, $\Bar{Y}\_\text{interp}$}
+ 
+\BlankLine
+\Begin{
+    /* Using cubic interpolation algorithm to interpolate original inputs*/
+    
+    $X\_\text{interp} \leftarrow \quad \CubicInterpolation(X, \textit{interp})$
+   \newline\newline
+
+    /* Applying the interpolated inputs $x\_\text{interp}$ to the hysteretic data set generator to generate ground-truth interpolated outputs */
+    
+    $Y\_\text{interp} \leftarrow \quad \GroundTruthDatasetGenerator(X\_\text{interp})$
+    \newline\newline
+    
+    /* Applying the interpolated inputs $X\_\text{interp}$ to the trained HNN to obtain interpolated predictions */
+
+    $\Bar{Y}\_\text{interp} \leftarrow \quad \TrainedHystereticNetwork(X\_\text{interp})$
+  }
+\end{algorithm}
+
+% \begin{algorithm}[H]
+% \SetAlgoLined
+% % \KwResult{train\_input\, train\_output\, test\_input\, test\_output}
+%  % initialization\
+%  \caption{How to generate set $D$}
+%  \SetKwInOut{Input}{Inputs}\SetKwInOut{Output}{Outputs}
+%  \SetKwFunction{HystereticOperator}{HystereticOperator}
+%  \SetKwFunction{Append}{Append}
+%   \SetKwFunction{Insert}{Insert}
+%   \SetKwFunction{Scale}{Scale}
+
+%  \SetKwRepeat{Repeat}{repeat}{until}
+%  \SetKwFunction{len}{len}
+%  % \Input{Number of points to generate $points$}
+%  \Output{Set $D$ consists $train\_input$, $train\_output$, $test\_input$, $test\_output$}
+%  \BlankLine
+%  \Begin{
+%   $points$ $\leftarrow$ 1000;
+%   $seq$ $\leftarrow$ [ 0, 3, 5, 0, 1, 5 ]\;
+%   $chunk\_size$ $\leftarrow$ \len{$seq$}\;
+%   $chunks$ $\leftarrow$ $\left\lceil{points/chunk\_size}\right\rceil$ \;
+%   $input$ $\leftarrow$ [ ]\;
+%   \Repeat{chunk = 0}{
+%   \tcp{append seq to list input}
+%   $\Append{input, seq}$\;
+%   $chunk$ $\leftarrow$ $chunk-1$\;
+%   }
+%   \tcp{insert 0 at index 0 in list input}
+%   $\Insert{input, 0, 0}$\;
+%   \tcp{insert -100 at index 1 in list input}
+%   $\Insert{input, 1, -100}$\;
+%   $input[600, \ldots, 700]$ $\leftarrow$ $input[600, \ldots, 700] / 10$\;
+%   $input[700, \ldots, 750]$ $\leftarrow$ $input[700, \ldots, 750] / 7$\;
+%   $input[750, \ldots, 800]$ $\leftarrow$ $input[600, \ldots, 800] / 6$\;
+%   $input[600, \ldots, 700]$ $\leftarrow$ $input[800, \ldots, 850] / 5$\;
+%   $input[600, \ldots, 700]$ $\leftarrow$ $input[850, \ldots, 900] / 4$\;
+%   $input[600, \ldots, 700]$ $\leftarrow$ $input[900, \ldots, 950] / 3$\;
+%   $input[600, \ldots, 700]$ $\leftarrow$ $input[950, \ldots, 1000] / 1$\;
+
+%   $output$ $\leftarrow$ $\HystereticOperator{input}$\;
+  
+%   }
+% \end{algorithm}

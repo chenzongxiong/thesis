@@ -44,11 +44,15 @@
     %% training sets
     % \nextgroupplot[ylabel=outputs,xmin=300,xmax=350,xlabel={time step, $n$}]
     \addplot[color=red,mark=.,name path=lower] table[x index={0}, y index={2}]{\mydata}; % ground -truth
-    \addplot[color=blue,mark=., name path=higher] table[x index={0}, y index={3}]{\mydata}; % state 1 
+    \addplot[color=blue,mark=., name path=higher] table[x index={0}, y index={7}]{\mydata}; % state 0 
+    
+    \addplot[color=black,mark=., name path=higher] table[x index={0}, y index={3}]{\mydata}; % state 1 
 
     \addplot[color=green, mark=., name path=higher] table[x index={0}, y index={5}]{\mydata}; % state -1
     \addplot[color=cyan,mark=., name path=higher] table[x index={0}, y index={4}]{\mydata}; % state 100
     \addplot[color=brown,mark=., name path=higher] table[x index={0}, y index={6}]{\mydata}; % state -100
+
+    \addlegendentry{ground-truth}
 
     \addlegendentry{state-correct}
     \addlegendentry{state=1}

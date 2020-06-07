@@ -1,10 +1,10 @@
 \chapter{Hysteretic neural networks\label{cha:chapter2}}
 
-First, we derive \textit{play networks} based on elementary non-linear function $\Phi(x)$ defined in this thesis. Then we use \textit{play networks} to generate \textit{generalized Prandtl-Ishlinskii (PI) networks}. In the end, we also provide a method how to train this PI networks. 
+ First, we derive \textit{play networks} based on elementary nonlinear function $\Phi(x)$ defined in this thesis. Then we use \textit{play networks} to generate \textit{generalized Prandtl-Ishlinskii (PI) networks}. In the end, we provide a method on how to train a hysteretic network. 
 
 \section{Play networks\label{sec:chapter2:play-network}}
 
-Consider $K > 0$ play operators. Each of them maps an initial state $p_{0}^{k} \in \mathbb{R} $ and an input sequence $x_1, x_2, \ldots$ to an output sequence $p_{1}^{k}, p_{2}^{k}, \ldots \ $, i.e.,
+Consider $K > 0$ \textit{play} operators. Each of them maps an initial state $p_{0}^{k} \in \mathbb{R} $ and an input sequence $x_1, x_2, \ldots$ to an output sequence $p_{1}^{k}, p_{2}^{k}, \ldots \ $, i.e.,
 \begin{equation*}
   p_{0}^{k}, (x_1, x_2, \ldots) \mapsto (p_{1}^{k}, p_{2}^{k}, \ldots), k = 1, \ldots, K
 \end{equation*}
@@ -34,7 +34,7 @@ where $w^{k}$ is a parameter and $\Phi(x)$ (see \myfigref{fig:chapter2:phi}) is 
         \input{./tikz/play-by-phi}
         \label{fig:chapter2:play-by-phi}
     }
-    \caption{(\myfigref{fig:chapter2:phi}) The graph of $\Phi(x)$. (\myfigref{fig:chapter2:play-by-phi}). There are three different dynamical progresses which initialize with different initial states.}
+    \caption{(\myfigref{fig:chapter2:phi}) The graph of $\Phi(x)$. (\myfigref{fig:chapter2:play-by-phi}) shows the graph of \textit{play}. There are three different hysteretic loops with different initial states generated from $\Phi(x)$.}
     \label{fig:chapter2:phi-and-play-by-phi}
 \end{figure}
 
@@ -51,7 +51,7 @@ where $w^{k}$ is a parameter and $\Phi(x)$ (see \myfigref{fig:chapter2:phi}) is 
         \input{./tikz/nn-play-rnn}
         \label{fig:chapter2:nn-play-rnn}
     }
-    \caption{The neural network cell of \myformularef{eqn:chapter2:play-operator}. The arrows show how data flows in the cell, and the number of $w^k, 1, -1$ beside the arrow line is the weights of this cell. Note that only parameter $w_k$ is learnable in this network since parameters $-1, +1$ are fixed.}
+    \caption{The neural network cell represents \myformularef{eqn:chapter2:play-operator}. The arrows indicate how data flows in the cell, and the number of $w^k, 1, -1$ beside the arrow line is the weights of this cell. Note that only parameter $w_k$ is learnable in this network since parameters $-1, +1$ are fixed.}
     
 \end{figure}
 The dynamics of \myformularef{eqn:chapter2:play-operator} is shown in \myfigref{fig:chapter2:play-by-phi}, and it can be represented as a recurrent neural network (see \myfigref{fig:chapter2:nn-play-rnn}), using the elementary neural network cell displayed in \myfigref{fig:chapter2:nn-play-stepwise}.
@@ -71,7 +71,7 @@ For example, the network in \myfigref{fig:chapter2:nn-play-rnn} is N-unfolded.
 
 \section{Generalized Prandtl-Ishlinskii networks\label{sec:chapter2:pi-network}}
 \begin{definition}
-If a network $\mathcal{G}$ network is the linear combination of generalized play networks, we call this network generalized Prandtl-Ishlinskii network, or generalized PI network. If the length of input sequence is m, we call PI networks as $m$-unfolded PI networks.
+If a network $\mathcal{G}$ network is the linear combination of generalized play networks, we call this network generalized Prandtl-Ishlinskii network or generalized PI network. If the length of the input sequence is m, we call PI networks as $m$-unfolded PI networks.
 \end{definition}
 
 % \mytodo{add generalized play networks}
@@ -116,7 +116,7 @@ where $\hat{\theta}^{k}_{s},\hat{\theta}^{k}_{0}$ are parameters and $p^k_n$ are
 
 % From \myformularef{eqn:chapter2:derviation-phi} and \myformularef{eqn:chapter2:dynamic-p0}, 
 % it's obvious that gradient on $p_0$ is trapped in vanishing situation if there exists a pair $(u_i, \Phi(u_i))$ where $u_i$ isn't on the horizontal part of $\Phi(u)$, see \myfigref{fig:chapter2:phi}. 
-
+ 
 
 % If $n$ is sufficiently large,
 % \begin{enumerate}
@@ -126,8 +126,16 @@ where $\hat{\theta}^{k}_{s},\hat{\theta}^{k}_{0}$ are parameters and $p^k_n$ are
 
 % \textbf{Solution.} We can split the input sequence into multiple batches and train the network on these smaller sequences to avoid gradient vanishing and exploding.
 
-\mytodo{update parameters notation of architecture in chapter1}
-\section{Training a PI network\label{sec:chapter2:training-pi-network}}
+% \mytodo{update parameters notation of architecture in chapter1}
+
+\section{General hysteretic networks}
+A general netwrk may consist of several \textit{play} layers (and perhaps standard layers). We call such a network \textit{hysteretic}, and denote
+\begin{equation}
+    b_n = G(X_n, W)
+\end{equation}
+where $X_n = (x_, \ldots, x_n)$ and $W$ is a vector of all weights of the network.
+
+\section{Training a hysteretic network\label{sec:chapter2:training-pi-network}}
 Assume we are given an input sequence $x_1, x_2, \ldots, x_N$ and an output sequence $y_1, y_2, \ldots, y_N$. We perform the following steps in cycle until convergence. 
 \begin{enumerate}
 \item Preparing initial states for the network: Fix a vector of initial states $P_0$ and all the weights (denoted by $W$, a collection of $w^k, \theta^{k}_{s}, \hat{\theta}^{k}_{s}, \theta^{k}_{s,0}, \hat{\theta}^{k}_{0}$). For each $k=1, \ldots, K$, we calculate recursively $p_{1}^{k}, p_{2}^{k}, \ldots, p_{N}^{k}$ by \myformularef{eqn:chapter2:play-operator}. We denote the corresponding states of the PI network by
@@ -163,10 +171,6 @@ and mean squared error as loss function $\mathcal{L}_{SE}$, where
 \item Updating weights $W$:  $W^{new} := W - \nabla_{W} \mathcal{L}_{SE, i}$.
 
 
-% \begin{remark}\label{remark:chapter2:1}
-%   Since $P_D(x)$ and $P_N(x)$ are not functions but operators, the monotone curves described in \ref{lemma:chapter3:reaction-to-price-change} are not defined only by the current value of $x$, but depend on its prehistory.
-% \end{remark}
-
 % $ At this step, we only update the weights $W$, but not the initial state $P_0$
 % \item We update the initial state $P_0$:
 %   \begin{equation*}
@@ -184,6 +188,5 @@ and mean squared error as loss function $\mathcal{L}_{SE}$, where
 
 
 \begin{remark}
-For a hysteretical process trained by HNN, it will catch up with the trace after finite time steps even through the initial state is incorrect.
-\mytodo{see evaluation results}
+For a hysteretic process trained by HNN, it will catch up with the trace after finite time steps even though the initial state is incorrect. (see \mysectionref{sec:chapter5:initial-states})
 \end{remark}

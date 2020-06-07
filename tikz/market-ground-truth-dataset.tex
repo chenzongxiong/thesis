@@ -21,7 +21,7 @@
 % \end{filecontents*}
 
 % \pgfplotstableread[col sep=comma]{mu-0-sigma-110.0-points-2000.csv}\mydata
-\pgfplotstableread[col sep=comma]{mu-0-sigma-80.0-points-1800.csv}\mydata
+\pgfplotstableread[col sep=comma]{mu-0-sigma-10.0-points-1700.csv}\mydata
 
 % \pgfplotstabletypeset[
 %     columns               ={\#noise,\#price,\#kn,\#walk},
@@ -49,7 +49,7 @@
 \begin{groupplot}[    
     group style = {group size = 1 by 4},
      height=5cm, width=20cm,
-     xmin=0, xmax=1800,
+     xmin=0, xmax=1700,
      % horizontal sep=2cm, 
      % vertical sep=5cm
     % xticklabels from table = {\Data}{Day}, xtick = {1,...,19},

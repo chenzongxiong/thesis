@@ -1,0 +1,60 @@
+% https://olivierpieters.be/blog/2015/10/23/latex-plotting-from-file
+
+% \documentclass[border=10pt]{standalone}
+% \usepackage{pgfplots}
+% % \usepackage{filecontents}
+% \usepgfplotslibrary{groupplots}
+% \usepackage{pgfplotstable}
+% % \usepackage{pgfplotstable} % <-- required in preamble
+% \usepackage{booktabs}      % <-- required in preamble
+% \usepackage{tikz}
+% \usepackage{xstring}
+% \usepackage{catchfile}
+\documentclass[border=10pt]{standalone}
+\usepackage{pgfplots}
+% \usepackage{filecontents}
+\usepgfplotslibrary{groupplots}
+\usepackage{pgfplotstable}
+% \usepackage{pgfplotstable} % <-- required in preamble
+\usepackage{booktabs}      % <-- required in preamble
+\usepackage{tikz}
+\usepackage{xstring}
+\usepackage{catchfile}
+\usepgfplotslibrary{fillbetween}
+
+\pgfplotstableread[col sep=comma]{debug-lstm-stock-mle-__units__-64.csv}\mydata
+
+\begin{document}
+
+\begin{tikzpicture}
+
+
+\begin{axis}[
+    height=7cm, width=20cm,
+    % ylabel=ground-truth-outputs,
+    axis y line*=left,
+    xmin=0,xmax=400,
+    xlabel={time step, $n$}
+   ]
+    \addplot[color=green,mark=.] table[x index={0}, y index={2}]{\mydata}; % ground truth
+    \label{plot:ground-truth};
+    % \addlegendentry{ground-truth}
+
+\end{axis}
+
+\begin{axis}[    
+    height=7cm, width=20cm,   
+    axis y line*=right, 
+ % ylabel=ensemble-outputs, 
+    % ylabel=outputs,
+    xmin=0, xmax=400,
+      legend pos=north west
+    ]
+    \addlegendimage{/pgfplots/refstyle=plot:ground-truth}\addlegendentry{ground-truth};
+    \addplot+[color=red,mark=.,name path=lower] table[x index={0}, y index={23}]{\mydata}; % ensemble
+    \addlegendentry{LSTM-ensemble}
+  \end{axis}
+ 
+\end{tikzpicture}
+\end{document}
+

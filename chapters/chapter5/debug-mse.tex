@@ -1,129 +1,54 @@
-\section{Hysteretical loop trace}
-\mytodo{HERE the ground-truth activation of data sets. P and D is None, not tanh}
-% \textbf{Data sets.} We generate two simple synthetic data sets to identify whether LSTM network and HNN could capture the micro loops of a hysteretical process. 
+\section{Hysteretic loop}
 
-% The set $D$ (see \myfigref{fig:chapter5:dima-seq}) consists 1000 points. We repeat sequence $0, 3, 5, 0, 1, 5$ to generate the input $x(n)$ for $D$. We also insert $0, -100$ at the very beginning of the input $x(n)$ in order to erase the memory in the hysteretical process. The first 600 points is used as training set and the rest 400 points is test set. We scale the input of test set by 1/10, 1/7, 1/6, 1/5, 1/4, 1/3, 1/1, 1/0.5 every 50 points in order to identify inner loops.  
+We run each network 20 times and calculate the average and the standard deviation of metric to show that if a network produces stable results.
+\mytableref{tbl:chapter5:dima-pavel-seq-results} shows the metric of the different methods. We exploit hyper parameters and select the best results achieved by those methods.
+We mark a result in bold if it is significantly better than other methods. We see that the HNN network achieves the best RMSE on all the data sets, which indicates it fits the hysteretic process best. Particularly, the amount of parameters HNN used is only about $1/9$ than that LSTM network used. 
 
-% As for the set $P$ (see \myfigref{fig:chapter5:pavel-seq}), it also contains 1000 points. The inputs $x(n)$ is sampled from a periodical function $5cos(0.1n)$ with random noise $noise$. Repeatedly, $noise$ is drawn from different normal distributions, which standard deviations are $0.1, 0.5, 1, 2, 3, 4, 5$. 
+\myfigref{fig:chapter5:dima-seq-prediction-outputs-vs-time-steps} and \myfigref{fig:chapter5:pavel-seq-prediction-outputs-vs-time-steps} shows the predictions of set $D$ and $P$ at each timestep respectively. The larger blue areas indicate the higher uncertainty of the predictions, which means the performance of the network is worse. 
 
-% \textbf{Results.} 
-We run each network 20 times and calculate the average and the standard deviation of metric to show the if a network can produce stable performance.
-\mytableref{tbl:chapter5:dima-pavel-seq-results} shows the metric of the different methods. We exploit hyper parameters select select the best results achieved by those methods (\mytodo{see appendix for detail results, maybe I also need to add results of gru and simple rnn}).
-We mark a result in bold if it is significantly better than other methods. We see that the HNN network achieves the best RMSE on all the data sets, which indicates it fits hysteretical process best. 
+In \myfigref{fig:chapter5:dima-lstm-results}, we see the predictions of LSTM networks perform extremely poor considering the first 300 timesteps corresponding to the micro-loops. The main reason is that LSTM network don't take hysteretic properties into consideration. On the contrary, the blue areas restricted around the ground-truth curve tightly reveal the NNN can reconstruct micro-loops from the training data set without observing them before. We can see both LSTM networks and HNN predict well for timestep ranges from 300 to 350 since these data are the same as the training set. For the last 50 timesteps, it corresponds to the macro-loops in the hysteretic process. Similarly, we see that HNN outperforms LSTM networks.
 
-\myfigref{fig:chapter5:pavel-seq-prediction-outputs-vs-time-steps} shows the predictions of set $P$ at each time step. The larger blue areas indicate the higher uncertainty of the predictions, which means the performance of network is worse. We see that the blue areas in \myfigref{fig:chapter5:lstm-results} is significantly larger than those in \myfigref{fig:chapter5:hnn-results}, especially for the first 100 time steps. Back to set $P$, We see the noise is distributed in training set evenly (repeating with standard deviation $0.1, 0.5, 1, 2, 3, 4, 5$ every 7 steps.). However, the first 100 data points are mainly dominated by $5 \cos(0.1n)$ signal, which is highly difference from the training set. LSTM network cannot deal with such a distribution in test set well and predict results worse with high uncertainty. Whereas, HNN treats training set as hysteretical process and inspect the internal properties of this dynamics successfully. That's why the blue areas of HNN is tightly bounded with the ground-truth curve. 
-\newline
-\myfigref{fig:chapter5:hnn-lstm-dynamics} shows the dynamics of set $P$. We apply cubic interpolation algorithm on $inputs$ of test set to generate $interp\_inputs$. to interpolate the ground-truth test set and predictive results to make the dynamics curve smooth. We see the green curve and blue one are overlapping preciously, whereas the red one deviates from the trace of blue one. That confirms HNN does capture in micro loops in a hysteretical process, but LSTM network fails. 
-Interesting, \myfigref{fig:chapter5:hnn-lstm-dynamics-1} and \myfigref{fig:chapter5:hnn-lstm-dynamics-2} show the LSTM network tries to predict the average of a hysteretical process.
+For performance of set $P$, we see that the blue areas in \myfigref{fig:chapter5:pavel-lstm-results} are significantly larger than those in \myfigref{fig:chapter5:pavel-hnn-results}, especially for the first 100 timesteps. Back to set $P$, We see the noise is spread in the training set evenly (repeating with standard deviation $0.1, 0.5, 1, 2, 3, 4, 5$ every 7 steps.). However, the first 100 data points are mainly dominated by $5 \cos(0.1n)$ signal due to the small standard deviation, which is profoundly distinct from the training set. LSTM network cannot deal with such a distribution in the test set well and predict results with high uncertainty. Whereas, HNN treats the training set as a hysteretic process and inspects the internal properties of this dynamics successfully. That's why the blue areas of HNN are tightly adhered to with the ground-truth curve. 
 
-% The following graphs are the dynamics of micro loops of data set $P$ for LSTM network and HNN.
+\myfigref{fig:chapter5:dima-hnn-lstm-dynamics} and \myfigref{fig:chapter5:pavel-hnn-lstm-dynamics} show the dynamics of set $D$ and $P$ individually. We apply cubic interpolation algorithm (see \myappendixsectionref{sec:appendix:interpolation}) on $inputs$ of test set and generate new interpolated $inputs$. After that, we feed the interpolated $inputs$ into the trained networks to generate the interpolated predictive results. 
 
+For data set $D$, we see the red curve (generated by LSTM networks) is oscillated left and right horizontally. But, the green curve  (generated by HNN) can follow the dynamics of the blue one in \myfigref{fig:chapter5:dima-hnn-lstm-dynamics-1,fig:chapter5:dima-hnn-lstm-dynamics-2,fig:chapter5:dima-hnn-lstm-dynamics-3,fig:chapter5:dima-hnn-lstm-dynamics-4,fig:chapter5:dima-hnn-lstm-dynamics-5}. We emphasize that the micro-loops in \myfigref{fig:chapter5:dima-hnn-lstm-dynamics-1,fig:chapter5:dima-hnn-lstm-dynamics-2,fig:chapter5:dima-hnn-lstm-dynamics-3,fig:chapter5:dima-hnn-lstm-dynamics-4,fig:chapter5:dima-hnn-lstm-dynamics-5} aren't exposed to the model during training. That's why the dynamic curve of LSTM networks is a horizontal line. Conversely, HNN reconstructs this kind of hysteretic process properly from the training set even though there still remains some bias. Particularly, \myfigref{fig:chapter5:dima-hnn-lstm-dynamics-9} is associated with the dynamics of the last 50 points in the test set, which we double the signal of inputs and we see that HNN is also able to reconstruct the macro-loops. 
 
-% \begin{algorithm}[H]
-% \SetAlgoLined
-% % \KwResult{train\_input\, train\_output\, test\_input\, test\_output}
-%  % initialization\
-%  \caption{How to generate set $D$}
-%  \SetKwInOut{Input}{Inputs}\SetKwInOut{Output}{Outputs}
-%  \SetKwFunction{HystereticOperator}{HystereticOperator}
-%  \SetKwFunction{Append}{Append}
-%   \SetKwFunction{Insert}{Insert}
-%   \SetKwFunction{Scale}{Scale}
+As for data set $P$, we see the green curve (generated by HNN) and blue one (ground-truth curve) are overlapping preciously. At the same time, the red curve, which generated from LSTM networks, deviates from the trace of the blue one. That confirms HNN does capture in micro-loops in a hysteretic process, but LSTM networks fail. 
+Interesting, \myfigref{fig:chapter5:pavel-hnn-lstm-dynamics-1} and \myfigref{fig:chapter5:pavel-hnn-lstm-dynamics-2} show that the red curve oscillates around the middle of the micro loop. It implies the fact that LSTM network tries to predict the average of a hysteretic process.
 
-%  \SetKwRepeat{Repeat}{repeat}{until}
-%  \SetKwFunction{len}{len}
-%  % \Input{Number of points to generate $points$}
-%  \Output{Set $D$ consists $train\_input$, $train\_output$, $test\_input$, $test\_output$}
-%  \BlankLine
-%  \Begin{
-%   $points$ $\leftarrow$ 1000;
-%   $seq$ $\leftarrow$ [ 0, 3, 5, 0, 1, 5 ]\;
-%   $chunk\_size$ $\leftarrow$ \len{$seq$}\;
-%   $chunks$ $\leftarrow$ $\left\lceil{points/chunk\_size}\right\rceil$ \;
-%   $input$ $\leftarrow$ [ ]\;
-%   \Repeat{chunk = 0}{
-%   \tcp{append seq to list input}
-%   $\Append{input, seq}$\;
-%   $chunk$ $\leftarrow$ $chunk-1$\;
-%   }
-%   \tcp{insert 0 at index 0 in list input}
-%   $\Insert{input, 0, 0}$\;
-%   \tcp{insert -100 at index 1 in list input}
-%   $\Insert{input, 1, -100}$\;
-%   $input[600, \ldots, 700]$ $\leftarrow$ $input[600, \ldots, 700] / 10$\;
-%   $input[700, \ldots, 750]$ $\leftarrow$ $input[700, \ldots, 750] / 7$\;
-%   $input[750, \ldots, 800]$ $\leftarrow$ $input[600, \ldots, 800] / 6$\;
-%   $input[600, \ldots, 700]$ $\leftarrow$ $input[800, \ldots, 850] / 5$\;
-%   $input[600, \ldots, 700]$ $\leftarrow$ $input[850, \ldots, 900] / 4$\;
-%   $input[600, \ldots, 700]$ $\leftarrow$ $input[900, \ldots, 950] / 3$\;
-%   $input[600, \ldots, 700]$ $\leftarrow$ $input[950, \ldots, 1000] / 1$\;
-
-%   $output$ $\leftarrow$ $\HystereticOperator{input}$\;
-  
-%   }
-% \end{algorithm}
-
-% \begin{table}[htb!]
-% \centering
-% \begin{adjustbox}{angle=0}
-% \begin{tabular}{||c|c|ccc||}
-% \hline 
-% Data sets & networks & hyper parameters & \#parameters & RMSE \\
-% \hline \hline
-% \multirow{13}{4em}{$D$ set} & \multirow{7}{4em}{LSTM} & 1 & 12 &  15.70 $\pm$ 6.89 \\ 
-%                          &                         & 8 & 320 &   \\ 
-%                          &                         & 16 & 1152 &  \\ 
-%                          &                         & 32 & 4352 & 22.71 $\pm$ 14.82 \\ 
-%                          &                         & 64 & 16896 & 12.16 $\pm$ 5.22  \\ 
-%                          &                         & 128 & 66560 & 14.39 $\pm$ 4.07 \\
-%                          % &                         & 256 & 264192 & \textcolor{red}{19.58295805} \\ 
-% \cline{2-5}
-%                              & \multirow{6}{4em}{HNN}  & (10, 10) & 301 & 3.07 $\pm$
-% 0.208 \\
-%                          &                         & (25, 10) & 751 & \textcolor{red}{3.602981637} \\ 
-%                          &                         & (25, 25) & 1876 & 2.78 $\pm$ 0.32 \\ 
-%                          &                         & (50, 25) & 3751 & 2.61 $\pm$ 0.34 \\ 
-%                          &                         & (50, 50) & 7501 & \textcolor{red}{3.02593742} \\ 
-%                          &                         & (100, 50) & 15001 & \textcolor{red}{3.040274771} \\ 
-                         
-% \hline \hline
-% \multirow{13}{4em}{$P$ set} & \multirow{7}{4em}{LSTM} & 1 & 12 & 8.66 $\pm$ 0.86 \\ 
-%                          &                         & 8 & 320 & 5.28 $\pm$ 0.77 \\ 
-%                          &                         & 16 & 1152 & 5.95 $\pm$ 0.83 \\ 
-%                          &                         & 32 & 4352 & 5.41 $\pm$ 0.46 \\ 
-%                          &                         & 64 & 16896 & 5.00 $\pm$ 0.33 \\ 
-%                          &                         & 128 & 66560 & 4.99 $\pm$ 0.33 \\ 
-%                          % &                         & 256 & 264192 & \textcolor{red}{39.95634943} \\ 
-% \cline{2-5}
-%                          & \multirow{6}{4em}{HNN}  & (10, 10) & 301 & 0.53 $\pm$ 0.16 \\
-%                          &                         & (25, 10) & 751 & 0.42 $\pm$ 0.22  \\ 
-%                          &                         & (25, 25) & 1876 & 0.15 $\pm$ 0.04 \\ 
-%                          &                         & (50, 25) & 3751 & 0.36 $\pm$ 0.17 \\ 
-%                          &                         & (50, 50) & 7501 & 0.09 $\pm$ 0.02 \\ 
-%                          &                         & (100, 50) & 15001 & 0.16 $\pm$ 0.07 \\        
-% \hline
-% \end{tabular}
-% \end{adjustbox}
-% \caption{RMSE for the data sets $D$ and $P$}
-% \label{tbl:chapter5:dima-pavel-seq-results}
-% \end{table}
-
+Overall, the HNN inspects the hysteretic data set and reconstructs this process correctly. Whereas, LSTM networks predict the results based on what it has seen in the training set (see \myfigref{fig:chapter5:dima-hnn-lstm-dynamics-8,fig:chapter5:dima-lstm-results}) and fail to rebuild the micro-loops and macro-loops.
 
 \begin{table}[htb!]
 \centering
 \begin{adjustbox}{angle=0}
-\begin{tabular}{||c|c|ccc||}
+\begin{tabular}{||c|c|cc||}
 \hline 
-Data sets & networks & hyper parameters & \#parameters & RMSE \\
+Data sets & networks & \#parameters & RMSE \\
 \hline \hline
-\multirow{2}{4em}{$D$ set} & \multirow{1}{4em}{LSTM} & 128 & 66560 & 14.39 $\pm$ 4.07 \\
-                    
-\cline{2-5}
-                             & \multirow{1}{4em}{HNN}  & (50, 50) & 7501 & \textcolor{red}{3.02593742} \\ 
+\multirow{2}{4em}{$D$ set} 
+                             & \multirow{1}{6em}{SimpleRNN} & 16769 & 12.62 $\pm$ 1.50  \\             
+\cline{2-4}
+
+                             & \multirow{1}{6em}{GRU} & 50049 & 12.13 $\pm$ 2.64 \\ 
+\cline{2-4}
+                             & \multirow{1}{6em}{LSTM} & 66560 & 14.39 $\pm$ 4.07 \\
+\cline{2-4}
+                             & \multirow{1}{6em}{HNN} & 7501 & \textbf{2.79 $\pm$ 0.09} \\ 
 \hline \hline
-\multirow{2}{4em}{$P$ set} & \multirow{1}{4em}{LSTM}   & 128 & 66560 & 4.99 $\pm$ 0.33 \\ 
-\cline{2-5}
-                         & \multirow{1}{4em}{HNN}  & (50, 50) & 7501 & 0.09 $\pm$ 0.02 \\ 
+\multirow{2}{4em}{$P$ set} 
+
+% 
+                            & \multirow{1}{6em}{SimpleRNN} & 16769 & 5.75 $\pm$ 0.66 \\
+\cline{2-4}
+
+                             & \multirow{1}{6em}{GRU} & 50049 & 4.70 $\pm$ 0.45 \\ 
+\cline{2-4}
+                            & \multirow{1}{6em}{LSTM}   & 66560 & 4.99 $\pm$ 0.33 \\ 
+
+\cline{2-4}
+                         & \multirow{1}{6em}{HNN} 
+                         & 7501 & \textbf{0.09 $\pm$ 0.02} \\ 
 \hline
 \end{tabular}
 \end{adjustbox}
@@ -131,68 +56,137 @@ Data sets & networks & hyper parameters & \#parameters & RMSE \\
 \label{tbl:chapter5:dima-pavel-seq-results}
 \end{table}
 
-\begin{figure}[ht!]
+\begin{figure}[h!]
     \centering
-    \subfloat[]{
+    \subfloat[LSTM]{
+        \includegraphics[width=\textwidth/2]{thesis/img/debug-lstm-dima-__units__-128.pdf}
+        \label{fig:chapter5:dima-lstm-results}
+    }
+    \subfloat[HNN]{
+        \includegraphics[width=\textwidth/2]{thesis/img/debug-hnn-dima-__units__-25-__nb_plays__-25.pdf}
+        \label{fig:chapter5:dima-hnn-results}
+    }
+    \caption{Predictions for set $D$. The curve in red is the ground-truth data set and the light blue area correspond to the maximal and minimal predicted results at each timestep. \myfigref{fig:chapter5:dima-lstm-results} is the predictions of LSTM network and \myfigref{fig:chapter5:dima-hnn-results} is the predictions of HNN.}
+    \label{fig:chapter5:dima-seq-prediction-outputs-vs-time-steps}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \subfloat[LSTM]{
         \includegraphics[width=\textwidth/2]{thesis/img/debug-lstm-pavel-__units__-128.pdf}
-        \label{fig:chapter5:lstm-results}
+        \label{fig:chapter5:pavel-lstm-results}
     }
-    \subfloat[]{
+    \subfloat[HNN]{
         \includegraphics[width=\textwidth/2]{thesis/img/debug-hnn-pavel-__units__-25-__nb_plays__-25.pdf}
-        \label{fig:chapter5:hnn-results}
+        \label{fig:chapter5:pavel-hnn-results}
     }
-    \caption{Predictions for set $P$. The curve in red is the ground-truth data set and the light blue area correspond to the maximal and minimal predicted results at each time step. \myfigref{fig:chapter5:lstm-results} is the predictions of LSTM network and \myfigref{fig:chapter5:hnn-results} is the predictions of HNN.}
+    \caption{Predictions for set $P$. The curve in red is the ground-truth data set and the light blue areas correspond to the maximal and minimal predicted results at each timestep. \myfigref{fig:chapter5:pavel-lstm-results} is the predictions of LSTM network and \myfigref{fig:chapter5:pavel-hnn-results} is the predictions of HNN.}
     \label{fig:chapter5:pavel-seq-prediction-outputs-vs-time-steps}
 \end{figure}
+
+
+\begin{figure}[h]
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-dima-hnn-lstm-inspection/1.pdf}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics-1}
+
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-dima-hnn-lstm-inspection/2.pdf}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics-2}
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-dima-hnn-lstm-inspection/3.pdf}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics-3}
+    
+    }
+    \hfill
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-dima-hnn-lstm-inspection/4.pdf}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics-4}
+
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-dima-hnn-lstm-inspection/5.pdf}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics-5}
+
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-dima-hnn-lstm-inspection/6.pdf}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics-6}
+    
+    }
+    \hfill
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-dima-hnn-lstm-inspection/7.pdf}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics-7}
+    
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-dima-hnn-lstm-inspection/8.pdf}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics-8}
+
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-dima-hnn-lstm-inspection/9.pdf}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics-9}
+    
+    }
+    \caption{The dynamics of hysteretic loops for set $D$. The dots in cyan are mixed with ground-truth data sets and predicted data sets. The curve in blue is the dynamics of ground-truth data sets and the one in red is the dynamics generated by LSTM networks and the one in green is the dynamics generated by HNN.}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics}
+\end{figure}
+
 
 %% lstm & hnn motion
 \begin{figure}[h]
     \subfloat[]{
     \includegraphics[width=\textwidth/3]{debug-pavel-hnn-lstm-inspection/1.pdf}
-    \label{fig:chapter5:hnn-lstm-dynamics-1}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics-1}
 
     }
     \subfloat[]{
     \includegraphics[width=\textwidth/3]{debug-pavel-hnn-lstm-inspection/2.pdf}
-    \label{fig:chapter5:hnn-lstm-dynamics-2}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics-2}
     }
     \subfloat[]{
     \includegraphics[width=\textwidth/3]{debug-pavel-hnn-lstm-inspection/3.pdf}
-    \label{fig:chapter5:hnn-lstm-dynamics-3}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics-3}
     
     }
     \hfill
     \subfloat[]{
     \includegraphics[width=\textwidth/3]{debug-pavel-hnn-lstm-inspection/4.pdf}
-    \label{fig:chapter5:hnn-lstm-dynamics-4}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics-4}
 
     }
     \subfloat[]{
     \includegraphics[width=\textwidth/3]{debug-pavel-hnn-lstm-inspection/5.pdf}
-    \label{fig:chapter5:hnn-lstm-dynamics-5}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics-5}
 
     }
     \subfloat[]{
     \includegraphics[width=\textwidth/3]{debug-pavel-hnn-lstm-inspection/6.pdf}
-    \label{fig:chapter5:hnn-lstm-dynamics-6}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics-6}
     
     }
     \hfill
     \subfloat[]{
     \includegraphics[width=\textwidth/3]{debug-pavel-hnn-lstm-inspection/7.pdf}
-    \label{fig:chapter5:hnn-lstm-dynamics-7}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics-7}
     
     }
     \subfloat[]{
     \includegraphics[width=\textwidth/3]{debug-pavel-hnn-lstm-inspection/8.pdf}
-    \label{fig:chapter5:hnn-lstm-dynamics-8}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics-8}
 
     }
     \subfloat[]{
     \includegraphics[width=\textwidth/3]{debug-pavel-hnn-lstm-inspection/9.pdf}
-    \label{fig:chapter5:hnn-lstm-dynamics-9}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics-9}
     
     }
-    \caption{The dynamics of hysteretical loops for set $P$. The dots in blue is mixed with ground-truth data sets and predicted data sets. The curve in blue is the dynamics of ground-truth data sets and the one in red is the dynamics generated by LSTM networks and the one in green is the dynamics generated by HNN.}
-    \label{fig:chapter5:hnn-lstm-dynamics}
+    \caption{The dynamics of hysteretic loops for set $P$. The dots in cyan is mixed with ground-truth data sets and predicted data sets. The curve in blue is the dynamics of ground-truth data sets and the one in red is the dynamics generated by LSTM networks and the one in green is the dynamics generated by HNN.}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics}
 \end{figure}
+
+\FloatBarrier

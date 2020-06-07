@@ -1,0 +1,86 @@
+\section{Detailed results comparison}
+\mytableref{tbl:appendix:dima-pavel-seq-results} shows the performance of different architectures exploited with different hyperparameters. The hyperparameter associated with LSTM/SimpleRNN/GRU networks is $\_\_units\_\_$, and one associated with HNN is the tuple of $(\_\_nb\_plays\_\_, \_\_units\_\_)$ (see \mytableref{tbl:chapter5:hyperparameters}).
+
+\begin{table}[htb!]
+\centering
+\begin{adjustbox}{angle=0}
+\begin{tabular}{||c|c|ccc||}
+\hline 
+Data sets & networks & hyperparameters & \#parameters & RMSE \\
+\hline \hline
+
+\multirow{13}{4em}{$D$ set} 
+
+                         & \multirow{7}{6em}{SimpleRNN} & 1 & 5 & 10.09 $\pm$ 0.01 \\ 
+                         &                         & 8 & 89 & 39.29 $\pm$ 18.97 \\ 
+                         &                         & 16 & 305 & 42.25 $\pm$ 24.28 \\ 
+                         &                         & 32 & 1121 & 15.56 $\pm$ 11.23 \\ 
+                         &                         & 64 & 4289 & 25.36 $\pm$ 15.83 \\ 
+                         &                         & 128 & 16769 & 12.62 $\pm$ 1.50 \\ 
+\cline{2-5}
+                         
+                         & \multirow{7}{6em}{GRU} & 1 & 11 & 16.95 $\pm$ 10.48 \\ 
+                         &                         & 8 & 249 & 16.64 $\pm$ 7.29 \\ 
+                         &                         & 16 & 881 & 19.59 $\pm$ 8.39 \\ 
+                         &                         & 32 & 3297 & 15.37 $\pm$ 10.70 \\ 
+                         &                         & 64 & 12737 & 17.55 $\pm$ 6.43 \\ 
+                         &                         & 128 & 50049 & 12.13 $\pm$ 2.64 \\ 
+                         % &                         & 256 & 264192 & \textcolor{red}{39.95634943} \\ 
+\cline{2-5}
+
+& \multirow{7}{6em}{LSTM} & 1 & 12 &  15.70 $\pm$ 6.89 \\ 
+                         &                         & 8 & 320 &  29.89 $\pm$ 30.48 \\ 
+                         &                         & 16 & 1152 & 47.15 $\pm$ 46.12 \\ 
+                         &                         & 32 & 4352 & 22.71 $\pm$ 14.82 \\ 
+                         &                         & 64 & 16896 & 12.16 $\pm$ 5.22  \\ 
+                         &                         & 128 & 66560 & 14.39 $\pm$ 4.07 \\
+                         % &                         & 256 & 264192 & \textcolor{red}{19.58295805} \\ 
+\cline{2-5}
+
+                             & \multirow{6}{6em}{HNN}  & (10, 10) & 301 & 3.07 $\pm$
+0.208 \\
+                         &                         & (25, 10) & 751 & 2.92 $\pm$ 0.18\\ 
+                         &                         & (25, 25) & 1876 & 2.78 $\pm$ 0.32 \\ 
+                         &                         & (50, 25) & 3751 & 2.61 $\pm$ 0.34 \\ 
+                         &                         & (50, 50) & 7501 & 2.79 $\pm$ 0.09 \\ 
+                         &                         & (100, 50) & 15001 & 3.14 $\pm$ 0.14 \\ 
+                         
+\hline \hline
+\multirow{13}{4em}{$P$ set}
+                         & \multirow{7}{6em}{SimpleRNN} & 1 & 5 & 6.84 $\pm$ 0.01 \\ 
+                         &                         & 8 & 89 & 4.47 $\pm$ 0.30 \\ 
+                         &                         & 16 & 305 & 5.21 $\pm$ 0.57 \\ 
+                         &                         & 32 & 1121 & 6.05 $\pm$ 1.07 \\ 
+                         &                         & 64 & 4289 & 6.84 $\pm$ 0.67 \\ 
+                         &                         & 128 & 16769 & 5.75 $\pm$ 0.66 \\ 
+\cline{2-5}
+                         & \multirow{7}{6em}{GRU} & 1 & 11 & 7.83 $\pm$ 0.01 \\ 
+                         &                         & 8 & 249 & 4.72 $\pm$ 0.68 \\ 
+                         &                         & 16 & 881 & 5.34 $\pm$ 0.78 \\ 
+                         &                         & 32 & 3297 & 5.30 $\pm$ 0.90 \\ 
+                         &                         & 64 & 12737 & 5.02 $\pm$ 0.44 \\ 
+                         &                         & 128 & 50049 & 4.70 $\pm$ 0.45 \\ 
+                         % &                         & 256 & 264192 & \textcolor{red}{39.95634943} \\ 
+\cline{2-5}
+
+& \multirow{7}{6em}{LSTM} & 1 & 12 & 8.66 $\pm$ 0.86 \\ 
+                         &                         & 8 & 320 & 5.28 $\pm$ 0.77 \\ 
+                         &                         & 16 & 1152 & 5.95 $\pm$ 0.83 \\ 
+                         &                         & 32 & 4352 & 5.41 $\pm$ 0.46 \\ 
+                         &                         & 64 & 16896 & 5.00 $\pm$ 0.33 \\ 
+                         &                         & 128 & 66560 & 4.99 $\pm$ 0.33 \\ 
+                         % &                         & 256 & 264192 & \textcolor{red}{39.95634943} \\ 
+\cline{2-5}
+
+                         & \multirow{6}{6em}{HNN}  & (10, 10) & 301 & 0.53 $\pm$ 0.16 \\
+                         &                         & (25, 10) & 751 & 0.42 $\pm$ 0.22  \\ 
+                         &                         & (25, 25) & 1876 & 0.15 $\pm$ 0.04 \\ 
+                         &                         & (50, 25) & 3751 & 0.36 $\pm$ 0.17 \\ 
+                         &                         & (50, 50) & 7501 & 0.09 $\pm$ 0.02 \\ 
+                         &                         & (100, 50) & 15001 & 0.16 $\pm$ 0.07 \\        
+\hline
+\end{tabular}
+\end{adjustbox}
+\caption{RMSE for the data sets $D$ and $P$}
+\label{tbl:appendix:dima-pavel-seq-results}
+\end{table}

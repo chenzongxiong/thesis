@@ -7,18 +7,19 @@
 % \mytodo{training loss curve} 
 % \mytodo{time consumption during train/prediction} 
 % \mytodo{(mean square error/cross entropy) on prediction data set}
-In this chapter, we evaluate different methods on hysteretical data sets and compare the performance among them.
+% In this chapter, we evaluate different methods on hysteretic data sets and compare the performance among them.
 
 \section{Data sets}
-We generate data sets to identify whether LSTM network and HNN could capture the micro loops of a hysteretical process. 
+We generate data sets to identify whether LSTM/SimpleRNN/GRU network and HNN could capture the micro-loops of a hysteretic process. 
 \newline
-\textbf{Data set $D$}. The set $D$ (see \myfigref{fig:chapter5:dima-seq}) consists 1000 points. We repeat sequence $0, 3, 5, 0, 1, 5$ to generate the input $x(n)$ for $D$. We also insert $0, -100$ at the very beginning of the input $x(n)$ in order to erase the memory in the hysteretical process. The first 600 points is used as training set and the rest 400 points is test set. We scale the input of test set by 1/10, 1/7, 1/6, 1/5, 1/4, 1/3, 1/1, 1/0.5 every 50 points in order to identify inner loops.  
+\textbf{Data set $D$.} The set $D$ (see \myfigref{fig:chapter5:dima-seq} and \myfigref{fig:chapter5:dima-seq-2}) consists 1000 points. We repeat sequence $0, 3, 5, 0, 1, 5$ to generate the input $x(n)$ for $D$. We also insert $0, -100$ at the very beginning of the input $x(n)$ to erase the memory in the hysteretic process. The first 600 points are used as a training set, and the rest 400 points are for the test set. We rescale the input of test set by 1/10, 1/7, 1/6, 1/5, 1/4, 1/3, 1/1, 1/0.5 every 50 points to identify inner loops. In this artificial set, only customized hysteretic loops are exposed to networks throughout the training phase.
+% The micro and macro loops in test set  any model during learning. 
 \newline
-\textbf{Data set $P$} As for the set $P$ (see \myfigref{fig:chapter5:pavel-seq}), it also contains 1000 points. The inputs $x(n)$ is sampled from a periodical function $5cos(0.1n)$ with random noise $noise$. Repeatedly, $noise$ is drawn from different normal distributions, which standard deviations are $0.1, 0.5, 1, 2, 3, 4, 5$. 
+\textbf{Data set $P$.} For the set $P$ (see \myfigref{fig:chapter5:pavel-seq} and \myfigref{fig:chapter5:pavel-seq-2}), it also contains 1000 points. The inputs $x(n)$ is sampled from a periodical function $5cos(0.1n)$ with random noise $noise$. Repeatedly, $noise$ is drawn from different normal distributions, which standard deviations are $0.1, 0.5, 1, 2, 3, 4, 5$. \todo{why do I use this data set}
 \newline
-\textbf{Data set $S$}. We generate set $S$ (see \myfigref{fig:chapter5:s-seq}) with different number of points. The inputs $x(n)$ of $S$ is sampled from a periodical signal function $\cos(0.1n) + 0.3\sin(1.3n) + 1.2\sin(0.6n)$. 
+\textbf{Data set $S$.} We generate set $S$ (see \myfigref{fig:chapter5:sin-seq} and \myfigref{fig:chapter5:sin-seq-2}) with different number of points. The inputs $x(n)$ of $S$ is sampled from a periodical signal function $\cos(0.1n) + 0.3\sin(1.3n) + 1.2\sin(0.6n)$. 
 \newline
-\textbf{Data set $M$} \mytodo{the outputs is a random walk}
+% \textbf{Data set $M$} \mytodo{the outputs is a random walk}
 
 % \begin{figure}[h!]
 %     \centering
@@ -48,49 +49,59 @@ We generate data sets to identify whether LSTM network and HNN could capture the
 %     \caption{Data set S. The first and second plots are inputs vs. time step $n$ and outputs vs. time step $n$, respectively. Time step $n$ is from 0 to 1000.}
 %     \label{fig:chapter5:s-seq}
 % \end{figure}
+\begin{figure}[ht!]
+    \centering
 
-\begin{figure}
+    \subfloat[]{
+        \includegraphics[width=\textwidth/3]{debug-input-output-dima.pdf}
+                 \label{fig:chapter5:dima-seq-2}
+
+    }
+    \subfloat[]{
+        \includegraphics[width=\textwidth/3]{debug-input-output-pavel.pdf}
+                         \label{fig:chapter5:pavel-seq-2}
+
+    }
+    \subfloat[]{
+        \includegraphics[width=\textwidth/3]{debug-input-output-sin.pdf}
+                         \label{fig:chapter5:sin-seq-2}
+
+    }
+
+    \hfill
+    
+    \caption{Caption}
+    \label{fig:chapter5:data-sets}
+\end{figure}
+
+\begin{figure}[ht!]
     \centering
     \subfloat[]{
         \includegraphics[height=3cm,width=\textwidth]{debug-input-output-dima-2.pdf}
+         \label{fig:chapter5:dima-seq}
     }
+    
     \hfill
     \subfloat[]{
         \includegraphics[height=3cm,width=\textwidth]{debug-input-output-pavel-2.pdf}
+                 \label{fig:chapter5:pavel-seq}
+
     }
     \hfill
     \subfloat[]{
         \includegraphics[height=3cm,width=\textwidth]{debug-input-output-sin-2.pdf}
-    }
-    \hfill
-    \subfloat[]{
-        \includegraphics[width=\textwidth/3]{debug-input-output-dima.pdf}
-    }
-    \subfloat[]{
-        \includegraphics[width=\textwidth/3]{debug-input-output-pavel.pdf}
-    }
-    \subfloat[]{
-        \includegraphics[width=\textwidth/3]{debug-input-output-sin.pdf}
+                 \label{fig:chapter5:sin-seq}
+
     }
     \caption{Data sets.}
     \label{fig:chapter5:data-sets}
 \end{figure}
+\FloatBarrier
 
-\section{Architectures}
-\textbf{LSTM network.} We use one LSTM layer with tanh nonlinearities and one dense layer. We use the default settings of hyper parameters in tensorflow \citep{abadi2016tensorflow} except the hidden units $units$ in LSTM layer. We grid search a sequence of hidden units, $1, 8, 16, 32, 64, 128, 256$, to find out the best results achieved by LSTM networks. As for the loss functions, we minimize mean squared error (MSE) and minimize negative maximal likelihood estimator (MLE). The total number of parameters used in this architecture is given by
-\begin{equation*}
-    \text{\#parameters} = 4 * ({\text{\#\_\_units\_\_}}^2 + 2*\text{\#\_\_units\_\_}) + \text{\#\_\_units\_\_} + 1
-\end{equation*}
-% where $\#units$ is the number of hidden units.
+\section{Architectures}\label{sec:chapter5:architectures}
 
-\textbf{HNN.}  We use architecture shown in \mychapterref{cha:chapter1}, see \myfigref{fig:chapter1:nn-arch}. We also exploit hyper parameters $plays$. $units$ in HNN. The number of parameters $\#parameters$ used in HNN is given by
-\begin{equation*}
-    \text{\#parameters} = 3 * \text{\#\_\_plays\_\_} * \text{\#\_\_units\_\_} + 1
-\end{equation*}
-% where $\#play$ is the number of plays and $\#units$ is the number of units.
-
-\textbf{Hyper parameters}
-In this evaluation, we focus on optimizing the following hyper parameters in LSTM networks and HNN.
+\textbf{Hyperparameters}
+In this evaluation, we focus on optimizing the following hyper parameters in LSTM/SimpleRNN/GRU networks and HNN.
 \begin{table}[h!]
 \begin{center}
     \begin{tabular}{||c|c||}
@@ -106,12 +117,39 @@ In this evaluation, we focus on optimizing the following hyper parameters in LST
      \#\_\_units\_\_      & the number of $units$ used in training phase \\
     \hline
     \end{tabular}
-    \caption{Hyper parameters used for evaluation}
+    \caption{Hyperparameters used for evaluation. \#\_\_nb\_plays\_\_ and \#\_\_units\_\_  can be different from the ground-truth parameters since they're blind to us in reality.}
+    \label{tbl:chapter5:hyperparameters}    
 \end{center}
 \end{table}
 
+\textbf{LSTM network.} We use one LSTM layer with tanh nonlinearities and one dense layer. We use the default settings of hyper parameters in tensorflow \citep{abadi2016tensorflow} except for the hidden units in LSTM layer. We grid search a sequence of hidden units, $1, 8, 16, 32, 64, 128, 256$, to find out the best results achieved by LSTM networks. As for the loss functions, we minimize mean squared error (MSE) and minimize the negative maximal likelihood estimator (MLE). The total number of parameters used in this architecture is given by
+\begin{equation*}
+    \text{\#parameters} = 4 * ({\text{\#\_\_units\_\_}}^2 + 2*\text{\#\_\_units\_\_}) + \text{\#\_\_units\_\_} + 1
+\end{equation*}
+\textbf{SimpleRNN/GRU network.} As for SimpleRNN/GRU network, we use the same architecture as LSTM network except the recurrent block. In SimpleRNN/GRU network, we apply SimpleRNN/GRU block instead of LSTM block. The total number of parameters used in these two different networks are given by 
+
+\begin{equation*}
+   \text{\#parameters} = ({\text{\#\_\_units\_\_}}^2 + 2*\text{\#\_\_units\_\_}) + \text{\#\_\_units\_\_} + 1    
+\end{equation*}
+and
+\begin{equation*}
+   \text{\#parameters} = 3 * ({\text{\#\_\_units\_\_}}^2 + 2*\text{\#\_\_units\_\_}) + \text{\#\_\_units\_\_} + 1    
+% \text{\#parameters} = 3 * \text{\#\_\_units\_\_} + 3 * \text{\#\_\_units\_\_} * \text{\#\_\_units\_\_} + 3 * \text{\#\_\_units\_\_} + \text{\#\_\_units\_\_} + 1
+\end{equation*}
+ respectively.
+
+
+% where $\#units$ is the number of hidden units.
+
+\textbf{HNN.}  We use architecture shown in \mychapterref{cha:chapter1} (see \myfigref{fig:chapter1:nn-arch}). We also exploit hyperparameters $\_\_plays\_\_$, $\_\_units\_\_$ in HNN. The number of parameters $\#parameters$ used in HNN is given by
+\begin{equation*}
+    \text{\#parameters} = 3 * \text{\#\_\_plays\_\_} * \text{\#\_\_units\_\_} + 1
+\end{equation*}
+% where $\#play$ is the number of plays and $\#units$ is the number of units.
+
+
 \section{Measure}
-The overall \textit{root mean squared error} (RMSE) is used to measure the quality of fit if loss function is MSE. It's defined as following,
+The overall \textit{root mean squared error} (RMSE) is used to measure the quality of fit. It's defined as following,
 % \begin{equation}
 % \text{RMSE} = \sqrt{\frac{\sum_{i=0}^{N-1}(\hat{y}_i - y_i)^2}{N}}
 % \end{equation}
@@ -121,12 +159,13 @@ The overall \textit{root mean squared error} (RMSE) is used to measure the quali
 \end{equation}
 where $n$ means the first $(n-1)$th data points are ignored in RMSE results.
 
-Especially, we set $\text{RMSE}=\text{RMSE(0)}$ when $n=0$.
+Particularly, we set $\text{RMSE}=\text{RMSE(0)}$ when $n=0$.
 
-\mytodo{For MLE, we use alternative criteria to measure the result of mu and sigma.}
+% \mytodo{For MLE, we use alternative criteria to measure the result of mu and sigma.}
 \input{thesis/chapters/chapter5/micro-experiments}
 \input{thesis/chapters/chapter5/debug-mse}
-\input{thesis/chapters/chapter5/debug-mle}
+% \newpage
+% \input{thesis/chapters/chapter5/debug-mle}
 
 % \mytodo{same weights but different nb plays}
 % \mytodo{different weights and different plays  no noise}
@@ -134,66 +173,15 @@ Especially, we set $\text{RMSE}=\text{RMSE(0)}$ when $n=0$.
 % \input{thesis/chapters/chapter5/same-weights-no-noise}
 % \input{thesis/chapters/chapter5/different-weights-no-noise}
 % \input{thesis/chapters/chapter5/different-weights-noise}
-\section{HNN for market model}\label{}
-% \mytodo{hnn for markov chain dataset}
-% \mytodo{compare network complexity, mle loss} 
-% \mytodo{compare the markov chain obtain by lstm and hnn}
-% \mytodo{show animation that lstm performs worse due to cannot capture minor loops.}
-\mytodo{show that hnn can reconstruct agents behavior}
-\mytodo{show that hnn can give a distribution of price, not average of price} 
-\mytodo{show that hnn can explain the avalanche of market} 
-\mytodo{add real world dataset}
+\newpage
+\section{HNN for market model}\label{sec:chapter5:hnn-for-market-model}
+In this section, we only compare HNN with LSTM network since SimpleRNN and GRU don't perform much better than LSTM.
+\input{thesis/chapters/chapter5/synthetic-stock-dataset}
+\input{thesis/chapters/chapter5/predicting-price}
+% \input{thesis/chapters/chapter5/real-word-dataset}
 
-We scale the the results by $\frac{x-\mu}{\sigma}$
+% \mytodo{add real world data set}
 
-\mytodo{HERE is the sigma is 50, we will try sigma is 20 throughout this paper}
-% \section{Synthetic data sets}\label{sec:chapter3:synthetic-datasets}
-% Following the practical mentioned in previous section, we obtain the following artificial data sets. See \myfigref{fig:chapter3:agents-distribution,fig:chapter3:market-participanted-agents,fig:chapter3:market-ground-truth-dataset}
-% % \mytodo{add distribution of real agent D, virtual agent N}
+% We scale the the results by $\frac{x-\mu}{\sigma}$
 
-% \begin{figure}[htb!]
-%     % \left
-%     %\subfloat[]{
-%         %\raisebox{0px} {
-%             % \adjustimage{width=\textwidth/2}{
-%             \includegraphics[height=3cm,width=\textwidth/2]{market-real-agents-n-distribution}\label{fig:chapter3:market-real-agents-n-distribution}
-%             \includegraphics[height=3cm,width=\textwidth/2]{market-virtual-agents-d-distribution}\label{fig:chapter3:market-virtual-agents-d-distribution}
-             
-%             % \adjustimage{width=\textwidth/2}{market-virtual-agents-d-distribution}\label{fig:chapter3:market-virutal-agents-d-distribution}
-
-%         % }
-%     % }
-
-%     % \subfloat[]{
-%     %         \includegraphics[width=\textwidth/2]{market-virtual-agents-d-distribution}
-%     %                                 \label{fig:chapter3:market-virutal-agents-d-distribution}
-
-%     % }
-%     % \hfill
-%     %     \subfloat[]{
-%              % \adjustimage{width=\textwidth/2,left}{market-real-agents-alpha-distribution}
-%              % \label{fig:chapter3:market-real-agents-alpha-distribution}
-%             \includegraphics[height=3cm,width=\textwidth/2]{market-real-agents-alpha-distribution}\label{fig:chapter3:market-real-agents-alpha-distribution}
-
-%     % }
-%     \caption{\myfigref{fig:chapter3:market-real-agents-n-distribution} shows the distribution of real agents N. \myfigref{fig:chapter3:market-real-agents-alpha-distribution} shows the distribution of $\alpha$ for each agent. \myfigref{fig:chapter3:market-virutal-agents-d-distribution} shows the distribution of virtual agents D}
-%     \label{fig:chapter3:agents-distribution}
-% \end{figure}
-
-% \begin{figure}[t!]
-%     \centering
-%     \subfloat[]{
-%     \includegraphics[height=7cm,width=\textwidth]{market-participanted-agents}
-%     }
-%     \caption{The detailed behaviours of agents taken part in the market during simulation}
-%     \label{fig:chapter3:market-participanted-agents}
-% \end{figure}
-
-% \begin{figure}[t!]
-%     \centering
-%     \subfloat[]{
-%         \includegraphics[height=7cm,width=\textwidth]{market-ground-truth-dataset}
-%     }
-%     \caption{The synthetic data sets generated from the model. The top one is the random walk, which is underline in the real market, of the simulation. The middle one is the fluctuation of price based on the model. And the bottom one the change of the total number of stocks in the market, which is following to random walk.}
-%     \label{fig:chapter3:market-ground-truth-dataset}
-% \end{figure}
+% \mytodo{HERE is the sigma is 50, we will try sigma is 10 throughout this paper}

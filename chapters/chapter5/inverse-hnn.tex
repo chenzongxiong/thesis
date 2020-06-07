@@ -1,0 +1,66 @@
+
+\subsection{Inverse of HNN}
+
+% We call HNN as $G$ and the inverse function of $G$ is $F$.
+% In this section, we show that the inverse $G$ can be approximated by another network $F$ (trained as \ref{xxx}). 
+% is an experiment to see whether HNN is inverse or not.
+
+% Before we move the evaluation the performance of HNN, we want to show that the initial states of HNN don't matter if we have enough large data sets. Also, we will show the fact that $G^{-1}$ can be approximate by $F$ within tolerant error.
+
+% \textbf{Data sets.} In order to show the HNN is inverse, we generate two data sets by $G$ networks and switch the $outputs$ and $inputs$ of them, we call $\bar{P}$ and $\bar{S}$. Finally, we train HNN network $F$ using method shown in \mysectionref{sec:chapter2:training-pi-network}.
+% $\bar{P}$ respectively.
+\textbf{Setup.} One uses the data sets $S$ and $P$ generated from $G$ network and switch the $inputs$ and $outputs$ of them. We call these new data sets $\bar{S}$ and $\bar{P}$ respectively. One can train the $F$ network with $\bar{S}$ and $\bar{P}$ by training approach provided in \mysectionref{sec:chapter3:training-pi-network} and compare the $outputs$ of $F$ network with $inputs$ in $G$ network.
+\newline
+\textbf{Results.} \mytableref{tbl:chapter5:inverse-of-HNN} shows \mytodo{analysis here}.  
+\myfigref{fig:chapter5:inverse-hnn-confidence-band} shows that all prediction results tightly bound 
+
+\begin{table}[htb!]
+\centering
+\begin{adjustbox}{angle=0}
+\begin{tabular}{||c|c|c|c||}
+\hline 
+Data sets & Length & hyper parameters & RMSE \\
+\hline \hline
+\multirow{3}{4em}{$\bar{S}$ set} & \multirow{1}{4em}{100} & (25,25) & 0.19 $\pm$
+0.01 \\ 
+                          \cline{2-4}
+                          
+                          & \multirow{1}{4em}{1000}  & (25,25) & 0.16 $\pm$ 0.03 \\ 
+                          \cline{2-4}
+                          
+                          & \multirow{1}{4em}{10000}  & (25,25) & 0 $\pm$ 0 \\ 
+                          \cline{2-4}
+                          
+% \hline                          
+% \multirow{3}{4em}{$\bar{P}$ set} & \multirow{1}{4em}{100}  & (50, 50) & 0 $\pm$ 0 \\ 
+
+%                           \cline{2-4}
+                          
+%                           & \multirow{1}{4em}{1000} & (50, 50) &  0.35 $\pm$ 0.06 \\ 
+                      
+%                           \cline{2-4}
+                          
+%                           & \multirow{1}{4em}{5000}  & (50, 50) & 0 $\pm$ 0 \\ 
+%                           \cline{2-4}                          
+\hline
+\hline
+\end{tabular}
+\end{adjustbox}
+\caption{RMSE for the data sets $\bar{S}$}
+\label{tbl:chapter5:inverse-of-HNN}
+\end{table}
+
+\begin{figure}[htb!]
+    \centering
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{thesis/img/inverse-sin-point-100-input-output.pdf}
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{thesis/img/inverse-sin-point-1000-input-output.pdf}
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{thesis/img/inverse-hnn-pavel-seq-__units__-25-__nb_plays__-25.pdf}
+    }
+    \caption{The results of confidence band. The curve in red ground-truth $inputs$ in $G$ network and the region in light blue is the maximal and minimal prediction of $F$ network at each time step.}
+    \label{fig:chapter5:inverse-hnn-confidence-band}
+\end{figure}

@@ -1,41 +1,24 @@
-\chapter{Financial Market Model\label{cha:chapter3}}s
-% \mytodo{how to generate dataset, why does it make sense to use these synthesis data
+\chapter{Financial Market Model\label{cha:chapter3}}
 % input single, 0.3*np.sin(1.3 t) + N(0, 8)
 % input signal 1.0*cos(0.1t) + N(0, 2) or N(0,1)}
-% \begin{figure}[htb]
-%     \centering
-%     % \subfloat[]{
-%     % \input{./tikz/market-ground-truth-dataset}
-%     % \input{./tikz/market-ground-truth-dataset}
-%     % }
-%     \includegraphics[]{}
-%     \caption{ground-truth dataset}
-%     \label{fig:chapter3:market-ground-truth-dataset}
-% \end{figure}
-
-% \section{Discussion $\alpha$ and $n$ in Equation \ref{eqn:chapter3:root-of-real-agents-n}}
-
-% \begin{equation}
-%     n = \frac{-\ln{\big(1-\frac{\delta (1 - e^{-\alpha})}{e^{-\alpha}}}\big)}{\alpha}
-% \end{equation}
 
 % We deduce $0 < \alpha < \ln{(1 + \frac{1}{\delta})}$ since $\alpha, n > 0$. We should draw $\delta$ and $\alpha$ from gamma distribution carefully to make sure the constraints meet.
-In this chapter, we show our financial market model based on hysteresis operators in details and provide a practical way to generate synthetic data from this model.
+In this chapter, we formulate our financial market model by hysteretic operators, \textit{PI operator} and \textit{Presaich operator}, in detail and provide a practical way to generate synthetic data sets from this model.
 
 \section{Demand/Supply price formation\label{sec:chapter3:demand-supply-price-formation}}
-In this model, we assume that the stock exchange accommodates two types of agents, which we call \textit{agents D} and \textit{agents N} and describe below. We assume that the time takes values $n=0, 1, 2, , \ldots$, and denote the price at time $n$ by $x_n$. By definition, $x_n$ is the price of last transaction at time $n$. We will see below that demand equals supply at times $n$, but between any two consecutive times $n-1$ and $n$, this need not be the case and there may occur many transactions until demand will have become supply.
+We assume that the stock exchange accommodates two types of agents, which we call \textit{agents D} and \textit{agents N} and describe below. We denote the price at time $n$ by $x_n$, where time step $n=0, 1, 2, , \ldots$. By definition, $x_n$ is the price of the transaction at time $n$. We will see below that demand equals supply at a time step $n$, but between any two consecutive time steps $n-1$ and $n$, there may occur numerous transactions until demand has become supply.
 
-\begin{assumption}\label{assumption:chapter3:strategy-of-agentD}
-  (Strategy of agents D) \citep{dima2014}. Agents D keep track of a trend. They buy stocks iff the price goes up and sell stocks iff the price goes down. The total amount of stocks that are in possession of all the agents D can be described as a Prandtl-Ishlinksii operator whose input is the price $x$. We denote this operator by
+\begin{assumption}[Strategy of agents D \citep{dima2014}]\label{assumption:chapter3:strategy-of-agentD}
+Agents D keep track of a trend. They buy stocks iff the price goes up and sell them iff the price goes down. The total amount of stocks that are in possession of all the agents D can be described as a Prandtl-Ishlinksii operator whose input is the price $x$. We denote this operator by
   $$P_D(x)$$
 \end{assumption}
-\begin{assumption}\label{assumption:chapter3:strategy-of-agentN}
-  (Strategy of agents N). The strategy of each of the agents N is characterized by a non-ideal relay with two fixed threshold $x_1 < x_2$ (different for different agents). The relay is in state 0 if the price higher than $x_2$ and in state 1 if the price is lower than $x_1$. The agent buys one stock whenever his relay switches from 0 to 1 and sells one stock whenever his relay switches from 1 to 0. The total amount of stocks that are in possession of all the agents N can be described as a Preisach operator whose input is the price $x$. We denote this operator by
+\begin{assumption}[Strategy of agents N]\label{assumption:chapter3:strategy-of-agentN}
+The strategy of each of the agent N is characterized by a non-ideal relay with two fixed threshold $x_1 < x_2$ (different for different agents). The relay is in state 0 if the price higher than $x_2$ and in state 1 if the price is lower than $x_1$. The agent buys one stock whenever his relay switches from 0 to 1 and sells one stock whenever his relay switches from 1 to 0. The total amount of stocks that are in possession of all the agents N can be described as a Preisach operator whose input is the price $x$. We denote this operator by
   $$P_N(x)$$
 \end{assumption}
 
-\begin{assumption}\label{assumpation:chapter3:strategy-of-agentE}
-    (Strategy of agents E). The strategy of each of agents E is designed to buy or sell the additional stocks so that the market could keep equilibrium due to price fluctuation.
+\begin{assumption}[Strategy of agents E]\label{assumpation:chapter3:strategy-of-agentE}
+The strategy of each of agents E is sketched to buy or sell the additional stocks and keeps the price equilibrium in the market.
 \end{assumption}
 
 The following lemma is direct consequence of the definition of the operators $P_D(x)$ and $P_N(x)$.
@@ -48,28 +31,28 @@ The following lemma is direct consequence of the definition of the operators $P_
 \end{lemma}
 
 \begin{remark}\label{remark:chapter3:1}
-  Since $P_D(x)$ and $P_N(x)$ are not functions but operators, the monotone curves described in \ref{lemma:chapter3:reaction-to-price-change} are not defined only by the current value of $x$, but depend on its prehistory.
+  Since $P_D(x)$ and $P_N(x)$ are not functions but operators, the monotone curves described in  \mylemmaref{lemma:chapter3:reaction-to-price-change} are not defined only by the current value of $x$, but depended on its prehistory.
 \end{remark}
 
-Denote by $b_n$ the total amount of stocks that are in possession of all the agents D and N at time $n$. We will see below in \ref{assumption:chapter3:transitions-between-stabilized-prices}
+Denote $b_n$ the total amount of stocks that are in possession of all the agents D and N at time $n$. We will see below in \myassumptionref{assumption:chapter3:transitions-between-stabilized-prices}.
 
-\begin{assumption}\label{assumption:chapter3:demand/supply-price-formation}
+\begin{assumption}[Demand/supply price formation]\label{assumption:chapter3:demand/supply-price-formation}
   At each moment $n$, the price $x_n$ is a stable solution of equation
   \begin{equation}\label{eqn:chapter3:demand-supply-price-formation}
     P_D(x_n) + P_N(x_n) = b_n
   \end{equation}
-  where the stability notion is explained in \myfigref{xxxx}, We will say that $x_n$ is a stabilized price.
+  where the stability notion is explained in \myfigref{xxxx}\lackref{}, We will say that $x_n$ is a stabilized price.
 \end{assumption}
 
-In order to explain how a stabilized price can change stabilize to the next value, we make the next assumption.
+To explain how a stabilized price moves from equilibrium to the subsequent value, we make the following assumption.
 
-\begin{assumption}\label{assumption:chapter3:transitions-between-stabilized-prices}
+\begin{assumption}[Transitions between stabilized prices]\label{assumption:chapter3:transitions-between-stabilized-prices} 
   Suppose $x_{n-1}$ is a stabilized price as time $n-1$. In particular, it is a stable solution of equation
   \begin{equation}\label{eqn:chapter3:stable-price-eqn}
     P_D(x_{n-1}) + P_N(x_{n-1}) = b_{n-1}
   \end{equation}
-  We assume that between time moments $n-1$ and $n$, some external agents E buy or sell some stocks. As a result, the total amount of stocks that is in possession of agents D and N becomes $b_n$. Moreover, we assume that external agents do not stay at the stock exchange, i.e., the operators (their densities) $P_D(x)$ and $P_N(x)$ do not change in time.
-  If $b_n \le b_{n-1}$, then external agents E buy $|b_{n}-b_{n-1}|$ stocks, which increases the price. As as result, agents D also buy. All the stocks bought by agents E and D are sold by agents N. This leads to the increase of the price to a new value $x_n^1$, where $x_n^1$ is the smallest solution of the equation
+  We assume that between time moments $n-1$ and $n$, some external agents E buy or sell some stocks. As a result, the total number of stocks that is in possession of agents D and N becomes $b_n$. Moreover, we assume that external agents do not stay at the stock exchange, i.e., the operators (their densities) $P_D(x)$ and $P_N(x)$ do not change in time.
+  If $b_n \le b_{n-1}$, then external agents E buy $|b_{n}-b_{n-1}|$ stocks, which makes the price rise. As a result, agents D also buy. All the stocks bought by agents E and D are sold by agents N. This leads to the increase of the price to a new value $x_n^1$, where $x_n^1$ is the smallest solution of the equation
   \begin{equation}\label{eqn:chapter3:new-stable-price-eqn}
     P_D(x_n^1) + P_N(x_n^1) = b_n
   \end{equation}
@@ -78,13 +61,13 @@ In order to explain how a stabilized price can change stabilize to the next valu
     x_n^1 \ge x_{n-1}
   \end{equation}
 
-  Note that small values $|b_n - b_{n-1}|$ may correspond to small change of the price as in \myfigref{xxxx} or large changes as in \myfigref{xxxx}. In the latter case, the price jumps up due to the fold bifurcation\lackref{}.
+  Note that small values $|b_n - b_{n-1}|$ may correspond to small change of the price as in \myfigref{fig:chapter5:dynamics-of-agents-1} or large changes as in \myfigref{fig:chapter5:dynamics-of-agents-2}. In the latter case, the price jumps up due to the fold bifurcation.
 
-  If $x_n^1$ is a stable of equation \ref{eqn:chapter3:new-stable-price-eqn}, the, by definition, it coincides with the new stabilized price:
+  If $x_n^1$ is a stable of \myformularef{eqn:chapter3:new-stable-price-eqn}, then, by definition, it coincides with the new stabilized price:
   \begin{equation}\label{eqn:new-price}
     x_n := x_n^1
   \end{equation}
-  Otherwise, the price makes several jumps taking semi-stable values $x_n^2, \ldots, x_n^{m-1}$ and a stable value $x_n^m$ (\textbf{hopefully with a finite} m) such that
+  Otherwise, the price makes several jumps taking semi-stable values $x_n^2, \ldots, x_n^{m-1}$ and a stable value $x_n^m$ (hopefully with a finite m) such that
   \begin{equation}
     x_{n}^1 > x_{n}^2, \quad x_{n}^3 > x_{n}^2, \quad x_{n}^3 > x_{n}^4,\quad x_{n}^{5} > x_{n}^4, \ldots
   \end{equation}
@@ -107,29 +90,30 @@ In order to explain how a stabilized price can change stabilize to the next valu
     \end{equation}
   \end{remark}
 
-  Then, formally, the relationship between the price $p_n$ and the noise $b_n$ is the same as \citet{dima2014}'s model, cf.\lackref{} \myformularef{eqn:chapter1:dima-model-assumption} and \myformularef{eqn:chapter3:demand-supply-price-formation}. \ref{xxx} Though in our second model, there is a number of further restrictions on admissible values of $p_n$ due to Assumption \ref{assumption:chapter3:transitions-between-stabilized-prices}
+Formally, the relationship between the price $p_n$ and the noise $b_n$ is the same as \citet{dima2014}'s model, cf. \myformularef{eqn:chapter4:g-network} and \myformularef{eqn:chapter3:demand-supply-price-formation}.
+% \ref{xxx} Though in our second model, there is a number of further restrictions on admissible values of $p_n$ due to Assumption \ref{assumption:chapter3:transitions-between-stabilized-prices}
 
 \begin{remark}\label{remark:chapter3:practical-analysis}
 \begin{enumerate}
-\item \label{remark:chapter3:stocks-of-agentsN-too-much} Supposing most agents N hold stocks, it means only few agents N can buy stocks from market since each agent can hold at most one stock in our market model. If the price goes up, it may lead to lots of agents D sell out their stocks and the number of stocks to be sold is much larger than the number of stocks agents N can buy. Theoretically, agents E should buy the rest amount of stocks that agents N can not buy. However, under constraint \ref{assumption:chapter3:b_sequence}, it's difficult to make $b_n$ random walk if the number of stocks agents E buy from markets is larger than $3 \sigma$ in practical implementation. Finally, no matter how high the price goes up, there is not enough stocks to make market stable again unless we sample the number of stocks for agents E again until meet equilibrium conditions. But it violates constraint \ref{assumption:chapter3:b_sequence} if we sample $b_n$ multiple times. Conversely, if most agents N don't hold stocks, it means only few agents N can sell stocks to market. If the price goes down, it may lead to lots of agents D buy stocks but no agents N and agents E to sell stocks to them. Finally, it also causes market model to fail.
+\item \label{remark:chapter3:stocks-of-agentsN-too-much} Supposing most agents N hold stocks, it means only a few agents N can buy stocks from the market since each agent can hold at most one stock in our market model. If the price climbs, it may lead to lots of agents D sell out their stocks, and the number of stocks to be sold is much larger than the number of stocks agents N can buy. Theoretically, agents E should buy the rest amount of stocks that agents N can not buy. However, under assumption \ref{assumption:chapter3:b_sequence}, it's difficult to generate random walk $b_n$ if the number of stocks agents E buy from markets is larger than $3 \sigma$ in a practical implementation. Finally, no matter how high the price goes up, there are still not enough stocks to make price jump to stable solution again unless we sample the number of stocks for agent E again until meeting equilibrium conditions. But it violates the constraint of assumption \ref{assumption:chapter3:b_sequence} if we sample $b_n$ multiple times at specific time step. Conversely, if most agents N don't hold stocks, it means only some agents N can sell stocks to market. If the price drops, it may lead to lots of agents D buy stocks but no agents N and agents E to sell stocks to them. Finally, it also causes the model to fail.
 
-\item Supposing most agents N have the same threshold, it means lots of agents N will buy or sell stocks at some price at the same timestamp. It may lead to agents D could not sell or buy all the stocks in the market. Further analysis leads to the same situation happened in item \ref{remark:chapter3:stocks-of-agentsN-too-much}
+\item Supposing most agents N have the same threshold, it means lots of agents N will buy or sell stocks at some price at the same time step. It may lead to agents D could not sell or buy all the stocks in the market. Further analysis leads to the same situation happened in item \ref{remark:chapter3:stocks-of-agentsN-too-much}
 \end{enumerate}
 \end{remark}
 
-\section{Practical approaches}
-According to \myremarkref{remark:chapter3:practical-analysis}, we introduce two auxiliary concepts of agents, \textit{real agents N} and \textit{real agents D}, and suggest the following general practical approach to generate synthetic data sets for our market model.
+\section{A practical approach}\label{sec:chapter3:practical-approches}
+According to \myremarkref{remark:chapter3:practical-analysis}, we introduce two auxiliary concepts of agents, \textit{real agents N} and \textit{real agents D}, and suggest the following general practical approach to generate synthetic data sets from our market model.
 
 \begin{definition}[Real agents N] 
-A real agents N consists of many a agents N with different relay threshold. 
+A real agents N consists of many agents N with different relay thresholds. 
 \end{definition}
 
 \begin{definition}[Real agents D]
-A real agents D consists of many a agents D with different play threshold.
+A real agents D consists of many agents D with different play thresholds.
 \end{definition}
 
 \subsection{Real agents N}
-We should choose the following parameters:
+We choose the following parameters:
 \begin{itemize}
     \item $\delta$ - maximum amount of assets which an agent can spend;
     \item $\alpha \in \mathbb{R} $ - the step of the strategy (width of the relay);
@@ -138,86 +122,69 @@ We should choose the following parameters:
     \item $L = L({\delta})$ - number of real agents with this strategy.
 \end{itemize}
 
-First we should choose $\delta$. We fix $\delta_0 > 0, \hat{\delta} > 0, k \in \mathbb{N}$ and consider $\delta_0, \delta_1 = \delta_0 + \hat{\delta}, \ldots, \delta_{k} = \delta_0 + k \hat{\delta}$. So, we just consider finite sequence of $\delta_i$ with fixed step. For each $\delta_{i}$ we should find $L(\delta_{i})$. For this purpose we need so-called gamma distribution \citep{wiki:gamma-distribution}. We take one with parameters, $k, \theta, C$. We set $L(\delta_{i}) = C \Gamma_1{(k, \theta)}(\delta_i)$. 
+First we should choose $\delta$. We fix $\delta_0 > 0, \hat{\delta} > 0, k \in \mathbb{N}$ and consider $\delta_0, \delta_1 = \delta_0 + \hat{\delta}, \ldots, \delta_{k} = \delta_0 + k \hat{\delta}$. So we consider finite sequence of $\delta_i$ with fixed steps. For each $\delta_{i}$ we should find $L(\delta_{i})$. For this purpose we need so-called gamma distribution \citep{wiki:gamma-distribution}. We take one with parameters, $k, \theta, C$. We set $L(\delta_{i}) = C \Gamma_1{(k, \theta)}(\delta_i)$ (see \myfigureref{fig:chapter3:market-real-agents-n-distribution}). 
 Each real agent with strategy corresponding to parameters $\alpha, \alpha_0, n$ s represented
 by $2n$ relays with thresholds $\big(\alpha_0 - n \alpha, \alpha_0 - (n-1) \alpha \big),\big(\alpha_0 - (n-1) \alpha, \alpha_0 - (n-2) \alpha \big), \ldots, \big(\alpha_0 + (n-1) \alpha, \alpha_0 + n \alpha \big)$(at these layers agent buys/sells his stock). At the
 beginning agent have $n$ stocks if $\alpha_0 \ge 0$ and $n-1$ otherwise.
 
-We choose $\alpha$ also using gamma distribution $\Gamma_2$. $\alpha_0$ we choose using the uniform distribution between $-\alpha$ and $\alpha$. $n$ we find as a root of the equation 
+We choose $\alpha$ also using gamma distribution $\Gamma_2$ (see \myfigureref{fig:chapter3:market-real-agents-alpha-distribution}). $\alpha_0$ we choose using the uniform distribution between $-\alpha$ and $\alpha$. $n$ we find as a root of the equation 
 
 \begin{equation}\label{eqn:chapter3:root-of-real-agents-n}
     \delta = \frac{e^{-\alpha}(1-e^{-\alpha n})}{1-e^{-\alpha}}
 \end{equation}
 
 \subsection{Real agents D}
-We should choose parameter $\beta$ (when price rises/drops $\beta$ points we buy/sell) and decide whether agents have stock at the very beginning. We consider sequence $\beta_i$ with fixed step. We also fix gamma distribution $\Gamma_3$ with some parameters and multiply it by number $B$. We want the amount of stocks for \textit{agents N} and \textit{agents D} keeps the follow equation,
+We choose parameter $\beta$ (when price rises/drops $\beta$ points we buy/sell) and decide whether agents have stock at the very beginning. We consider sequence $\beta_i$ with fixed step. We also fix gamma distribution $\Gamma_3$ (see \myfigureref{fig:chapter3:market-virtual-agents-d-distribution}) with some parameters and multiply it by number $B$. We want the amount of stocks for \textit{agents N} and \textit{agents D} keeps the follow equation,
 $$\sum_{\alpha, \delta} n(\alpha, \delta) L(\delta) = \sum D_{\textbf{1}}(\beta_i) = B \sum_i \Gamma_3(\beta_i)$$
 where $D_{\textbf{1}}(\beta_i)$ is number of agents D corresponded to $\beta_i$ with stock at the very beginning. We also assume that $D_{\textbf{0}}(\beta_i) = D_{\textbf{1}}(\beta_i)$ where $D_{\textbf{0}}(\beta_i)$ is the number of agents D corresponded to $\beta_i$ without stock at the very beginning.
 
+\begin{remark}
+\begin{enumerate}
+\item Why should we choose gamma distribution? \\
+      The probability density function of gamma distribution is in the first quadrant, and it's continuous.
+    
+    \item c \\
+    According to \citep{wiki:pareto-distribution}, it makes sense that only a few people possess a large volume of wealth in reality. And we can tune the shape of the gamma distribution to approximate the Pareto distribution.
+    
+% \item Why should we assume that the width of relay($\alpha$) is followed by gamma distribution ? \\
+%     In reality, most people will have the same strategy to react to the change of stock price. (TODO: need reference ?)
+\end{enumerate}
+\end{remark}
+
+\begin{figure}[htb!]
+    % \left
+    %\subfloat[]{
+        %\raisebox{0px} {
+            % \adjustimage{width=\textwidth/2}{
+            \subfloat[]{
+            \includegraphics[height=3cm,width=\textwidth/2]{market-real-agents-n-distribution}\label{fig:chapter3:market-real-agents-n-distribution}
+            }
+            \subfloat[]{
+            \includegraphics[height=3cm,width=\textwidth/2]{market-virtual-agents-d-distribution}\label{fig:chapter3:market-virtual-agents-d-distribution}
+            }
+            \hfill
+            \subfloat[]{
+            \includegraphics[height=3cm,width=\textwidth/2]{market-real-agents-alpha-distribution}\label{fig:chapter3:market-real-agents-alpha-distribution}
+            }
+    % }
+    \caption{\myfigref{fig:chapter3:market-real-agents-n-distribution} shows the distribution of real agents N. \myfigref{fig:chapter3:market-virtual-agents-d-distribution} shows the distribution of virtual agents D. \myfigref{fig:chapter3:market-real-agents-alpha-distribution} shows the distribution of $\alpha$ for each agent. 
+    The red dashed curve is sampled from the density function of gamma.
+    % \myfigref{fig:chapter5:market-virutal-agents-d-distribution} shows the distribution of virtual agents D
+    }
+    \label{fig:chapter3:agents-distribution}
+\end{figure}
+% agents takes part in the markets
+\begin{figure}[htb!]
+    \centering
+    \subfloat[]{
+    \includegraphics[height=8cm,width=\textwidth]{market-participanted-agents}
+    }
+    \caption{The detailed inspections of all agents taking part in the market during a simulation. It shows that both agents participated at each time step and indicates our market model doesn't degrade to \citep{dima2014}'s model.}
+    \label{fig:chapter3:market-participanted-agents}
+\end{figure}
 % \mytodo{https://en.wikipedia.org/wiki/Pareto_distribution} \\ 
 % \mytodo{https://en.wikipedia.org/wiki/Pareto_distribution} \\
 % \mytodo{https://en.wikipedia.org/wiki/Lorenz_curve} \\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \mytodo{maybe we need change to exponential distribution} 
-% \begin{remark}
-% \begin{enumerate}
-% % \item Why should we choose gamma distribution ? \\
-% %       The probability density function of gamma distribution is in the first quadrant, and it's continuous.
-% \item Why should we assume that the amount of wealth belonged to people is followed by gamma distribution ? \\
-%     According to \citep{wiki:pareto-distribution}, it makes sense that only a few people possess a large volume of wealth in reality. One of advantages using gamma distribution instead of pareto distribution is that gamma distribution is continuous. And we can tune the shape of gamma distribution to approximate pareto distribution.
-    
-% \item Why should we assume that the width of relay($\alpha$) is followed by gamma distribution ? \\
-%     In reality, most people will have the same strategy to react to the change of stock price. (TODO: need reference ?)
-% \end{enumerate}
-% \end{remark}
-
-% \section{Synthetic data sets}\label{sec:chapter3:synthetic-datasets}
-% Following the practical mentioned in previous section, we obtain the following artificial data sets. See \myfigref{fig:chapter3:agents-distribution,fig:chapter3:market-participanted-agents,fig:chapter3:market-ground-truth-dataset}
-% \mytodo{add distribution of real agent D, virtual agent N}
-% \begin{figure}[htb!]
-%     % \left
-%     %\subfloat[]{
-%         %\raisebox{0px} {
-%             % \adjustimage{width=\textwidth/2}{
-%             \includegraphics[height=3cm,width=\textwidth/2]{market-real-agents-n-distribution}\label{fig:chapter3:market-real-agents-n-distribution}
-%             \includegraphics[height=3cm,width=\textwidth/2]{market-virtual-agents-d-distribution}\label{fig:chapter3:market-virtual-agents-d-distribution}
-             
-%             % \adjustimage{width=\textwidth/2}{market-virtual-agents-d-distribution}\label{fig:chapter3:market-virutal-agents-d-distribution}
-
-%         % }
-%     % }
-
-%     % \subfloat[]{
-%     %         \includegraphics[width=\textwidth/2]{market-virtual-agents-d-distribution}
-%     %                                 \label{fig:chapter3:market-virutal-agents-d-distribution}
-
-%     % }
-%     % \hfill
-%     %     \subfloat[]{
-%              % \adjustimage{width=\textwidth/2,left}{market-real-agents-alpha-distribution}
-%              % \label{fig:chapter3:market-real-agents-alpha-distribution}
-%             \includegraphics[height=3cm,width=\textwidth/2]{market-real-agents-alpha-distribution}\label{fig:chapter3:market-real-agents-alpha-distribution}
-
-%     % }
-%     \caption{\myfigref{fig:chapter3:market-real-agents-n-distribution} shows the distribution of real agents N. \myfigref{fig:chapter3:market-real-agents-alpha-distribution} shows the distribution of $\alpha$ for each agent. \myfigref{fig:chapter3:market-virutal-agents-d-distribution} shows the distribution of virtual agents D}
-%     \label{fig:chapter3:agents-distribution}
-% \end{figure}
-
-% \begin{figure}[t!]
-%     \centering
-%     \subfloat[]{
-%     \includegraphics[height=7cm,width=\textwidth]{market-participanted-agents}
-%     }
-%     \caption{The detailed behaviours of agents taken part in the market during simulation}
-%     \label{fig:chapter3:market-participanted-agents}
-% \end{figure}
-
-% \begin{figure}[t!]
-%     \centering
-%     \subfloat[]{
-%         \includegraphics[height=7cm,width=\textwidth]{market-ground-truth-dataset}
-%     }
-%     \caption{The synthetic data sets generated from the model. The top one is the random walk, which is underline in the real market, of the simulation. The middle one is the fluctuation of price based on the model. And the bottom one the change of the total number of stocks in the market, which is following to random walk.}
-%     \label{fig:chapter3:market-ground-truth-dataset}
-% \end{figure}

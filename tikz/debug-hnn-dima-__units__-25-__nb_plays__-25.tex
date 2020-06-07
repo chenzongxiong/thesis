@@ -1,0 +1,52 @@
+% https://olivierpieters.be/blog/2015/10/23/latex-plotting-from-file
+
+% \documentclass[border=10pt]{standalone}
+% \usepackage{pgfplots}
+% % \usepackage{filecontents}
+% \usepgfplotslibrary{groupplots}
+% \usepackage{pgfplotstable}
+% % \usepackage{pgfplotstable} % <-- required in preamble
+% \usepackage{booktabs}      % <-- required in preamble
+% \usepackage{tikz}
+% \usepackage{xstring}
+% \usepackage{catchfile}
+\documentclass[border=10pt]{standalone}
+\usepackage{pgfplots}
+% \usepackage{filecontents}
+\usepgfplotslibrary{groupplots}
+\usepackage{pgfplotstable}
+% \usepackage{pgfplotstable} % <-- required in preamble
+\usepackage{booktabs}      % <-- required in preamble
+\usepackage{tikz}
+\usepackage{xstring}
+\usepackage{catchfile}
+\usepgfplotslibrary{fillbetween}
+
+\pgfplotstableread[col sep=comma]{debug-hnn-dima-__units__-25-__nb_plays__-25.csv}\mydata
+
+\begin{document}
+
+\begin{tikzpicture}
+\begin{axis}[
+    % group style = {group size = 1 by 1},
+    % height=10cm, width=20cm,
+    height=10cm, width=20cm,
+    % title={HNN},
+     % 
+     % horizontal sep=2cm, 
+     % vertical sep=5cm
+    % xticklabels from table = {\Data}{Day}, xtick = {1,...,19},
+    % xticklabel style = {rotate = 90, xshift = -0.8ex, anchor = mid east}
+    ylabel=outputs,
+    xmin=0,xmax=400, xlabel={time step, $n$}
+    ]
+    %% training sets
+    % \nextgroupplot[ylabel=outputs,xmin=300,xmax=350,xlabel={time step, $n$}]
+    \addplot+[color=blue!40,mark=.,name path=lower] table[x index={0}, y index={23}]{\mydata}; % lower
+    \addplot+[color=blue!40,mark=., name path=higher] table[x index={0}, y index={24}]{\mydata}; % high
+    \addplot[blue!40] fill between[of=lower and higher];
+    \addplot[color=red,mark=.] table[x index={0}, y index={2}]{\mydata}; % ground truth
+\end{axis}
+\end{tikzpicture}
+\end{document}
+

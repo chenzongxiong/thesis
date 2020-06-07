@@ -75,49 +75,63 @@
 % a=rtpmap:0 PCMU/8000
 % \end{lstlisting}
 
-\begin{table}[h]
-\centering
-\begin{adjustbox}{angle=0}
-\begin{tabular}{||c|c|ccc||}
-\hline 
-\#plays & networks & hyper parameters & \#parameters & RMSE ($\mu \pm \sigma$)\\
-\hline \hline
-\multirow{13}{4em}{50} & \multirow{7}{4em}{LSTM}   & 1    & 12         & 3.444246389 \\ 
-                         &                         & 8    & 320        & 1.463447021 \\ 
-                         &                         & 16   & 1,152      & 1.328417165 \\ 
-                         &                         & 32   & 4,352      & 1.303146381 \\ 
-                         &                         & 64   & 16,896     & 1.201215367 \\ 
-                         &                         & 128  & 66,560     & 1.398202932 \\ 
-                         &                         & 256  & 264,192    & 1.257714804 \\ 
-\cline{2-5}
-                         & \multirow{6}{4em}{HNN}  & (10, 10)    & 301      & 0.600649707 \\
-                         &                         & (25, 10)    & 751      & 0.590401014 \\ 
-                         &                         & (25, 25)    & 1,876    & 0.640757911 \\ 
-                         &                         & (50, 25)    & 7,501    & 0.570615017 \\ 
-                         &                         & (100, 50)   & 15,001   & 0.582596486 \\ 
+% \begin{table}[h]
+% \centering
+% \begin{adjustbox}{angle=0}
+% \begin{tabular}{||c|c|ccc||}
+% \hline 
+% \#plays & networks & hyper parameters & \#parameters & RMSE ($\mu \pm \sigma$)\\
+% \hline \hline
+% \multirow{13}{4em}{50} & \multirow{7}{4em}{LSTM}   & 1    & 12         & 3.444246389 \\ 
+%                          &                         & 8    & 320        & 1.463447021 \\ 
+%                          &                         & 16   & 1,152      & 1.328417165 \\ 
+%                          &                         & 32   & 4,352      & 1.303146381 \\ 
+%                          &                         & 64   & 16,896     & 1.201215367 \\ 
+%                          &                         & 128  & 66,560     & 1.398202932 \\ 
+%                          &                         & 256  & 264,192    & 1.257714804 \\ 
+% \cline{2-5}
+%                          & \multirow{6}{4em}{HNN}  & (10, 10)    & 301      & 0.600649707 \\
+%                          &                         & (25, 10)    & 751      & 0.590401014 \\ 
+%                          &                         & (25, 25)    & 1,876    & 0.640757911 \\ 
+%                          &                         & (50, 25)    & 7,501    & 0.570615017 \\ 
+%                          &                         & (100, 50)   & 15,001   & 0.582596486 \\ 
                          
-\hline \hline
-\multirow{13}{4em}{100} & \multirow{7}{4em}{LSTM}  & 1    & 12          & 6.104827801 \\ 
-                         &                         & 8    & 320         & 2.496286256 \\ 
-                         &                         & 16   & 1152        & 2.613680848 \\ 
-                         &                         & 32   & 4352        & 2.75013601  \\ 
-                         &                         & 64   & 16896       & 2.73756359  \\ 
-                         &                         & 128  & 66560       & 2.574973189 \\ 
-                         &                         & 256  & 264192      & 2.56076419  \\ 
-\cline{2-5}
-                         & \multirow{6}{4em}{HNN}  & (25, 25)     & 1,876    & 0.801752993 \\
-                         &                         & (50, 50)     & 7,501    & 0.959867101 \\ 
-                         &                         & (100, 50)    & 15,001   & 1.985093566 \\ 
-                         &                         & (100, 100)   & 30,001   & 0.436862487 \\        
-                         &                         & (200, 25)    & 15,001   & 1.135538106 \\        
-                         &                         & (200, 100)   & 60,001   & 0.844494969 \\        
+% \hline \hline
+% \multirow{13}{4em}{100} & \multirow{7}{4em}{LSTM}  & 1    & 12          & 6.104827801 \\ 
+%                          &                         & 8    & 320         & 2.496286256 \\ 
+%                          &                         & 16   & 1152        & 2.613680848 \\ 
+%                          &                         & 32   & 4352        & 2.75013601  \\ 
+%                          &                         & 64   & 16896       & 2.73756359  \\ 
+%                          &                         & 128  & 66560       & 2.574973189 \\ 
+%                          &                         & 256  & 264192      & 2.56076419  \\ 
+% \cline{2-5}
+%                          & \multirow{6}{4em}{HNN}  & (25, 25)     & 1,876    & 0.801752993 \\
+%                          &                         & (50, 50)     & 7,501    & 0.959867101 \\ 
+%                          &                         & (100, 50)    & 15,001   & 1.985093566 \\ 
+%                          &                         & (100, 100)   & 30,001   & 0.436862487 \\        
+%                          &                         & (200, 25)    & 15,001   & 1.135538106 \\        
+%                          &                         & (200, 100)   & 60,001   & 0.844494969 \\        
 
-\hline
-\end{tabular}
-\end{adjustbox}
-\caption{RMSE for the data sets with noise}
-\end{table}
+% \hline
+% \end{tabular}
+% \end{adjustbox}
+% \caption{RMSE for the data sets with noise}
+% \end{table}
+
+
+\input{thesis/misc/appendix/gradients-hnn}
+
+\input{thesis/misc/appendix/lstm}
+\input{thesis/misc/appendix/interplotation-alogrithm}
+\input{thesis/misc/appendix/details-mse-results}
+
+
 
 \end{appendix}
 
 \endinput
+
+
+
+
+
