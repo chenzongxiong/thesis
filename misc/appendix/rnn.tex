@@ -1,0 +1,43 @@
+\section{Recurrent neural networks}\label{sec:appendix:rnn}
+% LSTM: \citep{hochreiter1997long}
+% GRU: \citep{cho2014properties}
+
+A recurrent neural network (RNN) is an extension of a conventional feed-forward neural network, which is able to handle arbitrary length sequence inputs. The RNN allows previous outputs to be used as inputs while having internal hidden states.
+More formally, given a sequence $\{x_n\}$, the RNN updates its recurrent hidden state $h_n$ by 
+\begin{equation}\label{eqn:appendix:rnn}
+    h_n = \phi(h_{n-1}, x_n)
+\end{equation}
+where $\phi$ is a nonlinear function. We call \myformularef{eqn:appendix:rnn} SimpleRNN. Unfortunately, it has been observed by, i.e., \citep{longtermdependencies}, that it is hard to train RNNs well to capture long-term dependencies because of the vanishing or exploding gradients. This makes gradient-based optimization method, i.e., stochastic gradient descent, struggle. One approach to reduce the negative influences of this phenomenon is to propose a more sophisticated recurrent units than the native one, constisting of affine transformations followed by a simple element-wise nonlinearity by using gating units. \citep{hochreiter1997long} proposed a dedicated recurrent unit, called long short-term memory (LSTM) unit in this field (see \myfigref{fig:appendix:lstm}). The LSTM is given by,
+\begin{eqnarray}
+    i_{n} &=& \sigma(W_{i} x_{n} + W_{ri} h_{n-1} + b_{i}) \\
+    f_{n} &=& \sigma(W_{f} x_{n} + W_{rf} h_{n-1} + b_{f}) \\
+    o_{n} &=& \sigma(W_{o} x_{n} + W_{ro} h_{n-1} + b_{o}) \\
+    \tilde{C_{n}} &=& a(W_{c} x_{n} + W_{rc} h_{n-1} + b_{c}) \\
+    C_{n} &=& f_{n} C_{n-1} + i_{n} \tilde{C_{n}} \\
+    h_{n} &=& o_{n} a(C_{n})
+\end{eqnarray}
+where $x_n$ is the input vector to LSTM unit, $f_n$ is the forget gate's activation vector, $i_n$ is input gate's activation vector, $o_n$ is the output gate's activation vector, $h_n$ is hidden state vector, $\tilde{C}_n$ ..., $W_i$, $W_f$, $W_o$, $W_c$, $W_{ri}$, $W_{rf}$, $W_{ro}$, $W_{rc}$, $b_i$, $b_f$, $b_o$ and $b_c$ are the parameters matrices and vectors.
+More recently, another type of recurrent unit, called gated recurrent unit (GRU) (see \myfigref{fig:appendix:gru}), was proposed by \citep{cho2014properties}. Similarly to the LSTM unit, the GRU has gating units that modulate the flow of information inside the unit, however, without having a separate memory cells. It given by, 
+\begin{eqnarray}
+    z_n &=& \sigma_g(W_z x_n + W_{rz} h_{n-1} + b_z) \\
+    r_n &=& \sigma_g(W_r x_n + W_{rr} h_{n-1} + b_r) \\
+    \tilde{h}_n &=& \phi_{h} (W_h x_n + W_{rh} (r_n  \odot h_{n-1}) + b_h) \\
+    h_n &=& (1-z_n) \odot h_{n-1} + z_n \odot \tilde{h}_n
+\end{eqnarray}
+where $\sigma_g$ is sigmoid function, $\phi_{h}$ is a hyperbolic tangent function, $x_n$ is input vector, $h_n$ is the output vector, $\hat{h}_n$ is the candidate activation vector, $z_n$ is the update update vector, $r_n$ is reset gate vector, and $W_z$, $W_r$, $W_h$, $W_{rz}$, $W_{rr}$, $W_{rh}$, $b_z$, $b_r$ and $b_h$ are the parameter matrices and vectors.
+$\odot$ represents element-wise multiplication.
+
+\begin{figure}
+    \centering
+    \subfloat[Long Short-Term Memory]{
+        \includegraphics[width=\textwidth/2]{thesis/img/lstm-plot.png}
+        \label{fig:appendix:lstm}
+    }
+    \subfloat[Gated Recurrent Unit]{
+    \includegraphics[width=\textwidth/2]{thesis/img/gru-plot.png}
+        \label{fig:appendix:gru}
+    }
+    \caption{Illustration of LSTM and GRU. (\myfigref{fig:appendix:lstm}) $i$, $f$ and $o$ are the input, forget and output gates, respectively. $C$ and $\tilde{C}$ denote the memory cell and the new memory cell content. (\myfigref{fig:appendix:gru}) $r$ and $z$ are the reset and update gates, and $h$ and $\tilde{h}$ are the activation and the candidate activation. \citep{chungevaluation}}
+    \label{fig:appendix:rnn}
+\end{figure}
+\FloatBarrier

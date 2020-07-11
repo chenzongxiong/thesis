@@ -2,6 +2,7 @@
 \vspace*{1.0cm}
 
 \begin{center}
+    % \textbf{Hysteretic neural networks - Abstract}
     \textbf{Abstract}
 \end{center}
 
@@ -10,7 +11,9 @@
 \noindent
 
 
-\textit{Hysteresis} is defined as a \textit{rate independent} process with \textit{memory effect}. A wide class of hysteretic systems is formed by an elementary block, \textit{Preisach operator}. In this thesis, we approximate this kind hysteretic by neural network.
+\textit{Hysteresis} is defined as a \textit{rate independent} process with \textit{memory effect}. A wide class of hysteretic systems is formed by an elementary block, \textit{Preisach operator}. In this thesis, we approximate this kind hysteretic process by neural network.
 RNNs can approximate processes with memory, but standard architectures such as LSTM fail to learn the hysteretic relation from inputs and outputs.
-We develop a new network architecture, namely HNN, which is a realization of a linear combination of nonlinear \textit{plays}. We compare the RMSE between HNN and LSTM networks, and it shows that HNN is significantly better than LSTM networks. 
-Further, we generalize a financial market model with momentum trading strategies as an illustrative application. We evaluate the performance between HNN and LSTM networks on this market model. It reveals HNN outperforms LSTM networks several times with fewer parameters.
+Hence, we develop a new network architecture, namely hysteretic neural networks (HNN), which is a realization of a linear combination of \textit{nonlinear plays}. We compare the RMSE between HNN and LSTM networks, and it shows that HNN is significantly better than LSTM networks. 
+Furthermore, we generalize a financial market model in \citep{dima2014} \mydelete{with momentum trading strategies} as an illustrative application. We evaluate the performance between HNN and LSTM networks on this financial market model. 
+\mydelete{It reveals HNN outperforms LSTM networks several times with fewer parameters.}
+\myupdate{It reveals HNN can achieve better performance than LSTM networks with fewer parameters.} 

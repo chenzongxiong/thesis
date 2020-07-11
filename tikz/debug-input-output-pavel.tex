@@ -24,11 +24,19 @@
 \pgfplotstableread[col sep=comma]{base-pavel-seq.csv}\mydata
 
 
+\pgfplotsset{select coords between index/.style 2 args={
+    x filter/.code={
+        \ifnum\coordindex<#1\def\pgfmathresult{}\fi
+        \ifnum\coordindex>#2\def\pgfmathresult{}\fi
+    }
+}}
+
 \begin{document}
 
 \begin{tikzpicture}
 \begin{groupplot}[    
     group style = {group size = 1 by 6},
+    legend pos=north west        
     %  height=5cm, width=20cm,
      % 
      % horizontal sep=2cm, 
@@ -44,8 +52,20 @@
     \nextgroupplot[ylabel=outputs,xlabel=inputs, xmin=-10, xmax=10]
     % ,ymin=-45, ymax=45]
     % \nextgroupplot[ylabel=outputs,xlabel=inputs]
-    \addplot[only marks,scatter,mark size=1pt, point meta={1}] table[x index={1}, y index={2}]{\mydata}; % 
+\addplot[color=blue,select coords between index={600}{1000},only marks,scatter,mark size=1pt, point meta={1},colormap={summap}{
+        % color=(black)
+        % color=(violet)
+        color=(red)
+        color=(red)}] table[x index={1}, y index={2}]{\mydata}; % 
+        
+    \addplot[color=red,select coords between index={0}{600},only marks,scatter,mark size=1pt, point meta={1},colormap={summap}{
+        % color=(black)
+        % color=(violet)
+        color=(blue)
+        color=(blue)}] table[x index={1}, y index={2}]{\mydata}; % 
 
+    \addlegendentry{training data set}
+    \addlegendentry{test data set}
     %% test sets
     % \nextgroupplot[ylabel=inputs,xmin=601,xmax=1000,xlabel={time step, $n$}]
     % \addplot[color=red,mark=.] table[x index={0}, y index={1}]{\mydata}; 

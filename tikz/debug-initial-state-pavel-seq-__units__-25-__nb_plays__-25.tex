@@ -34,12 +34,14 @@
      % 
      % horizontal sep=2cm, 
      % vertical sep=5cm
-    % xticklabels from table = {\Data}{Day}, xtick = {1,...,19},
+    % xticklabels from table = {\Data}{Day}, 
     % xticklabel style = {rotate = 90, xshift = -0.8ex, anchor = mid east}
     ylabel=outputs,
     height=8cm,width=20cm,
-    xmin=0,xmax=400, xlabel={time step, $n$},
-        legend pos=north west
+    xmin=600,xmax=999, 
+    xlabel={time step, $n$},
+    % xtick = {0,...,400},
+    legend pos=north west
     ]
     %% training sets
     % \nextgroupplot[ylabel=outputs,xmin=300,xmax=350,xlabel={time step, $n$}]

@@ -1,4 +1,8 @@
-\chapter{Hysteretic neural networks\label{cha:chapter2}}
+\chapter{Hysteretic neural networks}\label{cha:chapter2}
+
+% \begin{equation}
+% \min_{W_b} \mathcal{L}_{SE}
+% \end{equation}
 
  First, we derive \textit{play networks} based on elementary nonlinear function $\Phi(x)$ defined in this thesis. Then we use \textit{play networks} to generate \textit{generalized Prandtl-Ishlinskii (PI) networks}. In the end, we provide a method on how to train a hysteretic network. 
 
@@ -8,7 +12,8 @@ Consider $K > 0$ \textit{play} operators. Each of them maps an initial state $p_
 \begin{equation*}
   p_{0}^{k}, (x_1, x_2, \ldots) \mapsto (p_{1}^{k}, p_{2}^{k}, \ldots), k = 1, \ldots, K
 \end{equation*}
-The $k$th play operator is given by:
+
+The $k$th play operator is given by \citep[p. 9]{krejci1996hysteresis}\footnote{Note that we use the play operator in a slightly different way from the original one described in \citep[p. 9]{krejci1996hysteresis}. Originally, the play operator contains multiple different horizontal lines (see \myfigref{fig:chapter1:play}) and each horizontal line has determined direction. However, each play operator in our implementation has only one horizontal line which is bi-direction (\myfigref{fig:chapter2:play-by-phi}).}:
 \begin{equation}\label{eqn:chapter2:play-operator}
   p_{n}^{k} = \mathcal{P}(x_{n}, p_{n-1}^{k}, w^{k}) := p_{n-1}^{k} + \Phi(w^{k} x_{n} - p_{n-1}^{k}), n = 1, 2, \ldots, N
 \end{equation}
@@ -31,10 +36,10 @@ where $w^{k}$ is a parameter and $\Phi(x)$ (see \myfigref{fig:chapter2:phi}) is 
         \label{fig:chapter2:phi}
     }
     \subfloat[$\text{Play(x)}$]{
-        \input{./tikz/play-by-phi}
+        \input{./tikz/play-by-phi-1}
         \label{fig:chapter2:play-by-phi}
     }
-    \caption{(\myfigref{fig:chapter2:phi}) The graph of $\Phi(x)$. (\myfigref{fig:chapter2:play-by-phi}) shows the graph of \textit{play}. There are three different hysteretic loops with different initial states generated from $\Phi(x)$.}
+    \caption{(\myfigref{fig:chapter2:phi}) The graph of $\Phi(x)$. (\myfigref{fig:chapter2:play-by-phi}) shows the graph of \textit{play}. There are three different \mydelete{hysteretic loops} \myupdate{dynamics}  with different initial states generated from $\Phi(x)$.}
     \label{fig:chapter2:phi-and-play-by-phi}
 \end{figure}
 
@@ -71,12 +76,12 @@ For example, the network in \myfigref{fig:chapter2:nn-play-rnn} is N-unfolded.
 
 \section{Generalized Prandtl-Ishlinskii networks\label{sec:chapter2:pi-network}}
 \begin{definition}
-If a network $\mathcal{G}$ network is the linear combination of generalized play networks, we call this network generalized Prandtl-Ishlinskii network or generalized PI network. If the length of the input sequence is m, we call PI networks as $m$-unfolded PI networks.
+If a \mydelete{netwrk} \myupdate{network} $\mathcal{G}$ \mydelete{network} is the linear combination of generalized play networks $\mathcal{P}$, we call this network generalized Prandtl-Ishlinskii network or generalized PI network. If the length of the input sequence is m, we call PI networks as $m$-unfolded PI networks.
 \end{definition}
 
 % \mytodo{add generalized play networks}
 
-We consider a $\mathcal{G}$ network contains K $\mathcal{P}$ networks. Denote the initial states of $\mathcal{G}$ network 
+A $\mathcal{G}$ network consists of $K$ $\mathcal{P}$ networks and the initial states of $\mathcal{G}$ network is denoted as follows,
 % $p_0$. 
 % and the output sequence of $k$th $\mathcal{P}$ network by
 \begin{equation*}
@@ -129,13 +134,13 @@ where $\hat{\theta}^{k}_{s},\hat{\theta}^{k}_{0}$ are parameters and $p^k_n$ are
 % \mytodo{update parameters notation of architecture in chapter1}
 
 \section{General hysteretic networks}
-A general netwrk may consist of several \textit{play} layers (and perhaps standard layers). We call such a network \textit{hysteretic}, and denote
+A general network may consist of several \textit{play} layers (and perhaps standard layers) (see \myfigref{fig:chapter1:nn-pi}). We call such a network \textit{hysteretic}, and denote
 \begin{equation}
     b_n = G(X_n, W)
 \end{equation}
 where $X_n = (x_, \ldots, x_n)$ and $W$ is a vector of all weights of the network.
 
-\section{Training a hysteretic network\label{sec:chapter2:training-pi-network}}
+\section{Training a hysteretic network \myupdate{given targets (labels)}}\label{sec:chapter2:training-pi-network}
 Assume we are given an input sequence $x_1, x_2, \ldots, x_N$ and an output sequence $y_1, y_2, \ldots, y_N$. We perform the following steps in cycle until convergence. 
 \begin{enumerate}
 \item Preparing initial states for the network: Fix a vector of initial states $P_0$ and all the weights (denoted by $W$, a collection of $w^k, \theta^{k}_{s}, \hat{\theta}^{k}_{s}, \theta^{k}_{s,0}, \hat{\theta}^{k}_{0}$). For each $k=1, \ldots, K$, we calculate recursively $p_{1}^{k}, p_{2}^{k}, \ldots, p_{N}^{k}$ by \myformularef{eqn:chapter2:play-operator}. We denote the corresponding states of the PI network by
@@ -188,5 +193,5 @@ and mean squared error as loss function $\mathcal{L}_{SE}$, where
 
 
 \begin{remark}
-For a hysteretic process trained by HNN, it will catch up with the trace after finite time steps even though the initial state is incorrect. (see \mysectionref{sec:chapter5:initial-states})
+For a hysteretic process trained by HNN, it will catch up with the \mydelete{trace} \myupdate{dynamics} after finite time steps even though the initial state is incorrect. (see \mysectionref{sec:chapter5:initial-states})
 \end{remark}

@@ -26,11 +26,11 @@
     % group style = {group size = 1 by 4},
     scale only axis,
      height=5cm, width=20cm,
-     xmin=1, xmax=500,
+     xmin=1300, xmax=1700,
      legend pos=north west,
      xlabel=\large{time steps, n},
      axis y line*=left,
-      ylabel=\large{outputs},
+      ylabel=\large{$b_n$},
     ]
     \addplot[color=blue,mark=.,thick] table[x index={0}, y index={2}]{\mydata}; % ground truth
     \label{plot:ground-truth};
@@ -40,7 +40,7 @@
     % group style = {group size = 1 by 4},
     scale only axis,
      height=5cm, width=20cm,
-     xmin=1, xmax=500,
+     xmin=1300, xmax=1700,
      ymax=1100,
      legend pos=north west,
      xlabel=\large{time steps, n},

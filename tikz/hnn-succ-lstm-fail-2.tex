@@ -20,7 +20,10 @@
 % 5,3,4,7
 % \end{filecontents*}
 
-\pgfplotstableread[col sep=comma]{analysis-hnn-lstm-pavel-sequence.csv}\mydata
+% \pgfplotstableread[col sep=comma]{analysis-hnn-lstm-pavel-sequence.csv}\mydata
+\pgfplotstableread[col sep=comma]{debug-lstm-pavel-__units__-128.csv}\mydata
+\pgfplotstableread[col sep=comma]{debug-hnn-pavel-__units__-25-__nb_plays__-25.csv}\mydatax
+
 % \pgfplotstabletypeset[
 %     columns               ={\#noise,\#price,\#kn,\#walk},
 %     % columns/f/.style      ={column name=$f (\hertz)$,sci},
@@ -47,7 +50,7 @@
 \begin{axis}[    
     % group style = {group size = 1 by 4},
      height=5cm, width=20cm,
-     xmin=50, xmax=200,
+     xmin=600, xmax=750,
      % horizontal sep=2cm, 
      % vertical sep=5cm
     % xticklabels from table = {\Data}{Day}, xtick = {1,...,19},
@@ -58,8 +61,8 @@
     ]
     % \nextgroupplot[ylabel=outputs]
     \addplot[color=blue,mark=.,thick] table[x index={0}, y index={2}]{\mydata}; % ground truth
-    \addplot[color=red,dashed, mark=.,thick] table[x index={0}, y index={3}]{\mydata}; % lstm results
-    \addplot[color=green,dashdotted, mark=.,thick] table[x index={0}, y index={9}]{\mydata}; % hnn results
+    \addplot[color=red,dashed, mark=.,thick] table[x index={0}, y index={25}]{\mydata}; % lstm results
+    \addplot[color=green,dashdotted, mark=.,thick] table[x index={0}, y index={5}]{\mydatax}; % hnn results
     \addlegendentry{ground truth}
     \addlegendentry{LSTM predictions}
     \addlegendentry{HNN predictions}

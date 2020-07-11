@@ -13,16 +13,41 @@
 
 \pgfplotstableread[col sep=comma]{base-dima-seq.csv}\mydata
 
+\pgfplotsset{select coords between index/.style 2 args={
+    x filter/.code={
+        \ifnum\coordindex<#1\def\pgfmathresult{}\fi
+        \ifnum\coordindex>#2\def\pgfmathresult{}\fi
+    }
+}}
+
 \begin{document}
 
 
 \begin{tikzpicture}
 \begin{groupplot}[    
     group style = {group size = 1 by 6},
+    legend pos=north west    
     ]
     \nextgroupplot[ylabel=outputs,xlabel=inputs,xmin=-5, xmax=15]
-    \addplot[only marks,scatter,mark size=1pt, point meta={1}] table[x index={1}, y index={2}]{\mydata}; % 
 
+        
+    \addplot[color=blue, select coords between index={600}{1000},only marks,scatter,mark size=1pt, point meta={1},colormap={summap}{
+        % color=(black)
+        % color=(violet)
+        color=(red)
+        color=(red)}] table[x index={1}, y index={2}]{\mydata}; % 
+        
+   
+    \addplot[color=red,select coords between index={10}{50},only marks,scatter,mark size=1pt, point meta={1},colormap={summap}{
+        % color=(black)
+        % color=(violet)
+        color=(blue)
+        color=(blue)}] table[x index={1}, y index={2}]{\mydata}; %
+        
+    \addlegendentry{training data set}
+    \addlegendentry{test data set}
+    
+  %  \addlegendentry{state=-1}        
 \end{groupplot}
 \end{tikzpicture}
 

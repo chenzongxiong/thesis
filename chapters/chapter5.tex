@@ -1,4 +1,4 @@
-\chapter{Evaluation\label{cha:chapter5}}
+\chapter{Evaluation in case of data sets given ground-truth outputs}\label{cha:chapter5}
 
 % \section{Attribute to compare}\label{}
 % \mytodo{complexity of synthesis data set (nb plays/nb units/random weights/noise)} 
@@ -8,14 +8,16 @@
 % \mytodo{time consumption during train/prediction} 
 % \mytodo{(mean square error/cross entropy) on prediction data set}
 % In this chapter, we evaluate different methods on hysteretic data sets and compare the performance among them.
+\todo{Are D and P two different experiments? Explain this in the beginning} In this chapter, we evaluate the performance of LSTM/SimpleRNN/GRU networks (see \myappendixsectionref{sec:appendix:rnn}) and HNN with two different data sets $D$ and $P$, which are generated from ground-truth networks with \#\_\_nb\_plays\_\_=50 and \#\_\_units\_\_ = 50 (see \mytableref{tbl:chapter5:hyperparameters}). 
 
-\section{Data sets}
-We generate data sets to identify whether LSTM/SimpleRNN/GRU network and HNN could capture the micro-loops of a hysteretic process. 
+\section{Synthetic Data sets}
+We generate data sets to identify whether LSTM/SimpleRNN/GRU networks and HNN could capture the micro-loops \myupdate{(see \myfigref{fig:chapter1:hysteresis-loop})} of a hysteretic process. 
 \newline
-\textbf{Data set $D$.} The set $D$ (see \myfigref{fig:chapter5:dima-seq} and \myfigref{fig:chapter5:dima-seq-2}) consists 1000 points. We repeat sequence $0, 3, 5, 0, 1, 5$ to generate the input $x(n)$ for $D$. We also insert $0, -100$ at the very beginning of the input $x(n)$ to erase the memory in the hysteretic process. The first 600 points are used as a training set, and the rest 400 points are for the test set. We rescale the input of test set by 1/10, 1/7, 1/6, 1/5, 1/4, 1/3, 1/1, 1/0.5 every 50 points to identify inner loops. In this artificial set, only customized hysteretic loops are exposed to networks throughout the training phase.
+\textbf{Data set $D$.} The set $D$ (see \myfigref{fig:chapter5:dima-seq-2} and \myfigref{fig:chapter5:dima-seq}) consists \myupdate{of} 1000 points. We repeat sequence $0, 1, 5, 0, 3, 1, 5$ to generate the input $x(n)$ for $D$. We also insert $0, -100$ at the very beginning of the input $x(n)$ to erase the memory in the hysteretic process. The first 600 points are used as a training set, and the rest 400 points are for the test set. We rescale the input of test set by 1/10, 1/7, 1/6, 1/5, 1/4, 1/3, 1/1, 1/0.5 every 50 points to identify inner loops. In this artificial set, only customized hysteretic loops are exposed to networks throughout the training phase.
 % The micro and macro loops in test set  any model during learning. 
 \newline
-\textbf{Data set $P$.} For the set $P$ (see \myfigref{fig:chapter5:pavel-seq} and \myfigref{fig:chapter5:pavel-seq-2}), it also contains 1000 points. The inputs $x(n)$ is sampled from a periodical function $5cos(0.1n)$ with random noise $noise$. Repeatedly, $noise$ is drawn from different normal distributions, which standard deviations are $0.1, 0.5, 1, 2, 3, 4, 5$. % \todo{why do I use this data set}
+\textbf{Data set $P$.} The set $P$ (see \myfigref{fig:chapter5:pavel-seq} and \myfigref{fig:chapter5:pavel-seq-2}) contains 1000 points. The inputs $x(n)$ are sampled from a normal distribution $\mathcal{N}(5cos(0.1n), \sigma),\, \sigma \in \{0.1, 0.5, 1, 2, 3, 4, 5\}$.
+\todo{why do I use this data set}
 \newline
 % \textbf{Data set $S$.} We generate set $S$ (see \myfigref{fig:chapter5:sin-seq} and \myfigref{fig:chapter5:sin-seq-2}) with different number of points. The inputs $x(n)$ of $S$ is sampled from a periodical signal function $\cos(0.1n) + 0.3\sin(1.3n) + 1.2\sin(0.6n)$. 
 %\newline
@@ -52,7 +54,6 @@ We generate data sets to identify whether LSTM/SimpleRNN/GRU network and HNN cou
 % \end{figure}
 \begin{figure}[ht!]
     \centering
-
     \subfloat[]{
         \includegraphics[width=\textwidth/2]{debug-input-output-dima.pdf}
                  \label{fig:chapter5:dima-seq-2}
@@ -68,23 +69,25 @@ We generate data sets to identify whether LSTM/SimpleRNN/GRU network and HNN cou
     %                      \label{fig:chapter5:sin-seq-2}
 
     % }
-
     \hfill
+    \caption{Data sets. (\myfigref{fig:chapter5:dima-seq-2}, \myfigref{fig:chapter5:pavel-seq-2}) The blue points are the training set and the red one are the test set. (\myfigref{fig:chapter5:dima-seq}, \myfigref{fig:chapter5:pavel-seq}) It only presents the data points from timesteps 3 to timesteps 50 in training set. We don't plot the data point $(x_2, y_2)$ in set $D$ due to its large magnitude.}
     
-    \caption{Caption}
-    \label{fig:chapter5:data-sets}
+    % \label{fig:chapter5:data-sets}
 \end{figure}
 
 \begin{figure}[ht!]
+ \ContinuedFloat 
     \centering
     \subfloat[]{
-        \includegraphics[height=3cm,width=\textwidth]{debug-input-output-dima-2.pdf}
+        % \includegraphics[height=3cm,width=\textwidth]{debug-input-output-dima-2.pdf}
+        \includegraphics[height=3cm,width=\textwidth]{debug-input-output-dima-3-train.pdf}        
          \label{fig:chapter5:dima-seq}
     }
     
     \hfill
     \subfloat[]{
-        \includegraphics[height=3cm,width=\textwidth]{debug-input-output-pavel-2.pdf}
+        % \includegraphics[height=3cm,width=\textwidth]{debug-input-output-pavel-2.pdf}
+    \includegraphics[height=3cm,width=\textwidth]{debug-input-output-pavel-3-train.pdf}
                  \label{fig:chapter5:pavel-seq}
 
     }
@@ -94,7 +97,7 @@ We generate data sets to identify whether LSTM/SimpleRNN/GRU network and HNN cou
     %              \label{fig:chapter5:sin-seq}
 
     % }
-    \caption{Data sets.}
+    \caption{Data sets. (\myfigref{fig:chapter5:dima-seq-2}, \myfigref{fig:chapter5:pavel-seq-2}) The blue points are the training set and the red one are the test set. (\myfigref{fig:chapter5:dima-seq}, \myfigref{fig:chapter5:pavel-seq}) It only presents the data points from timesteps 3 to timesteps 50 in training set. We don't plot the data point $(x_2, y_2)$ in set $D$ due to its large magnitude.}
     \label{fig:chapter5:data-sets}
 \end{figure}
 \FloatBarrier
@@ -102,7 +105,7 @@ We generate data sets to identify whether LSTM/SimpleRNN/GRU network and HNN cou
 \section{Architectures}\label{sec:chapter5:architectures}
 
 \textbf{Hyperparameters}
-In this evaluation, we focus on optimizing the following hyper parameters in LSTM/SimpleRNN/GRU networks and HNN.
+In this evaluation, we focus on optimizing the following hyperparameters in LSTM/SimpleRNN/GRU networks and HNN.
 \begin{table}[h!]
 \begin{center}
     \begin{tabular}{||c|c||}
@@ -118,11 +121,12 @@ In this evaluation, we focus on optimizing the following hyper parameters in LST
      \#\_\_units\_\_      & the number of $units$ used in training phase \\
     \hline
     \end{tabular}
-    \caption{Hyperparameters used for evaluation. \#\_\_nb\_plays\_\_ and \#\_\_units\_\_  can be different from the ground-truth parameters since they're blind to us in reality.}
+    \caption{Hyperparameters used for evaluation. \#\_\_nb\_plays\_\_ and \#\_\_units\_\_  can be different from the ground-truth parameters since they're blind to us in reality. \#\_\_nb\_plays\_\_ and \#\_\_units\_\_ are used for HNN (see \mychapterref{cha:chapter2} for details), \#\_\_units\_\_ is only used for LSTM/SimpleRNN/GRU networks (\myappendixsectionref{TODO: add arch}) for details).}
     \label{tbl:chapter5:hyperparameters}    
 \end{center}
 \end{table}
 
+% \mytodo{add rnn, gru in appendix}
 \textbf{LSTM network.} We use one LSTM layer with tanh nonlinearities and one dense layer. We use the default settings of hyper parameters in tensorflow \citep{abadi2016tensorflow} except for the hidden units in LSTM layer. We grid search a sequence of hidden units, $1, 8, 16, 32, 64, 128, 256$, to find out the best results achieved by LSTM networks. As for the loss functions, we minimize mean squared error (MSE) and minimize the negative maximal likelihood estimator (MLE). The total number of parameters used in this architecture is given by
 \begin{equation*}
     \text{\#parameters} = 4 * ({\text{\#\_\_units\_\_}}^2 + 2*\text{\#\_\_units\_\_}) + \text{\#\_\_units\_\_} + 1
@@ -150,15 +154,15 @@ and
 
 
 \section{Measure}
-The overall \textit{root mean squared error} (RMSE) is used to measure the quality of fit. It's defined as following,
+The overall \textit{root mean squared error} (RMSE) is used to measure the quality of fit. It's defined as follows,
 % \begin{equation}
 % \text{RMSE} = \sqrt{\frac{\sum_{i=0}^{N-1}(\hat{y}_i - y_i)^2}{N}}
 % \end{equation}
 % Additionally, we defined RMSE(n) as
 \begin{equation}
-    \text{RMSE(n)} = \sqrt{\frac{\sum_{i=n}^{N-1}(\hat{y}_i - y_i)^2}{N-n}}, \quad n=0,1,\ldots,N-1
+    \text{RMSE(n)} = \sqrt{\frac{\sum_{i=n}^{N}(\hat{y}_i - y_i)^2}{N-n}}, \quad n=1,\ldots,N
 \end{equation}
-where $n$ means the first $(n-1)$th data points are ignored in RMSE results.
+where $n$ means the first $(n-1)$ data points are ignored in RMSE results.
 
 Particularly, we set $\text{RMSE}=\text{RMSE(0)}$ when $n=0$.
 
@@ -174,15 +178,3 @@ Particularly, we set $\text{RMSE}=\text{RMSE(0)}$ when $n=0$.
 % \input{thesis/chapters/chapter5/same-weights-no-noise}
 % \input{thesis/chapters/chapter5/different-weights-no-noise}
 % \input{thesis/chapters/chapter5/different-weights-noise}
-\newpage
-\section{HNN for market model}\label{sec:chapter5:hnn-for-market-model}
-In this section, we only compare HNN with LSTM network since SimpleRNN and GRU don't perform much better than LSTM.
-\input{thesis/chapters/chapter5/synthetic-stock-dataset}
-\input{thesis/chapters/chapter5/predicting-price}
-% \input{thesis/chapters/chapter5/real-word-dataset}
-
-% \mytodo{add real world data set}
-
-% We scale the the results by $\frac{x-\mu}{\sigma}$
-
-% \mytodo{HERE is the sigma is 50, we will try sigma is 10 throughout this paper}
