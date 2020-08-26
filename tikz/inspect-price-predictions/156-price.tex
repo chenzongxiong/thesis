@@ -37,17 +37,18 @@
         % axis y line*=left,
         xmin=0,xmax=100,
         ylabel={price},
-        xlabel={time steps, $n$},
+        xlabel={number of samples},
         yticklabel style={/pgf/number format/fixed},
         legend pos=outer north east
     ]{
         \addplot+[color=blue,mark=*] table[x index={0}, y index={2}]{\mydata}; % ground-truth
         \addplot+[color=red,mark=*] table[x index={0}, y index={3}]{\mydata}; % lstm
+        \addplot+[color=cyan,mark=*] table[x index={0}, y index={1}]{\mydata}; % hnn
         \addplot+[color=green,mark=*] table[x index={0}, y index={4}]{\mydata}; % hnn
-        \addplot+[color=green!50,mark=*] table[x index={0}, y index={1}]{\mydata}; % hnn
-           \addlegendentry{ground-truth price}
-           \addlegendentry{LSTM}
-           \addlegendentry{HNN}
+        \addlegendentry{ground-truth price ($p_{i-1}$)}
+           \addlegendentry{LSTM (predicted $p_{i-1}$)}
+           \addlegendentry{HNN (samples of predicted $p_{i-1}$)}
+           \addlegendentry{HNN (mean value of predicted $p_{i-1}$)}
     }
     \end{axis}
 

@@ -2,10 +2,15 @@
 \vspace*{0.2cm}
 
 \begin{center}
-    % \textbf{Zusammenfassung}
+    \textbf{Zusammenfassung}
 \end{center}
 
 \vspace*{0.2cm}
 
 % \noindent
-% Da die meisten Leuten an der TU deutsch als Muttersprache haben, empfiehlt es sich, das Abstract zusätzlich auch in deutsch zu schreiben. Man kann es auch nur auf deutsch schreiben und anschließend einem Englisch-Muttersprachler zur Übersetzung geben.
+
+\textit{Hysterese} ist definiert als ein \textit{raten unabh{\"a}ngiger} Prozess mit lokalem \textit{Speicher}. Eine breite Klasse von hysteretischen Systemen wird durch einen Elementarblock \textit{Preisach-Operator} gebildet. In dieser Arbeit approximieren wir diese Art von hysteretischem Prozess durch neuronale Netze.
+RNNs k{\"o}nnen Prozesse mit Speicher approximieren, aber Standardarchitekturen wie LSTM k{\"o}nnen die hysteretische Beziehung nicht aus Ein- und Ausg{\"a}ngen lernen.
+Daher entwickeln wir eine neue Netzwerkarchitektur, sogenannte hysteretische neuronale Netze (HNN), die ein {\"U}berlagerung von \textit{nichtlinearen Spielen} ist. Wir vergleichen den RMSE zwischen HNN- und LSTM-Netzwerken und es zeigt sich, dass HNN signifikant besser ist als LSTM-Netzwerke.
+Dar{\"u}ber hinaus verallgemeinern wir ein Finanzmarktmodell, das auf \citep{dima2014} basiert.
+Es zeigt auch, dass HNN mit weniger Parametern eine bessere Leistung erzielen kann als LSTM-Netzwerke.

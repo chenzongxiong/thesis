@@ -1,44 +1,44 @@
 \chapter{Introduction\label{cha:chapter1}}
 
 % grammarly -> 100
-\textit{Hysteresis} (see \myfigref{fig:chapter1:hysteresis-loop,fig:chapter1:non-ideal-relay,fig:chapter1:stop,fig:chapter1:play}) is defined as a \textit{rate independent} process with \textit{memory effect} \citep[p. 13-14]{visintin2013differential}. It's ubiquitous in various fields, including microelectronics \citep{bondurant1989ferroelectrics,jiles1983ferromagnetic}, materials \citep{Kaltenbacher2014ATC,krejvci2007elastic,al2009generalized,ge1995modeling}, mechanics \citep{truesdell2004non,dima2014,kunze2000introduction}, economics \citep{belke2013exchange,gocke2002various,belke2014hysteresis,blanchard1986hysteresis}. The nonlinear operators such as \textit{non-ideal relay operator} (see \myfigref{fig:chapter1:non-ideal-relay}), \textit{stop operator} (see \myfigref{fig:chapter1:stop}), \textit{play operator} (see \myfigref{fig:chapter1:play}) and their generalizations \citep{krejci1996hysteresis} are used as elementary blocks to form dynamical systems with hysteresis. Preisach-type model, constructed as a superposition of non-ideal relays, is quite general in applications, and it's equivalent to a linear combination of \textit{generalized plays} \citep[p. 110-111, Theorem 2.7]{visintin2013differential}.
+\textit{Hysteresis} (see \myfigref{fig:chapter1:hysteresis-loop,fig:chapter1:non-ideal-relay,fig:chapter1:stop,fig:chapter1:play}) is defined as a \textit{rate independent} process with \textit{memory effect} \citep[p. 13-14]{visintin2013differential}. It's ubiquitous in various fields, including microelectronics \citep{bondurant1989ferroelectrics,jiles1983ferromagnetic}, materials \citep{Kaltenbacher2014ATC,krejvci2007elastic,al2009generalized,ge1995modeling}, mechanics \citep{truesdell2004non,dima2014,kunze2000introduction}, economics \citep{belke2013exchange,gocke2002various,belke2014hysteresis,blanchard1986hysteresis}. The nonlinear operators such as \textit{non-ideal relay operator} (see \myfigref{fig:chapter1:non-ideal-relay}), \textit{stop operator} (see \myfigref{fig:chapter1:stop}), \textit{play operator} (see \myfigref{fig:chapter1:play}) and their generalizations \citep{krejci1996hysteresis} are used as elementary blocks to form dynamical systems with hysteresis. Preisach-type model, constructed as a superposition of non-ideal relays, is quite general in applications, and it is equivalent to a linear combination of \textit{generalized plays} \citep[p. 110-111, Theorem 2.7]{visintin2013differential}.
 \begin{figure}[htb!]
     \centering
     \subfloat[Hysteresis loops]{
-        \scalebox{1.42} {
+        \scalebox{0.994} {
         \input{./tikz/hysteresis-loop}
         }
         \label{fig:chapter1:hysteresis-loop}
     }
     \subfloat[Non-ideal relay]{
-        \scalebox{1.0} {
+        \scalebox{0.7} {
         \input{./tikz/non-ideal-relay}
         }
         \label{fig:chapter1:non-ideal-relay}
     }
     \hfill
     \subfloat[Stop]{
-       \scalebox{1.0} {
+       \scalebox{0.7} {
         \input{./tikz/stop-def}
         \label{fig:chapter1:stop}
         }
     }
     \subfloat[Play]{
-       \scalebox{1.0} {
+       \scalebox{0.7} {
         \input{./tikz/play-def}
         \label{fig:chapter1:play}
         }
     }
-    \caption{Interpretation of simplest \textit{hysteresis loop}, \textit{non-ideal relay}, \textit{stop} and \textit{play}. (\myfigref{fig:chapter1:hysteresis-loop}) If $u$ monotonically increases from $u_1$ to $u_2$, then the coordinate $(u, x)$ moves along the path $A \rightarrow B \rightarrow C$; conversely, if $u$ monotonically decreases from $u_2$ to $u_1$, then $(u, x)$ moves along the path $C \rightarrow D \rightarrow A$ \citep[p. 12-13]{visintin2013differential}. \myupdate{We call the curve $G \rightarrow D \rightarrow E \rightarrow F \rightarrow G$ inside curve $A \rightarrow B \rightarrow C \rightarrow D \rightarrow A$ micro-loop.}
+    \caption[Interpretation of simplest \textit{hysteresis loop}, \textit{non-ideal relay}, \textit{stop} and \textit{play}.]{Interpretation of simplest \textit{hysteresis loop}, \textit{non-ideal relay}, \textit{stop} and \textit{play}. (\myfigref{fig:chapter1:hysteresis-loop}) If $u$ monotonically increases from $u_1$ to $u_2$, then the coordinate $(u, x)$ moves along the path $A \rightarrow B \rightarrow C$; conversely, if $u$ monotonically decreases from $u_2$ to $u_1$, then $(u, x)$ moves along the path $C \rightarrow D \rightarrow A$ \citep[p. 12-13]{visintin2013differential}. \myupdate{We call the curve $G \rightarrow D \rightarrow E \rightarrow F \rightarrow G$ inside curve $A \rightarrow B \rightarrow C \rightarrow D \rightarrow A$ micro-loop. And We call curve $A \rightarrow B \rightarrow C \rightarrow D \rightarrow A$ outside curve $G \rightarrow D \rightarrow E \rightarrow F \rightarrow G$ macro-loop.}
     (\myfigref{fig:chapter1:non-ideal-relay}) Hyper-parameters $\alpha$ and $\beta$ correspond to \textit{on} and \textit{off} switching values of input, respectively. As the input $u$ monotonically increased, the ascending branch $a \rightarrow b \rightarrow c \rightarrow d \rightarrow e$ is followed. When the input is monotonically decreased, the descending branch $e \rightarrow d \rightarrow f \rightarrow b \rightarrow a$ is traced  \citep[p. 2]{mayergoyz1986mathematical}. (\myfigref{fig:chapter1:stop}, \myfigref{fig:chapter1:play}) Input-output diagram for \textit{stop} and \textit{play} in the case $\dim X = 1, Z = [-r, r], u(t)=A \sin (\omega t) \, for \, A > r > 0$ \, \citep[p. 9]{krejci1996hysteresis}.} 
 \end{figure}
-
+% \FloatBarrier
 % \mytodo{add explanation of play in the figure}
 
 
 % grammarly -> 100
-In this thesis, we want to approximate a general class of hysteretic processes, the Preisach-type model, by recurrent neural networks (RNNs). Intuitively, RNN is an optional approach to approximate systems with \textit{memory} since it allows previous output to be used as input while having hidden states. \citep{wang2018prandtl} applied internal time-delay RNN to describe some particular hysteretic operator (so-called giant magnetostrictive actuator) but not arbitrary Preisach operators, neither they compared with long short-term memory (LSTM) networks \citep{hochreiter1997long}, the state-of-the-art architecture of RNN. We checked LSTM networks and found that it didn't perform well enough to reveal the relation between output and original input in hysteretic systems. % \citet{wei2000constructing} proposed a propulsive neural unit (PNU) to assist hysteresis simulation. 
-Hence \textbf{we develop a new neural network architecture, namely hysteretic neural network (\text{HNN}) (see \myfigref{fig:chapter1:nn-arch})}. It is a realization of a linear combination of generalized plays, and therefore it's able to approximate any \textit{Preisach operator} \citep{visintin2013differential}. 
+In this thesis, we want to approximate a general class of hysteretic processes, the Preisach-type model, by recurrent neural networks (RNNs). Intuitively, RNN is an optional approach to approximate systems with \textit{memory} since it allows previous output to be used as input while having hidden states. \citep{wang2018prandtl} applied internal time-delay RNN to describe some particular hysteretic operator (so-called giant magnetostrictive actuator) but not arbitrary Preisach operators, neither they compared with long short-term memory (LSTM) networks \citep{hochreiter1997long}, the state-of-the-art architecture of RNN. We checked LSTM networks and found that it did not perform well enough to reveal the relation between output and original input in hysteretic systems. % \citet{wei2000constructing} proposed a propulsive neural unit (PNU) to assist hysteresis simulation. 
+Hence \textbf{we develop a new neural network architecture, namely hysteretic neural network (\text{HNN}) (see \myfigref{fig:chapter1:nn-arch})}. It is a realization of a linear combination of generalized plays, and therefore it is able to approximate any \textit{Preisach operator} \citep{visintin2013differential}. 
 
 
 % Our main contributions are 
@@ -58,7 +58,7 @@ Hence \textbf{we develop a new neural network architecture, namely hysteretic ne
         }
         \label{fig:chapter1:nn-pi}
     }
-    \caption{The architecture of HNN}
+    \caption{The architecture of HNN.}
     \label{fig:chapter1:nn-arch}
 \end{figure}
 
@@ -83,37 +83,50 @@ Given an observation $(x_n, y_n) \, (n=1,\ldots, N)$ underlying hysteretic input
         }
         \label{fig:chapter1:hnn-lstm-result-2}
     }
-    \caption{The overall predictive outputs against ground-truth outputs for two different sequences in \myfigref{fig:chapter1:hnn-lstm-result-1} and \myfigref{fig:chapter1:hnn-lstm-result-2} (see \myupdate{\mychapterref{cha:chapter5}} for details).}
+    \caption{The overall predictive outputs against ground-truth outputs for two different sequences (see \myupdate{\mychapterref{cha:chapter5}} for details).}
     \label{fig:chapter1:hnn-lstm-results}
 \end{figure}
 % grammarly -> 100
-Furthermore, we study a specific application of HNN, namely momentum-based trading strategies in the financial market. \citep{dima2014} proposed a market model and used \textit{Prandtl-Ishlinskii operator} \citep{visintin2013differential}, a particular case of the Preisach model, to represent trading strategies within their market model. It provides a promising insight to make play-hysteresis economic models compatible with multi-agent modeling frameworks \citep{cross2007stylized,cartwright1999dappled,lamba2008market}. However, they only considered a single trading strategy that agents take reaction to the change of \textit{price trends} to simulate market movements. Another trading strategy, which is common in financial trading patterns as well, is threshold-based, where agents in markets are sensitive to the fluctuation of some \textit{fixed price value} instead of \textit{price trends}. 
+Furthermore, we study a specific application of HNN, so-called momentum-based trading strategies in the financial market. \citep{dima2014} proposed a market model and used \textit{Prandtl-Ishlinskii operator} \citep{visintin2013differential}, a particular case of the Preisach model, to represent trading strategies within their market model. It provides a promising insight to make play-hysteresis economic models compatible with multi-agent modeling frameworks \citep{cross2007stylized,cartwright1999dappled,lamba2008market}. However, they only considered a single trading strategy that agents take reaction to the change of \textit{price trends} to simulate market movements. Another trading strategy, which is common in financial trading patterns as well, is threshold-based, where agents in markets are sensitive to the fluctuation of some \textit{fixed price value} instead of \textit{price trends}. 
  % We call agents with this strategy \textit{agents D} (cf. \ref{assumption:chapter3:strategy-of-agentD}) in this thesis. called \textit{agents N} (cf. \ref{assumption:chapter3:strategy-of-agentN}) in this thesis. 
-\textbf{We generalize \citep{dima2014}'s market model by introducing two different agents, agents D, and agents N}. Additionally, agents D only react to price trends, and agents N respond to fixed price threshold. Moreover, we form agents D and agents N by play operator and non-ideal relay operator, respectively (see \mysectionref{sec:chapter3:demand-supply-price-formation} for details).
+\textbf{We generalize \citep{dima2014}'s market model by introducing two different agents, agents D, and agents N}. Additionally, agents D only react to price trends, and agents N respond to fixed price threshold. Moreover, we form agents D and agents N by \textit{play operator} and \textit{non-ideal relay operator}, respectively (see \mysectionref{sec:chapter3:demand-supply-price-formation} for details).
  
 % grammarly -> 100
 We learn this financial market model using HNN and LSTM by minimizing the negative log-likelihood of the price distribution (see \mysectionref{sec:chapter4:direct_learning} for details). \textbf{It reveals that HNN achieves better performance than LSTM by comparing log-likelihood of price (see \myfigref{fig:chapter1:market-hnn-lstm-results}). Particularly, HNN can predict and interpret the avalanches of price.}
 
 \begin{figure}[htb!]
     \centering
-    \subfloat[]{
+    % \subfloat[]{
+    %     \scalebox{1.0} {
+    %     \includegraphics[width=\textwidth]{market-lstm-bn-predictions}
+    %     }
+    %     \label{fig:chapter1:market-lstm-result}
+    % }
+    % \hfill
+    % \subfloat[]{
+    %     \scalebox{1.0} {
+    %     \includegraphics[width=\textwidth]{market-hnn-bn-predictions}
+    %     }
+    %     \label{fig:chapter1:market-hnn-result}
+    % }
+    
+    \subfloat[LSTM]{
         \scalebox{1.0} {
-        \includegraphics[width=\textwidth]{market-lstm-bn-predictions}
+        \includegraphics[height=3cm,width=\textwidth]{img/market-prediction-lstm/1.pdf}
         }
         \label{fig:chapter1:market-lstm-result}
     }
     \hfill
-    \subfloat[]{
+    \subfloat[HNN]{
         \scalebox{1.0} {
-        \includegraphics[width=\textwidth]{market-hnn-bn-predictions}
+        \includegraphics[height=3cm,width=\textwidth]{img/market-prediction-hnn/1.pdf}
         }
         \label{fig:chapter1:market-hnn-result}
     }
-    \caption{The overall predictive outputs against ground-truth outputs for LSTM and HNN in \myfigref{fig:chapter1:market-lstm-result} and \myfigref{fig:chapter1:market-hnn-result} (see \mychapterref{cha:chapter6} for details).}
+    \caption{The overall predictive random walk against ground-truth random walk for LSTM and HNN (see \mychapterref{cha:chapter6} for details).}
     \label{fig:chapter1:market-hnn-lstm-results}
 \end{figure}
 
-% It reveals HNN models this kind of market model better than LSTM and it's able to predict avalanche of prices. Even HNN is possible to reconstruct the \textit{unobserved state changes underlying the market}, which is useful to interpret the \textit{avalanche of market movements}, since it inherently contains agents that use different trading strategies in micro level. 
-
+% It reveals HNN models this kind of market model better than LSTM, and it is able to predict an avalanche of prices. Even HNN is possible to reconstruct the \textit{unobserved state changes underlying the market}, which is useful to interpret the \textit{avalanche of market movements}, since it inherently contains agents that use different trading strategies in micro-level. 
 % organization
-The thesis is organized as follows. In the next chapter, we give a comprehensive methodology for HNN, including how to formulate hysteretic systems by generalized play operators and learn the neural networks. In chapter 3, we offer detailed discussions about our financial market model and perform a practical approach to generate synthetic data sets for further evaluation. We generalize the HNN to learn the financial market model in chapter 4. In chapter 5, we evaluate the performance of LSTM, SimpleRNN, GRU and HNN on the data sets given ground-truth outputs in different perspectives, including the complexity of data sets, the network complexity, and the accuracy of predicted results. We present the performance of LSTM and HNN learning the data sets obtained from the financial market model proposed in \mychapterref{cha:chapter3}. The last chapter contains our conclusions and future works. 
+The thesis is organized as follows. In the next chapter, we give a comprehensive methodology for HNN, including how to formulate hysteretic systems by generalized play operators and learn the neural networks. Chapter 3 offers detailed discussions about our financial market model and performs a practical approach to generate synthetic data sets for further evaluation. We generalize the HNN to learn the financial market model in chapter 4.  In chapter 5, we evaluate the performance of LSTM, SimpleRNN, GRU, and HNN on the data sets given ground-truth outputs in different perspectives, including the complexity of data sets, the network complexity, and the accuracy of predicted results. We present LSTM and HNN's performance learning the data sets obtained from our financial market model in chapter 6. The last chapter contains our conclusions and future works. \myupdate{In the appendices, we present a brief description of recurrent neural networks, interpolation algorithm used to reconstruct hysteretic loops from the networks, gradients of HNN, and LSTM architecture used in this thesis, and more detailed evaluation results. We also provide an example to illustrate the strategies of agents D and agents N.}

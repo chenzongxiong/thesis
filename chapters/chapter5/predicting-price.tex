@@ -1,110 +1,33 @@
 \section{Predicting price}
-\textbf{Methods.} To distinguish difference predicting performance among different methods, we consider the following three approaches. The first approach is to predict the next price $\hat{p}_i$ as the previous price $p_{i-1}$, and we call it native method. The second method is using LSTM networks described in \citep{kagglelstm}. The last one is using the methods described in \mysectionref{sec:chapter4:predicting_price}. %we calculate the RMSE as the following algorithm
-% \begin{algorithm}[H]
-% \SetAlgoLined
-%  \caption{Calculating RMSE}
-%  \SetKwInOut{Input}{Inputs}\SetKwInOut{Output}{Outputs}
-%  \SetKwFunction{TrainedHystereticNetwork}{TrainedHystereticNetwork}
-%  \SetKwFunction{GroundTruthDatasetGenerator}{GroundTruthDatasetGenerator}
-%  \SetKwFunction{CubicInterpolation}{CubicInterpolation}
-%  \Input{The original inputs $X$, the number of points to be interpolated between two consecutive points, $interp$}
-%  \Output{The interpolated inputs, $X\_\text{interp}$, ground-truth outputs, $Y\_\text{interp}$ and predicted outputs, $\Bar{Y}\_\text{interp}$}
+\textbf{Methods.} To distinguish difference predicting performance among different methods, we consider the following three approaches. The first approach is to predict the next price $\hat{p}_i$ as the previous price $p_{i-1}$, and we call it \textit{native method}. The second method is using LSTM networks described in \citep{kagglelstm}. The last one is using the methods described in \mysectionref{sec:chapter4:predicting_price}.  
  
-% \BlankLine
-% \Begin{
-%     /* Using cubic interpolation algorithm to interpolate original inputs*/
-    
-%     $X\_\text{interp} \leftarrow \quad \CubicInterpolation(X, \textit{interp})$
-%   \newline\newline
+\textbf{Measure.} To show the fine performance of the predictions, we divide \myupdate{price change} ${p_n-p_{n-1}}$ and \myupdate{noise jumps $b_n - b_{n-1}$} into $R \times R$ grids 
+\mydelete{and generate the difference $|\hat{p}_i - p_i|$ at each}
+slot $\text{SLOT}_j$ \myupdate{where}, 
 
-%     /* Applying the interpolated inputs $x\_\text{interp}$ to the hysteretic data set generator to generate ground-truth interpolated outputs */
-    
-%     $Y\_\text{interp} \leftarrow \quad \GroundTruthDatasetGenerator(X\_\text{interp})$
-%     \newline\newline
-    
-%     /* Applying the interpolated inputs $X\_\text{interp}$ to the trained HNN to obtain interpolated predictions */
-
-%     $\Bar{Y}\_\text{interp} \leftarrow \quad \TrainedHystereticNetwork(X\_\text{interp})$
-%   }
-% \end{algorithm}
-\textbf{Measure.} To show the fine performance of the predictions, we divide inputs ${p_n}$ and outputs ${b_n}$ into grids and generate the difference $|\hat{p}_i - p_i|$ at each slot $\text{SLOT}(\Delta p_j, \Delta b_j)$ as follows, 
-% \begin{equation}
-% \begin{aligned}
-% & & & |\hat{p}_i - p_i| \in \text{SLOT}(\Delta p_j, \Delta b_j) \\
-% & \text{s.t.} & & \Delta p_{j-1} \le |p_i - p_{i-1}| \le \Delta p_j \\
-% & & & \Delta b_{j-1} \le |b_i - b_{i-1}| \le \Delta b_j  \\
-% & & & \Delta p_{j} = p_{j} - p_{j-1} \\ 
-% & & & \Delta b_{j} = b_{j} - b_{j-1} 
-% \end{aligned}
-% \end{equation}
 
 \begin{equation}
 \begin{aligned}
-% & & & |\hat{p}_i - p_i| \in \text{SLOT}(\Delta p_j, \Delta b_j) \\
-% & \text{s.t.} & & \Delta p_{j-1} \le |p_i - p_{i-1}| \le \Delta p_j \\
-% & & & \Delta b_{j-1} \le |b_i - b_{i-1}| \le \Delta b_j  \\
-% & & & \Delta p_{j} = p_{j} - p_{j-1} \\ 
-% & & & \Delta b_{j} = b_{j} - b_{j-1} 
-\text{SLOT}(\Delta p_j, \Delta b_j) = \big\{|\hat{p}_i - p_i| \big|  \Delta p_{j-1} \le |p_i - p_{i-1}| \le \Delta p_j, \\
-\Delta b_{j-1} \le |b_i - b_{i-1}| \le \Delta b_j, \\
-\Delta p_{j} = p_{j} - p_{j-1}, \\
-and \, \Delta b_{j} = b_{j} - b_{j-1} \big\}
+\text{SLOT}_j = \big\{ (\Delta p, \Delta b) : \Delta p_{j-1} < \Delta p \le \Delta p_j, \Delta b_{j-1} < \Delta b \le \Delta b_j \big\}
 \end{aligned}
 \end{equation}
+and $\hat{p}_i$ is the predicted price, $p_i$ is the ground-truth price, $\Delta{p}_j = j \frac{\max\{p_1, p_2, \ldots\} - \min\{p_1, p_2, \ldots\}}{R}$, $\Delta{b}_j = j \frac{\max\{b_1, b_2, \ldots\} - \min\{b_1, b_2, \ldots\}}{R}$ and $j=0,1,\ldots$
 
-Then the modified RMSE at slot $(\Delta p_j, \Delta b_j)$ is given by,
+Then the modified RMSE at 
+$\text{SLOT}_j$ is given by,
 \begin{equation}
 \begin{aligned}
-& & & \text{RMSE}(\Delta p_j, \Delta b_j) = \sqrt{\frac{1}{C} \sum_{i} (\hat{p}_i - p_i)^2 }  \\
-& \text{s.t.} & & |\hat{p}_i - p_i| \in \text{SLOT}(\Delta p_j, \Delta b_j) \\
-& & & C = card(\text{SLOT}(\Delta p_j, \Delta b_j))
+& & & \text{RMSE}(\text{SLOT}_j) = \sqrt{\frac{1}{C} \sum_{i} (\hat{p}_i - p_i)^2 }  \\
+& \text{s.t.} & & (|p_i - p_{i-1}|, |b_i - b_{i-1}|) \in \text{SLOT}_j \\
+& & & C = \text{card}(\text{SLOT}_j)
 \end{aligned}
 \end{equation}
+\myupdate{With revised \text{RMSE}, we can easily explore how the noise jumps affects the predicted price accuracy.}
 
-% \begin{eqnarray}
-%     |\hat{p}_i - p_i| &\in& \text{SLOT}(\Delta p_j, \Delta b_j)  \\
-%     % \text{RMSE}(\Delta p_j, \Delta b_j) &=& \sqrt{\frac{1}{N} \sum_{i} (\hat{p}_i - p_i)^2 } \\
-%     % \Delta p_j &=& |p_i - p_{i-1}| \\
-%     % \Delta b_j &=& |b_i - b_{i-1}| \\
-%     % \Delta p_{j-1} &\le& (\hat{p}_i - p_i)^2 \le \Delta p_{j}
-%     \text{s.t} \\
-%     \Delta p_{j-1} &\le& |p_i - p_{i-1}| \le \Delta p_j \\
-%     \Delta b_{j-1} &\le& |b_i - b_{i-1}| \le \Delta b_j \\
-%     % \Delta p &=& |\Delta p_{j} - \Delta p_{j-1}| \\
-%     % \Delta b &=& |\Delta b_{j} - \Delta b_{j-1}| \\
-% \end{eqnarray}
-where $\hat{p}_i$ is the predicted price, $p_i$ is the ground-truth price, $b_i$ is ground-truth outputs. 
-% Smaller $\Delta b$ and larger $\Delta p$ implies an avalanche may occur inside the market.
-
-% $\sum_{i} (\hat{p}_i - p_i)^2$ means summing up $((\hat{p}_i - p_i)^2$ over $i$ in slot $(\Delta p, \Delta b)$, and $N$ is the length of predicted price sequence.
-
-% baseline:  [[0.         0.00955533 0.00952353 0.01       0.00816497 0.01224745]
-%  [0.         0.02614065 0.02962732 0.02645751 0.0244949  0.02236068]
-%  [0.         0.04242641 0.04242641 0.04472136 0.         0.        ]
-%  [0.         0.07416198 0.         0.         0.         0.        ]
-%  [0.         0.         0.         0.         0.         0.        ]
-%  [0.         0.         0.09695359 0.         0.         0.        ]]
-
-% hnn:  [[0.         0.00978492 0.01078328 0.01140175 0.00881917 0.01870829]
-%  [0.         0.0254951  0.02472066 0.01732051 0.01732051 0.02      ]
-%  [0.         0.03605551 0.03464102 0.04242641 0.         0.        ]
-%  [0.         0.0591608  0.         0.         0.         0.        ]
-%  [0.         0.         0.         0.         0.         0.        ]
-%  [0.         0.         0.08185352 0.         0.         0.        ]]
-
-
-% lstm:  [[0.04358899 0.05757792 0.05990302 0.05258327 0.07241853 0.10488088]
-%  [0.         0.05802298 0.07644897 0.08       0.07483315 0.        ]
-%  [0.         0.07778174 0.05291503 0.11135529 0.         0.        ]
-%  [0.         0.01414214 0.         0.         0.         0.        ]
-%  [0.         0.         0.         0.         0.         0.        ]
-%  [0.         0.         0.05       0.         0.         0.        ]]
 \textbf{Results.} \myfigref{fig:chapter5:predicting-price} shows the different RMSE for three methods mentioned above. 
-Comparing \myfigref{fig:chapter5:predicting-price-lstm} and \myfigref{fig:chapter5:predicting-price-hnn}, we see that the RMSE are close to each other when $\Delta p < 0.059$. Particularly, HNN performs better than the native methods when $\Delta p$ is larger. It indicates HNN can predict the dramatic fluctuation of the price whereas the native approach cannot.
-We observe that the results generated by HNN have smaller RMSE among most slots in \myfigref{fig:chapter5:predicting-price-lstm,fig:chapter5:predicting-price-hnn}. As for $\Delta p >= 0.059$, LSTM exceeds HNN if we only consider RMSE. However, when we inspect the predicted price obtained by HNN and  LSTM, we find that HNN gives us an insight for the avalanche of the price (see \myfigref{fig:chapter5:predicting-price,fig:chapter5:predicting-price-2}). Briefly explanation, we see there might be an avalanche from  \myfigref{fig:chapter5:predicting-price-156} if external agents sell stocks to the market. However, LSTM is unaware to this situations. Instead, HNN captures this signal and predicts that the price would rise in the near future. And \myfigref{fig:chapter5:predicting-price-158-price} proves the predictions.
-% Comparing LSTM networks and HNN, we conclude that HNN 
-% In order the compare the results of LSTM
-% \mytodo{show that hnn can give a distribution of price, not average of price} 
+Comparing \myfigref{fig:chapter5:predicting-price-baseline} and \myfigref{fig:chapter5:predicting-price-hnn}, we see that the RMSE are close to each other when $\Delta p < 0.059$. \myupdate{But} HNN performs better than the native methods when $\Delta p > 0.059$ (\myupdate{The RMSE of HNN and native approach are 0.082 and 0.097 respectively}). It indicates HNN can predict the dramatic fluctuation of the price whereas the native approach cannot.
+We observe that the results generated by HNN have smaller RMSE among most slots in \myfigref{fig:chapter5:predicting-price-lstm,fig:chapter5:predicting-price-hnn}. As for $\Delta p >= 0.059$, LSTM exceeds HNN if we only consider RMSE. However, when we inspect the predicted price obtained by HNN and LSTM, we find that HNN gives us an insight for the avalanche of the price (see \myfigref{fig:chapter5:predicting-price,fig:chapter5:price-predictions,fig:chapter5:predicting-price-2}). Briefly explanation, we see there might be an avalanche from \myfigref{fig:chapter5:predicting-price-156} if external agents sell stocks to the market. \myupdate{And in the consecutive time steps, we do observe circumstance during the simulation \myfigref{fig:chapter5:predicting-price-157}.} However, LSTM is unaware to this situations. Instead, HNN captures this signal and predicts that the price would rise in the future. And \myfigref{fig:chapter5:predicting-price-158-price} proves the predictions. However, RMSE cannot reflect this situation well and that is why the RMSE of HNN is higher than that of LSTM when $\Delta b_n$ is larger ($\Delta b_n \ge  26.2$ in the \myfigref{fig:chapter5:predicting-price}).
+
 \begin{figure}[htb!]
     \centering
     \subfloat[Native]{
@@ -122,7 +45,7 @@ We observe that the results generated by HNN have smaller RMSE among most slots 
             \label{fig:chapter5:predicting-price-hnn}
 
     }
-    \caption{The RMSE for different methods. The x-axis is $\Delta p$, the y-axis is $\Delta b$, and the z-axis is RMSE.}
+    \caption[The RMSE for different methods.]{The RMSE for different methods. The x-axis is $\Delta p$, the y-axis is $\Delta b$, and the z-axis is RMSE.}
     \label{fig:chapter5:predicting-price}
 \end{figure}
 
@@ -140,27 +63,24 @@ We observe that the results generated by HNN have smaller RMSE among most slots 
     
     }
 
-    \caption{The dynamics of agents extracted from the simulation. \myfigref{fig:chapter5:predicting-price-156} and \myfigref{fig:chapter5:predicting-price-157} are corresponding to \myfigref{fig:chapter5:predicting-price-156-price} and \myfigref{fig:chapter5:predicting-price-157-price} respectively.}
+    \caption[The dynamics of aggregated agents extracted from the simulation.]{\myupdate{Two consecutive} dynamics of aggregated agents extracted from the simulation. The price changes from $p_{i-1}$ to $p_i$ in \myfigref{fig:chapter5:predicting-price-156} and jumps from $p_i$ to $p_{i+1}$ in \myfigref{fig:chapter5:predicting-price-157}. \myfigref{fig:chapter5:predicting-price-156} and \myfigref{fig:chapter5:predicting-price-157} are corresponding to \myfigref{fig:chapter5:predicting-price-157-price} and \myfigref{fig:chapter5:predicting-price-158-price} respectively. \myupdate{The blue curve (dynamics generated by \myupdate{actual scenario}) is the dynamics of aggregated agents that took place in simulation. The orange one (dynamics generated by \myupdate{potential scenario}) is that we want to inspect what the dynamics would be if external agents take the opposite action at the same time steps, i.e., if the blue curve is resulted in by external agents buy the stocks from market, the orange curve is resulted in by the external agents sell the stock to market correspondingly.}}
     \label{fig:chapter5:price-predictions}
 \end{figure}
 
 \begin{figure}[ht!]
     \centering
-    \subfloat[]{
-    \includegraphics[height=4cm,width=\textwidth/3]{thesis/img/price-predictions/156-price.pdf}
-        \label{fig:chapter5:predicting-price-156-price}
 
-    }
      \subfloat[]{
-    \includegraphics[height=4cm,width=\textwidth/3]{thesis/img/price-predictions/157-price.pdf}
+    \includegraphics[height=4cm,width=\textwidth]{thesis/img/price-predictions/157-price.pdf}
         \label{fig:chapter5:predicting-price-157-price}
-    
     }
-     \subfloat[]{
-    \includegraphics[height=4cm,width=\textwidth/3]{thesis/img/price-predictions/158-price.pdf}
+    \hfill
+    
+    \subfloat[]{
+    \hbox{\hspace{0.7em}}\includegraphics[height=4cm,width=\textwidth]{thesis/img/price-predictions/158-price.pdf}
             \label{fig:chapter5:predicting-price-158-price}
 
     }
-    \caption{The consecutive predicted price given by HNN and LSTM networks. \myfigref{fig:chapter5:predicting-price-156-price} and \myfigref{fig:chapter5:predicting-price-157-price} are corresponding to \myfigref{fig:chapter5:predicting-price-156} and \myfigref{fig:chapter5:predicting-price-157} respectively. The blue horizontal line is the ground-truth price, the red horizontal one is the price predicted by LSTM, the light green curve (not the horizontal green line) is the price predicted by HNN 100 times, and the green horizontal line is the average of price predicted by HNN.}
+    \caption[The consecutive predicted prices given by HNN and LSTM networks.]{The consecutive predicted prices given by HNN and LSTM networks. \myfigref{fig:chapter5:predicting-price-156-price} and \myfigref{fig:chapter5:predicting-price-157-price} are corresponding to \myfigref{fig:chapter5:predicting-price-156} and \myfigref{fig:chapter5:predicting-price-157} respectively. \myfigref{fig:chapter5:predicting-price-158-price} is the predicted price after \myfigref{fig:chapter5:predicting-price-157-price}. The blue horizontal line is the ground-truth price, the red horizontal one is the price predicted by LSTM, the light green curve (not the horizontal green line) is the price predicted by HNN 100 times, and the green horizontal line is the average of price predicted by HNN.}
     \label{fig:chapter5:predicting-price-2}
 \end{figure}

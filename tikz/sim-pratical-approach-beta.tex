@@ -35,12 +35,12 @@
         ]
         \addplot [smooth, domain=0:20, black] {160*gammapdf(x,4,2.0)};
         \addplot[-,color=black] coordinates {(4,0) (4,14.5)};
-        \node[below] (deltai) at (4,0) {$\delta_i$};
-        \node[above] (Ldeltai) at (4,14.5) {$L(\delta_i)$};
+        \node[below] (deltai) at (4,0) {$\beta_i$};
+        \node[above] (Ldeltai) at (3.4,14.5) {$D_\textbf{1}(\beta_i)$};
         
-        \node[below] (delta0) at (1, 0) {$\delta_0$};        
-        \node[below] (delta1) at (2, 0) {$\delta_1$};        
-        \node[below] (deltak) at (18, 0) {$\delta_m$};        
+        \node[below] (delta0) at (1, 0) {$\beta_0$};        
+        \node[below] (delta1) at (2, 0) {$\beta_1$};        
+        \node[below] (deltak) at (18, 0) {$\beta_k$};        
 
         \addplot[-,color=black] coordinates {(1,0) (1,0.5)};
         \addplot[-,color=black] coordinates {(2,0) (2,0.5)};

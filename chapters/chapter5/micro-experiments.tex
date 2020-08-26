@@ -1,14 +1,16 @@
 \section{Initial states}\label{sec:chapter5:initial-states}
-Before we compare the performance of HNN with other recurrent networks, we confirm that the effects of HNN's initial states can be ignored if we have large enough data sets. 
+Before we compare HNN's performance with other recurrent networks, we confirm that the effects of HNN's initial states can be ignored if we have large enough data sets. 
 % Also, we will show the fact that $G^{-1}$ can be approximated by $F$ within tolerant error.
 
 % \subsection{Initial states}
 We use data sets $D$ and $P$ and set different initial states during the predicting phase.
-\mytableref{tbl:chapter5:initial-states} presents the influence of different initial states. We mark a result in bold if the initial state is correct throughout prediction. We see the incorrect initial states do make RMSE worse. But these impacts can be ignored after 150 timesteps in set $P$. For set $D$, it takes nearly 300 timesteps to synchronize the internal states of each \textit{play}. Comparing the results of sets $D$ and $P$, we see that the different data sets would take different timesteps to synchronize the internal states. Even though the incorrect states $1$ and $100$ in set $D$, they can produce the same RMSE. Mainly, it's because of the next movement in their dynamics is the same even though they are at different states (see \myfigref{fig:chapter1:play}). \todo{why is RMSE increasing? This contradicts \myfigref{fig:chapter5:initial-states}} \myupdate{We see that the RMSE increase from 2.78 to 5.56 in set $D$ with initial states 1 and 100. It's due the error resulting in the last 100 timesteps in test set contributing mostly to the RMSE, which is a macro-loops (see \myfigref{fig:chapter1:hysteresis-loop}) compared with the loops in training set. We emphasize that set $D$ with different initial states has the same internal states finally since RMSE(300) is the same.}
+\mytableref{tbl:chapter5:initial-states} presents the influence of different initial states. We mark a result in bold if the initial state is correct throughout prediction. According to \mytableref{tbl:chapter5:initial-states}, we do see the incorrect initial states do make RMSE worse. Nevertheless, these impacts can be ignored after 150 time steps in set $P$. For set $D$, it takes nearly 300 time steps to synchronize the internal states of each \textit{play}. Comparing the results of sets $D$ and $P$, we see that the different data sets would take different time steps to synchronize the internal states. Even though the incorrect states $1$ and $100$ in set $D$, they can produce the same RMSE. Mainly, it is because the next movement in their dynamics is the same even though they are at different states (see \myfigref{fig:chapter1:play}). 
+%\todo{why is RMSE increasing? This contradicts \myfigref{fig:chapter5:initial-states}} 
+\myupdate{We see that the RMSE increases from 2.78 to 5.56 in set $D$ with initial states 1 and 100. It is due to the error resulting in the last 100 time steps in the test set contributing mostly to the RMSE, which is a macro-loops (see \myfigref{fig:chapter1:hysteresis-loop}) compared with the loops in the training set. We emphasize that set $D$ with different initial states should have the same internal states finally since their RMSE(300) are the same.}
  
-From \myfigref{fig:chapter5:initial-states}, we see that the predictive curves with different initial states diverge at the very beginning steps of predictions. However, they are overlapping exactly within finite timesteps. 
+From \myfigref{fig:chapter5:initial-states}, we see that the predictive curves with different initial states diverge at the very beginning steps of predictions. However, they are overlapping exactly within finite time steps. 
 
-In the following analysis, we always set the correct initial states in predicting phase.
+In the following analysis, we always set the correct initial states in the predicting phase.
 
 \begin{table}[htb!]
 \centering
@@ -51,14 +53,14 @@ In the following analysis, we always set the correct initial states in predictin
 
 \begin{figure}[h!]
     \centering
-    \subfloat[]{
+    \subfloat[Test set $D$]{
         \includegraphics[height=4cm,width=\textwidth]{thesis/img/debug-initial-state-dima-seq.pdf}
     }
     \hfill
-    \subfloat[]{
+    \subfloat[Test set $P$]{
     \includegraphics[height=4cm,width=\textwidth]{thesis/img/debug-initial-state-pavel-seq.pdf}
     }
-    \caption{Different initial states for set $D$ and $P$ on test set}
+    \caption{Different initial states for test sets $D$ and $P$}
     \label{fig:chapter5:initial-states}
 \end{figure}
 \FloatBarrier

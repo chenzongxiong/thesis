@@ -2,7 +2,7 @@
 % LSTM: \citep{hochreiter1997long}
 % GRU: \citep{cho2014properties}
 
-A recurrent neural network (RNN) is an extension of a conventional feed-forward neural network, which is able to handle arbitrary length sequence inputs. The RNN allows previous outputs to be used as inputs while having internal hidden states.
+A recurrent neural network (RNN) is an extension of a conventional feed-forward neural network that can handle arbitrary-length sequence inputs. The RNN allows previous outputs to be used as inputs while having internal hidden states.
 More formally, given a sequence $\{x_n\}$, the RNN updates its recurrent hidden state $h_n$ by 
 \begin{equation}\label{eqn:appendix:rnn}
     h_n = \phi(h_{n-1}, x_n)
@@ -37,7 +37,7 @@ $\odot$ represents element-wise multiplication.
     \includegraphics[width=\textwidth/2]{thesis/img/gru-plot.png}
         \label{fig:appendix:gru}
     }
-    \caption{Illustration of LSTM and GRU. (\myfigref{fig:appendix:lstm}) $i$, $f$ and $o$ are the input, forget and output gates, respectively. $C$ and $\tilde{C}$ denote the memory cell and the new memory cell content. (\myfigref{fig:appendix:gru}) $r$ and $z$ are the reset and update gates, and $h$ and $\tilde{h}$ are the activation and the candidate activation. \citep{chungevaluation}}
+    \caption[Illustration of LSTM and GRU.]{Illustration of LSTM and GRU. (\myfigref{fig:appendix:lstm}) $i$, $f$ and $o$ are the input, forget and output gates, respectively. $C$ and $\tilde{C}$ denote the memory cell and the new memory cell content. (\myfigref{fig:appendix:gru}) $r$ and $z$ are the reset and update gates, and $h$ and $\tilde{h}$ are the activation and the candidate activation. \citep{chungevaluation}}
     \label{fig:appendix:rnn}
 \end{figure}
 \FloatBarrier

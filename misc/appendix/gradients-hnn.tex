@@ -1,4 +1,4 @@
-\section{Gradient of hysteretic neural networks with respect to inputs}\label{sec:chapter3:gradient-networks}
+\section{Gradients of hysteretic neural networks with respect to inputs}\label{sec:chapter3:gradient-networks}
 First we only consider \textbf{one} \textit{play}
 \begin{equation}\label{eqn:chapter3:outputs-of-pi-networks}
 G(P_{n}, w^{1}) = \sum_{s=1}^{S} \tilde{\theta_{s}} a(\theta_{s} P_{n} + \theta_{s0}) + \tilde{\theta_{0}}
@@ -65,7 +65,7 @@ Using chain rule, we obtain
 \end{equation}
 
 
-To consider \textbf{multiple} \textit{plays} case, we reformulate the derivation as following:
+To consider \textbf{multiple} \textit{plays} case, we reformulate the derivation as follows:
 
 \begin{equation}
 \frac{\partial {y_{j}^{1}}}{\partial x_{j}} = \frac{\partial{y_{j}^{1}}}{\partial{p_{j}^{1}}} \frac{\partial{ p_{j}}^{1}}{\partial x_{j}} \\
@@ -81,7 +81,7 @@ As the architecture (see \myfigref{fig:chapter1:nn-arch}) shown, we know that if
 % where $F=[f_1, f_2, ..., f_n]$,
 % and
 \begin{equation}
-y_{j} = \frac{1}{P} \sum_{k=1}^{K} y_{j}^{k}
+y_{j} = \frac{1}{K} \sum_{k=1}^{K} y_{j}^{k}
 \end{equation}
 So the derivation of $y_j$ with respect to $x_j$ is,
 \begin{equation}

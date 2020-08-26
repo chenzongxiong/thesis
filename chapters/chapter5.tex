@@ -1,103 +1,49 @@
-\chapter{Evaluation in case of data sets given ground-truth outputs}\label{cha:chapter5}
+\chapter{Evaluation in case of given ground-truth outputs}\label{cha:chapter5}
 
-% \section{Attribute to compare}\label{}
-% \mytodo{complexity of synthesis data set (nb plays/nb units/random weights/noise)} 
-% \mytodo{number of sequence length (points)} 
-% \mytodo{number of parameters to use in the network, our network is smaller and can  achieve the same performance as (lstm/rnn/gru)} 
-% \mytodo{training loss curve} 
-% \mytodo{time consumption during train/prediction} 
-% \mytodo{(mean square error/cross entropy) on prediction data set}
-% In this chapter, we evaluate different methods on hysteretic data sets and compare the performance among them.
-\todo{Are D and P two different experiments? Explain this in the beginning} In this chapter, we evaluate the performance of LSTM/SimpleRNN/GRU networks (see \myappendixsectionref{sec:appendix:rnn}) and HNN with two different data sets $D$ and $P$, which are generated from ground-truth networks with \#\_\_nb\_plays\_\_=50 and \#\_\_units\_\_ = 50 (see \mytableref{tbl:chapter5:hyperparameters}). 
+In this chapter, we evaluate the performance of LSTM/SimpleRNN/GRU networks (see \myappendixsectionref{sec:appendix:rnn}) and HNN with two different data sets $D$ and $P$, which are generated from ground-truth networks with \#nb\_plays\_\_=50 and \#\_\_units\_\_ = 50 (see \mytableref{tbl:chapter5:hyperparameters}). 
 
 \section{Synthetic Data sets}
 We generate data sets to identify whether LSTM/SimpleRNN/GRU networks and HNN could capture the micro-loops \myupdate{(see \myfigref{fig:chapter1:hysteresis-loop})} of a hysteretic process. 
 \newline
 \textbf{Data set $D$.} The set $D$ (see \myfigref{fig:chapter5:dima-seq-2} and \myfigref{fig:chapter5:dima-seq}) consists \myupdate{of} 1000 points. We repeat sequence $0, 1, 5, 0, 3, 1, 5$ to generate the input $x(n)$ for $D$. We also insert $0, -100$ at the very beginning of the input $x(n)$ to erase the memory in the hysteretic process. The first 600 points are used as a training set, and the rest 400 points are for the test set. We rescale the input of test set by 1/10, 1/7, 1/6, 1/5, 1/4, 1/3, 1/1, 1/0.5 every 50 points to identify inner loops. In this artificial set, only customized hysteretic loops are exposed to networks throughout the training phase.
-% The micro and macro loops in test set  any model during learning. 
+
+% \newline
+\textbf{Data set $P$.} The set $P$ (see \myfigref{fig:chapter5:pavel-seq} and \myfigref{fig:chapter5:pavel-seq-2}) contains 1000 points. The inputs $x(n)$ are sampled from a normal distribution $\mathcal{N}(5 \cos(0.1n), \sigma),\, \sigma \in \{0.1, 0.5, 1, 2, 3, 4, 5\}$. More specifically, the $x_n = \mathcal{N}(5 \cos(0.1 n), \sigma_{j}), n = 1,2,\ldots, 600, j = n \mod 6$ in the training set. For the test set, $ x_n = \mathcal{N}(5 \cos(0.1 n), \sigma_{j}), n = 601, 602,\ldots 1000, j = n \mod \lfloor 400 /6 \rfloor$. 
 \newline
-\textbf{Data set $P$.} The set $P$ (see \myfigref{fig:chapter5:pavel-seq} and \myfigref{fig:chapter5:pavel-seq-2}) contains 1000 points. The inputs $x(n)$ are sampled from a normal distribution $\mathcal{N}(5cos(0.1n), \sigma),\, \sigma \in \{0.1, 0.5, 1, 2, 3, 4, 5\}$.
-\todo{why do I use this data set}
-\newline
-% \textbf{Data set $S$.} We generate set $S$ (see \myfigref{fig:chapter5:sin-seq} and \myfigref{fig:chapter5:sin-seq-2}) with different number of points. The inputs $x(n)$ of $S$ is sampled from a periodical signal function $\cos(0.1n) + 0.3\sin(1.3n) + 1.2\sin(0.6n)$. 
-%\newline
 
-% \textbf{Data set $M$} \mytodo{the outputs is a random walk}
-
-% \begin{figure}[h!]
-%     \centering
-%     \subfloat[]{
-%     \includegraphics[height=7cm,width=\textwidth]{thesis/img/debug-input-output-dima.pdf}
-%     }
-%     \caption{Data set D. The first and second plots are inputs vs. time step $n$ and outputs vs. time step $n$, respectively. Time step $n$ is between 10 and 1000. The last one is outputs vs. inputs, only showing $y(n) \in [-0.5, 45]$}
-%     \label{fig:chapter5:dima-seq}
-% \end{figure}
-
-% \begin{figure}[h!]
-%     \centering
-%     \includegraphics[height=7cm,width=\textwidth]{thesis/img/debug-input-output-pavel.pdf}
-%     \caption{Data set P. The first and second plots are inputs vs. time step $n$ and outputs vs. time step $n$, respectively. Time step $n$ is from 0 to 1000. The last one is outputs vs. inputs, only showing $y(n) \in [-0.5, 45]$}
-%     \label{fig:chapter5:pavel-seq}
-% \end{figure}
-
-% \begin{figure}[h!]
-%     \centering
-%     \subfloat[]{
-%         \includegraphics[height=5cm,width=\textwidth]{thesis/img/debug-input-output-sin-2.pdf}
-%     }
-%     \hfill
-%     \subfloat[]{
-%         \includegraphics[height=5cm,width=10cm]{thesis/img/debug-input-output-sin.pdf}
-%     }
-%     \caption{Data set S. The first and second plots are inputs vs. time step $n$ and outputs vs. time step $n$, respectively. Time step $n$ is from 0 to 1000.}
-%     \label{fig:chapter5:s-seq}
-% \end{figure}
 \begin{figure}[ht!]
     \centering
-    \subfloat[]{
-        \includegraphics[width=\textwidth/2]{debug-input-output-dima.pdf}
+    \subfloat[Set $D$]{
+        \includegraphics[height=5cm,width=\textwidth/2]{debug-input-output-dima.pdf}
                  \label{fig:chapter5:dima-seq-2}
 
     }
-    \subfloat[]{
-        \includegraphics[width=\textwidth/2]{debug-input-output-pavel.pdf}
+    \subfloat[Set $P$]{
+        \includegraphics[height=5cm,width=\textwidth/2]{debug-input-output-pavel.pdf}
                          \label{fig:chapter5:pavel-seq-2}
 
     }
-    % \subfloat[]{
-    %     \includegraphics[width=\textwidth/3]{debug-input-output-sin.pdf}
-    %                      \label{fig:chapter5:sin-seq-2}
 
-    % }
     \hfill
-    \caption{Data sets. (\myfigref{fig:chapter5:dima-seq-2}, \myfigref{fig:chapter5:pavel-seq-2}) The blue points are the training set and the red one are the test set. (\myfigref{fig:chapter5:dima-seq}, \myfigref{fig:chapter5:pavel-seq}) It only presents the data points from timesteps 3 to timesteps 50 in training set. We don't plot the data point $(x_2, y_2)$ in set $D$ due to its large magnitude.}
+    \caption[Scatter plots for data sets D and P.]{Data sets. (\myfigref{fig:chapter5:dima-seq-2}, \myfigref{fig:chapter5:pavel-seq-2}) The blue points are the training set and the red ones are the test set. We do not present the data point $(x_2, y_2)$ in set $D$ due to its large magnitude.}
     
-    % \label{fig:chapter5:data-sets}
 \end{figure}
 
 \begin{figure}[ht!]
- \ContinuedFloat 
     \centering
-    \subfloat[]{
-        % \includegraphics[height=3cm,width=\textwidth]{debug-input-output-dima-2.pdf}
+    \subfloat[Set $D$]{
         \includegraphics[height=3cm,width=\textwidth]{debug-input-output-dima-3-train.pdf}        
          \label{fig:chapter5:dima-seq}
     }
     
     \hfill
-    \subfloat[]{
-        % \includegraphics[height=3cm,width=\textwidth]{debug-input-output-pavel-2.pdf}
+    \subfloat[Set $P$]{
     \includegraphics[height=3cm,width=\textwidth]{debug-input-output-pavel-3-train.pdf}
                  \label{fig:chapter5:pavel-seq}
 
     }
-    % \hfill
-    % \subfloat[]{
-    %     \includegraphics[height=3cm,width=\textwidth]{debug-input-output-sin-2.pdf}
-    %              \label{fig:chapter5:sin-seq}
-
-    % }
-    \caption{Data sets. (\myfigref{fig:chapter5:dima-seq-2}, \myfigref{fig:chapter5:pavel-seq-2}) The blue points are the training set and the red one are the test set. (\myfigref{fig:chapter5:dima-seq}, \myfigref{fig:chapter5:pavel-seq}) It only presents the data points from timesteps 3 to timesteps 50 in training set. We don't plot the data point $(x_2, y_2)$ in set $D$ due to its large magnitude.}
+  
+    \caption[Data sets D and P.]{Data sets. \myfigref{fig:chapter5:dima-seq}, \myfigref{fig:chapter5:pavel-seq} only present the data points from time steps 3 to time steps 50 in training set. We do not plot the first 3 data points in set $D$ due to the large magnitude of point $(x_2, y_2)$. The red curves in the \myfigref{fig:chapter5:dima-seq,fig:chapter5:pavel-seq} are the inputs vs. time steps and the blue ones are the output vs. time steps.}
     \label{fig:chapter5:data-sets}
 \end{figure}
 \FloatBarrier
@@ -106,6 +52,7 @@ We generate data sets to identify whether LSTM/SimpleRNN/GRU networks and HNN co
 
 \textbf{Hyperparameters}
 In this evaluation, we focus on optimizing the following hyperparameters in LSTM/SimpleRNN/GRU networks and HNN.
+
 \begin{table}[h!]
 \begin{center}
     \begin{tabular}{||c|c||}
@@ -121,13 +68,12 @@ In this evaluation, we focus on optimizing the following hyperparameters in LSTM
      \#\_\_units\_\_      & the number of $units$ used in training phase \\
     \hline
     \end{tabular}
-    \caption{Hyperparameters used for evaluation. \#\_\_nb\_plays\_\_ and \#\_\_units\_\_  can be different from the ground-truth parameters since they're blind to us in reality. \#\_\_nb\_plays\_\_ and \#\_\_units\_\_ are used for HNN (see \mychapterref{cha:chapter2} for details), \#\_\_units\_\_ is only used for LSTM/SimpleRNN/GRU networks (\myappendixsectionref{TODO: add arch}) for details).}
+    \caption[Hyperparameters used for evaluation.]{Hyperparameters used for evaluation. \#\_\_nb\_plays\_\_ and \#\_\_units\_\_  can be different from the ground-truth parameters, $\#plays$ and $\#units$, since they're blind to us in reality. Both \#\_\_nb\_plays\_\_ and \#\_\_units\_\_ are used for HNN during training phase (see \mychapterref{cha:chapter2} for details), \#\_\_units\_\_ is only used  for LSTM/SimpleRNN/GRU networks during the training phase. $\#plays = K$ and $\#units=S$ in \myfigref{fig:chapter1:nn-arch} because of $K$ \textit{play} cell in \myfigref{fig:chapter1:nn-pi} and the number of nonlinear functions ($\tanh$) is $S$.}
     \label{tbl:chapter5:hyperparameters}    
 \end{center}
 \end{table}
 
-% \mytodo{add rnn, gru in appendix}
-\textbf{LSTM network.} We use one LSTM layer with tanh nonlinearities and one dense layer. We use the default settings of hyper parameters in tensorflow \citep{abadi2016tensorflow} except for the hidden units in LSTM layer. We grid search a sequence of hidden units, $1, 8, 16, 32, 64, 128, 256$, to find out the best results achieved by LSTM networks. As for the loss functions, we minimize mean squared error (MSE) and minimize the negative maximal likelihood estimator (MLE). The total number of parameters used in this architecture is given by
+\textbf{LSTM network.} We use one LSTM layer with \textit{tanh} nonlinearities and one dense layer. We use the default settings of hyperparameters in tensorflow \citep{abadi2016tensorflow} except for the hidden units in LSTM layer. We grid search a sequence of hidden units, $1, 8, 16, 32, 64, 128, 256$, to find out the best results achieved by LSTM networks. As for the loss functions, we minimize mean squared error (MSE) (see \mysectionref{sec:chapter2:training-pi-network}) and minimize the negative maximal likelihood estimator (MLE) (see \mysectionref{sec:chapter4:direct_learning}). The total number of parameters used in this architecture is given by
 \begin{equation*}
     \text{\#parameters} = 4 * ({\text{\#\_\_units\_\_}}^2 + 2*\text{\#\_\_units\_\_}) + \text{\#\_\_units\_\_} + 1
 \end{equation*}
@@ -139,12 +85,8 @@ In this evaluation, we focus on optimizing the following hyperparameters in LSTM
 and
 \begin{equation*}
    \text{\#parameters} = 3 * ({\text{\#\_\_units\_\_}}^2 + 2*\text{\#\_\_units\_\_}) + \text{\#\_\_units\_\_} + 1    
-% \text{\#parameters} = 3 * \text{\#\_\_units\_\_} + 3 * \text{\#\_\_units\_\_} * \text{\#\_\_units\_\_} + 3 * \text{\#\_\_units\_\_} + \text{\#\_\_units\_\_} + 1
 \end{equation*}
  respectively.
-
-
-% where $\#units$ is the number of hidden units.
 
 \textbf{HNN.}  We use architecture shown in \mychapterref{cha:chapter1} (see \myfigref{fig:chapter1:nn-arch}). We also exploit hyperparameters $\_\_plays\_\_$, $\_\_units\_\_$ in HNN. The number of parameters $\#parameters$ used in HNN is given by
 \begin{equation*}
@@ -155,26 +97,275 @@ and
 
 \section{Measure}
 The overall \textit{root mean squared error} (RMSE) is used to measure the quality of fit. It's defined as follows,
-% \begin{equation}
-% \text{RMSE} = \sqrt{\frac{\sum_{i=0}^{N-1}(\hat{y}_i - y_i)^2}{N}}
-% \end{equation}
-% Additionally, we defined RMSE(n) as
+
 \begin{equation}
-    \text{RMSE(n)} = \sqrt{\frac{\sum_{i=n}^{N}(\hat{y}_i - y_i)^2}{N-n}}, \quad n=1,\ldots,N
+    \text{RMSE(n)} = \sqrt{\frac{\sum_{i=n}^{N}(\hat{y}_i - y_i)^2}{N-n+1}}, \quad n=1,\ldots,N
 \end{equation}
 where $n$ means the first $(n-1)$ data points are ignored in RMSE results.
 
 Particularly, we set $\text{RMSE}=\text{RMSE(0)}$ when $n=0$.
 
-% \mytodo{For MLE, we use alternative criteria to measure the result of mu and sigma.}
-\input{thesis/chapters/chapter5/micro-experiments}
-\input{thesis/chapters/chapter5/debug-mse}
-% \newpage
-% \input{thesis/chapters/chapter5/debug-mle}
+% \input{thesis/chapters/chapter5/micro-experiments}
+% \input{thesis/chapters/chapter5/debug-mse}
 
-% \mytodo{same weights but different nb plays}
-% \mytodo{different weights and different plays  no noise}
-% \mytodo{different weights  and different plays noise} 
-% \input{thesis/chapters/chapter5/same-weights-no-noise}
-% \input{thesis/chapters/chapter5/different-weights-no-noise}
-% \input{thesis/chapters/chapter5/different-weights-noise}
+\section{Initial states}\label{sec:chapter5:initial-states}
+Before we compare HNN's performance with other recurrent networks, we confirm that the effects of HNN's initial states can be ignored if we have large enough data sets. 
+
+We use data sets $D$ and $P$ and set different initial states during the predicting phase.
+\mytableref{tbl:chapter5:initial-states} presents the influence of different initial states. We mark a result in bold if the initial state is correct throughout prediction. According to \mytableref{tbl:chapter5:initial-states}, we do see the incorrect initial states do make RMSE worse. Nevertheless, these impacts can be ignored after 150 time steps in set $P$. For set $D$, it takes nearly 300 time steps to synchronize the internal states of each \textit{play}. Comparing the results of sets $D$ and $P$, we see that the different data sets would take different time steps to synchronize the internal states. Even though the incorrect states $1$ and $100$ in set $D$, they can produce the same RMSE. Mainly, it is because the next movement in their dynamics is the same even though they are at different states (see \myfigref{fig:chapter1:play}). 
+%\todo{why is RMSE increasing? This contradicts \myfigref{fig:chapter5:initial-states}} 
+\myupdate{We see that the RMSE increases from 2.78 to 5.56 in the set $D$ with initial states 1 and 100. It is due to the error resulting in the last 100 time steps in the test set contributing mostly to the RMSE, which is a macro-loops (see \myfigref{fig:chapter1:hysteresis-loop}) compared with the loops in the training set. We emphasize that set $D$ with different initial states should have the same internal states finally since their RMSE(300) are the same.}
+ 
+From \myfigref{fig:chapter5:initial-states}, we see that the predictive curves with different initial states diverge at the very beginning steps of predictions. However, they are overlapping exactly within finite time steps. 
+
+In the following analysis, we always set the correct initial states in the predicting phase.
+
+\begin{table}[htb!]
+\centering
+\begin{adjustbox}{angle=0}
+\begin{tabular}{||c|c|c|c|c|c||}
+\hline 
+    Data sets & Initial states & RMSE & RMSE(50) & RMSE(150) & RMSE(300)
+    % & RMSE(200) 
+    \\
+\hline \hline
+\multirow{4}{4em}{$D$} & 1 & 2.78 $\pm$ 0.32 & 2.97 $\pm$ 0.34 & 3.52 $\pm$ 0.40 & 5.56 $\pm$
+0.64 \\
+                           & 100 & 2.78 $\pm$ 0.32 & 2.97 $\pm$ 0.34 & 3.52 $\pm$ 0.40  &5.56 $\pm$
+0.64  \\
+                           & -1 &  5.49 $\pm$ 1.14 & 5.08 $\pm$ 1.03  & 4.72 $\pm$ 0.70 &5.56 $\pm$
+0.64  % & 4.69 $\pm$ 0.43
+                           \\
+                           & -100 & 5.49 $\pm$ 1.14 & 5.08 $\pm$ 1.03 & 4.72 $\pm$ 0.70 & 5.56 $\pm$
+0.64 % & 4.69 $\pm$ 0.43 
+                           \\
+                           & \textbf{correct} & \textbf{2.78 $\pm$ 0.32} & \textbf{2.97 $\pm$ 0.34} & \textbf{3.52 $\pm$ 0.40}  &  \textbf{5.56 $\pm$
+0.64} 
+                           % & \textbf{3.93 $\pm$ 0.45} 
+                           \\
+\hline
+
+\multirow{4}{4em}{$P$} & 1 & 4.97 $\pm$ 0.04 &  2.52 $\pm$ 0.03 & 0.15 $\pm$ 0.03 & - \\
+                           & 100 & 4.97 $\pm$ 0.04 & 2.52 $\pm$ 0.03 & 0.15 $\pm$ 0.03 & - \\
+                           & -1 & 0.69 $\pm$ 0.04 & 0.51 $\pm$ 0.03 & 0.15 $\pm$ 0.03  & - \\
+                           & -100 & 2.90 $\pm$ 0.03 & 1.20 $\pm$ 0.01 & 0.15 $\pm$ 0.03  & - \\
+                           & \textbf{correct} & \textbf{0.15 $\pm$ 0.04} & \textbf{0.15 $\pm$ 0.03} & \textbf{0.15 $\pm$ 0.03} & - \\
+\hline
+\hline
+\end{tabular}
+\end{adjustbox}
+\caption{Influence of initial state for predictions.}
+\label{tbl:chapter5:initial-states}
+\end{table}
+
+
+\begin{figure}[h!]
+    \centering
+    \subfloat[Test set $D$]{
+        \includegraphics[height=4cm,width=\textwidth]{thesis/img/debug-initial-state-dima-seq.pdf}
+    }
+    \hfill
+    \subfloat[Test set $P$]{
+    \includegraphics[height=4cm,width=\textwidth]{thesis/img/debug-initial-state-pavel-seq.pdf}
+    }
+    \caption{Different initial states for test sets $D$ and $P$.}
+    \label{fig:chapter5:initial-states}
+\end{figure}
+\FloatBarrier
+
+
+\section{Hysteretic loop}
+
+We \myupdate{train} each network 20 times \myupdate{on train sets with different random seeds} and calculate the average and the standard deviation of metric \myupdate{on test sets} to \myupdate{see} if a network produces stable results.
+\mytableref{tbl:chapter5:dima-pavel-seq-results} shows the metric of the different methods. We exploit hyper parameters and select the best results achieved by those methods.
+We mark a result in bold if \myupdate{RMSE} is significantly \myupdate{smaller} than other methods. We see that the HNN network achieves the best RMSE on all the data sets, which indicates it fits the hysteretic process best. Additionally, the amount of parameters HNN used is only about $1/9$ than that LSTM network used. 
+
+\myfigref{fig:chapter5:dima-seq-prediction-outputs-vs-time-steps} and \myfigref{fig:chapter5:pavel-seq-prediction-outputs-vs-time-steps} show that the predictions on set $D$ and $P$ at each time step respectively. The larger blue areas indicate the higher uncertainty of the predictions, which means the performance of the network is worse. 
+
+In \myfigref{fig:chapter5:dima-lstm-results}, we see the predictions of LSTM networks perform extremely poor considering the \myupdate{time steps from 601 to 900} corresponding to the micro-loops. The main reason is that LSTM networks do not take hysteretic properties into consideration. On the contrary, the blue areas restricted around the ground-truth curve tightly reveal that the HNN can reconstruct micro-loops from the training data set without observing them before. We can see that both LSTM networks and HNN predict well for time steps ranges from 900 to 950 since these data are presented in the training set. For the last 50 time steps, it corresponds to the macro-loops (see \myfigref{fig:chapter1:hysteresis-loop}) in the hysteretic process. Similarly, we see that HNN outperforms LSTM networks.
+
+For the performance of set $P$, we see that the blue areas in \myfigref{fig:chapter5:pavel-lstm-results} are significantly larger than those in \myfigref{fig:chapter5:pavel-hnn-results}, especially for the first 100 time steps in the test set. We see the noise is spread in the training set evenly (repeating with standard deviation $0.1, 0.5, 1, 2, 3, 4, 5$ every seven steps.) in the set $P$. However, the first 100 data points are mainly dominated by $5 \cos(0.1n)$ due to the small standard deviation ($\sigma=0.1$), which is profoundly distinct from the training set. LSTM network cannot deal with such a distribution in the test set well and predict results with high uncertainty. Whereas, HNN treats the training set as a hysteretic process and inspects the intrinsic properties of this dynamics successfully. That is why the blue areas of HNN are tightly adhered to with the ground-truth curve. 
+
+\myfigref{fig:chapter5:dima-hnn-lstm-dynamics} and \myfigref{fig:chapter5:pavel-hnn-lstm-dynamics} show the \myupdate{trajectory} of set $D$ and $P$ individually. We apply cubic interpolation algorithm (see \myappendixsectionref{appendix:interpolation}) on $inputs$ of test set and generate new interpolated $inputs$. After that, we feed the interpolated $inputs$ into the trained networks to generate the interpolated predictive results. 
+
+For data set $D$, we see the red curve (generated by LSTM networks) is oscillated left and right horizontally. But, the green curve  (generated by HNN) can follow the dynamics of the blue one in \myfigref{fig:chapter5:dima-hnn-lstm-dynamics-1,fig:chapter5:dima-hnn-lstm-dynamics-2,fig:chapter5:dima-hnn-lstm-dynamics-3,fig:chapter5:dima-hnn-lstm-dynamics-4,fig:chapter5:dima-hnn-lstm-dynamics-5}. We emphasize that the micro-loops in \myfigref{fig:chapter5:dima-hnn-lstm-dynamics-1,fig:chapter5:dima-hnn-lstm-dynamics-2,fig:chapter5:dima-hnn-lstm-dynamics-3,fig:chapter5:dima-hnn-lstm-dynamics-4,fig:chapter5:dima-hnn-lstm-dynamics-5} are not exposed to the model during training. That's why the dynamic curve of LSTM networks is a horizontal line. Conversely, HNN reconstructs this kind of hysteretic process properly from the training set even though there still remains some bias. Particularly, \myfigref{fig:chapter5:dima-hnn-lstm-dynamics-9} is associated with the dynamics of the last 50 points in the test set, \myupdate{which corresponds to macro-loops}, we see that HNN is also able to reconstruct the macro-loops. 
+
+As for data set $P$, we see the green curve (generated by HNN) and blue one (ground-truth curve) are overlapping precisely. At the same time, the red curve, which is generated by LSTM networks, deviates from the trace of the blue one. That confirms HNN does capture in micro-loops in a hysteretic process, but LSTM networks fail. 
+Interestingly, \myfigref{fig:chapter5:pavel-hnn-lstm-dynamics-1} and \myfigref{fig:chapter5:pavel-hnn-lstm-dynamics-2} show that the red curve oscillates around the middle of the micro loop. It implies the fact that LSTM networks try to predict the average of a hysteretic process.
+
+% \mytodo{to update, both predict based on the training set.}
+% Overall, the HNN inspects the hysteretic data set and reconstructs this process correctly. Whereas, LSTM networks predict the results based on what it has seen in the training set (see \myfigref{fig:chapter5:dima-hnn-lstm-dynamics-8,fig:chapter5:dima-lstm-results}) and fail to rebuild the micro-loops and macro-loops.
+\myupdate{Overall, the HNN inspects the hysteretic data set and reconstructs macro-loops and micro-loops correctly. Whereas, LSTM networks fails to reconstruct this process due to the lack of the assumptions on hysteretic data sets. Moreover, HNN fits the data sets better with fewer parameters compared with LSTM/SimpleRNN/GRU.}
+
+\begin{table}[htb!]
+\centering
+\begin{adjustbox}{angle=0}
+\begin{tabular}{||c|c|cc||}
+\hline 
+Data sets & networks & \#parameters & RMSE \\
+\hline \hline
+\multirow{2}{4em}{$D$ set} 
+                             & \multirow{1}{6em}{SimpleRNN} & 16769 & 12.62 $\pm$ 1.50  \\             
+\cline{2-4}
+
+                             & \multirow{1}{6em}{GRU} & 50049 & 12.13 $\pm$ 2.64 \\ 
+\cline{2-4}
+                             & \multirow{1}{6em}{LSTM} & 66560 & 14.39 $\pm$ 4.07 \\
+\cline{2-4}
+                             & \multirow{1}{6em}{HNN} & 7501 & \textbf{2.79 $\pm$ 0.09} \\ 
+\hline \hline
+\multirow{2}{4em}{$P$ set} 
+
+% 
+                            & \multirow{1}{6em}{SimpleRNN} & 16769 & 5.75 $\pm$ 0.66 \\
+\cline{2-4}
+
+                             & \multirow{1}{6em}{GRU} & 50049 & 4.70 $\pm$ 0.45 \\ 
+\cline{2-4}
+                            & \multirow{1}{6em}{LSTM}   & 66560 & 4.99 $\pm$ 0.33 \\ 
+
+\cline{2-4}
+                         & \multirow{1}{6em}{HNN} 
+                         & 7501 & \textbf{0.09 $\pm$ 0.02} \\ 
+\hline
+\end{tabular}
+\end{adjustbox}
+\caption[RMSE for the test sets $D$ and $P$.]{The RMSE for the test sets $D$ and $P$. The total number of parameters used to generate ground-truth is 7501 (50 $nb\_plays$ and 50 $units$).}
+\label{tbl:chapter5:dima-pavel-seq-results}
+\end{table}
+
+\begin{figure}[h!]
+    \centering
+    \subfloat[LSTM]{
+        \includegraphics[width=\textwidth/2]{thesis/img/debug-lstm-dima-__units__-128.pdf}
+        \label{fig:chapter5:dima-lstm-results}
+    }
+    \subfloat[HNN]{
+        \includegraphics[width=\textwidth/2]{thesis/img/debug-hnn-dima-__units__-25-__nb_plays__-25.pdf}
+        \label{fig:chapter5:dima-hnn-results}
+    }
+    \caption[Predictions for test set $D$.]{Predictions for test set $D$. The curve in red is the ground-truth test set and the light blue areas correspond to the uncertainty of the predictive results. \myfigref{fig:chapter5:dima-lstm-results} is the predictions of LSTM network and \myfigref{fig:chapter5:dima-hnn-results} is the predictions of HNN.}
+    \label{fig:chapter5:dima-seq-prediction-outputs-vs-time-steps}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \subfloat[LSTM]{
+        \includegraphics[width=\textwidth]{thesis/img/debug-lstm-pavel-__units__-128.pdf}
+        \label{fig:chapter5:pavel-lstm-results}
+    }
+    \hfill
+    \subfloat[HNN]{
+        \includegraphics[width=\textwidth]{thesis/img/debug-hnn-pavel-__units__-25-__nb_plays__-25.pdf}
+        \label{fig:chapter5:pavel-hnn-results}
+    }
+    \caption[Predictions for test set $P$.]{Predictions for test set $P$. The curve in red is the ground-truth test set and the light blue areas correspond to the uncertainty of the predictive results. \myfigref{fig:chapter5:pavel-lstm-results} is the predictions of LSTM network and \myfigref{fig:chapter5:pavel-hnn-results} is the predictions of HNN.}
+    \label{fig:chapter5:pavel-seq-prediction-outputs-vs-time-steps}
+\end{figure}
+
+
+\begin{figure}[h]
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-dima-hnn-lstm-inspection/1.pdf}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics-1}
+
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-dima-hnn-lstm-inspection/2.pdf}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics-2}
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-dima-hnn-lstm-inspection/3.pdf}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics-3}
+    
+    }
+    \hfill
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-dima-hnn-lstm-inspection/4.pdf}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics-4}
+
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-dima-hnn-lstm-inspection/5.pdf}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics-5}
+
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-dima-hnn-lstm-inspection/6.pdf}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics-6}
+    
+    }
+    \hfill
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-dima-hnn-lstm-inspection/7.pdf}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics-7}
+    
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-dima-hnn-lstm-inspection/8.pdf}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics-8}
+
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-dima-hnn-lstm-inspection/9.pdf}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics-9}
+    
+    }
+    \caption[The animation of hysteretic loops for set $D$. ]{The animation of hysteretic loops for set $D$. \myupdate{Different plots correspond to different time steps. The last time step of the (blue/green/red) curves in each plot is monotonically increasing. The scatter points in cyan consist of ground-truth and predicted test sets.} The curve in blue is the animation of ground-truth data sets and the one in red is the animation generated by LSTM networks and the one in green is the animation generated by HNN.}
+    \label{fig:chapter5:dima-hnn-lstm-dynamics}
+\end{figure}
+
+
+%% lstm & hnn motion
+\begin{figure}[h]
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-pavel-hnn-lstm-inspection/1.pdf}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics-1}
+
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-pavel-hnn-lstm-inspection/2.pdf}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics-2}
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-pavel-hnn-lstm-inspection/3.pdf}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics-3}
+    
+    }
+    \hfill
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-pavel-hnn-lstm-inspection/4.pdf}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics-4}
+
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-pavel-hnn-lstm-inspection/5.pdf}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics-5}
+
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-pavel-hnn-lstm-inspection/6.pdf}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics-6}
+    
+    }
+    \hfill
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-pavel-hnn-lstm-inspection/7.pdf}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics-7}
+    
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-pavel-hnn-lstm-inspection/8.pdf}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics-8}
+
+    }
+    \subfloat[]{
+    \includegraphics[width=\textwidth/3]{debug-pavel-hnn-lstm-inspection/9.pdf}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics-9}
+    
+    }
+    \caption[The animation of hysteretic loops for set $P$.]{The animation of hysteretic loops for set $P$. \myupdate{Different plots correspond to different time steps. The last time step of the (blue/green/red) curves in each plot is monotonically increasing. The scatter points in cyan consist of ground-truth and predicted test sets.} The curve in blue is the animation of ground-truth data sets and the one in red is the animation generated by LSTM networks and the one in green is the animation generated by HNN.}
+    \label{fig:chapter5:pavel-hnn-lstm-dynamics}
+\end{figure}
+
+\FloatBarrier

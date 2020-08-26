@@ -1,0 +1,6 @@
+Your name: Zongxiong, Chen
+Matriculation number: 0390198
+Degree and course of study: Master, Computer Science
+Names of the examiners: Prof. Dr. Sebastian Pokutta, PD Dr. Pavel Gurevich 
+Email addresses of the examiners: pokutta@math.tu-berlin.de, gurevich@math.fu-berlin.de
+Topic of the submitted work: Hysteretic neural networks and their applications in financial markets

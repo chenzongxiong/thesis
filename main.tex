@@ -90,9 +90,10 @@
 \usepackage{todonotes}
 \usepackage{xcolor}
 \newcommand\mytodo[1]{\textcolor{red}{\, TODO: #1 \\}}
-\newcommand\myupdate[1]{\textcolor{red}{#1}}
-\newcommand\mydelete[1]{\textcolor{red}{\sout{\text{#1 }}}}
-
+% \newcommand\myupdate[1]{\textcolor{red}{#1}}
+\newcommand\myupdate[1]{#1}
+% \newcommand\mydelete[1]{\textcolor{red}{\sout{#1}}}
+\newcommand\mydelete[1]{}
 \newcommand\lackref[1]{\textcolor{red}{#1 \,reference?}}
 % \newcommand\lackref[1]{}
 % \newcommand\mytodo[1]{}
@@ -101,6 +102,8 @@
 % \newcommand\myfigref[1]{Figure \ref{#1}}
 \newcommand\myfigref[1]{\Cref{#1}}
 \newcommand\myformularef[1]{\Cref{#1}}
+\newcommand\myequationref[1]{\Cref{#1}}
+
 \newcommand\myremarkref[1]{\textbf{Remark \ref{#1}}}
 \newcommand\myassumptionref[1]{\textbf{Assumption \ref{#1}}}
 \newcommand\mylemmaref[1]{\textbf{Lemma \ref{#1}}}
@@ -166,9 +169,14 @@
 
 
     \include{./misc/abstract}
-    \thispagestyle{empty}
+    \include{./misc/abstract_de}
+    
+    % \thispagestyle{empty}
     \cleardoublepage
 
+    % \thispagestyle{empty}
+    % \cleardoublepage
+    
     \tableofcontents
     \thispagestyle{empty}
 

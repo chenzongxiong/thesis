@@ -15,7 +15,7 @@
     \begin{tikzpicture}
         \begin{axis} [
             xmin=-2.5, xmax=2.5, ymin=-2, ymax=2, grid=both,
-            ylabel={Play$(x)$}, xlabel={$x$},
+            ylabel={$Play(x)$}, xlabel={$x$},
             xtick={-2,-1.5,...,2}, ytick={-2,-1.5,...,2},
             xticklabel style={font=\tiny, xshift=0.5ex},
             yticklabel style={font=\tiny, yshift=0.5ex},
@@ -41,47 +41,29 @@
         \addplot[dashed,-,color=red, line width=1.1] coordinates {(-0.25,0+0.02) (0.5-0.02,0+0.02)};
         \addplot[dashed,->,color=red, line width=1.1] coordinates {(0.5-0.02,0+0.02) (0.875-0.02,0.375+0.02)};
         \addplot[dashed,-,color=red, line width=1.1] coordinates {(0.875-0.02,0.375+0.02) (1.25-0.04,0.75-0.02)};
-        \addplot[dashed,->,color=red, line width=1.1] coordinates {(0.5-0.02,0+0.02) (0.25,0+0.02)};
-        \addplot[dashed,->,color=red, line width=1.1] coordinates {(-0.5-0.02,0+0.02) (-0.75,-0.25)};
-        \addplot[dashed,-,color=red, line width=1.1] coordinates {(-0.5-0.02,0+0.02) (-1,-0.5)};
-
-
-        \addplot[dashed,->,color=green, line width=1.1][xshift=-0.3cm,yshift=-0.36cm] coordinates {(-0.5+0.04,0+0.02) (-0.25+0.02,0+0.02)};
-        \addplot[dashed,-,color=green, line width=1.1][xshift=-0.3cm,yshift=-0.36cm] coordinates {(-0.25,0+0.02) (0.5-0.02,0+0.02)};
-        \addplot[dashed,->,color=green, line width=1.1][xshift=-0.3cm,yshift=-0.36cm] coordinates {(0.5-0.02,0+0.02) (0.875-0.02,0.375+0.02)};
-        \addplot[dashed,-,color=green, line width=1.1][xshift=-0.3cm,yshift=-0.36cm] coordinates {(0.875-0.02,0.375+0.02) (1.25-0.04,0.75-0.02)};
-        \addplot[dashed,->,color=green, line width=1.1][xshift=-0.3cm,yshift=-0.36cm] coordinates {(0.5-0.02,0+0.02) (0.25,0+0.02)};
-        \addplot[dashed,->,color=green, line width=1.1][xshift=-0.3cm,yshift=-0.36cm] coordinates {(-0.5-0.02,0+0.02) (-0.75,-0.25)};
-        \addplot[dashed,-,color=green, line width=1.1][xshift=-0.3cm,yshift=-0.36cm] coordinates {(-0.5-0.02,0+0.02) (-1,-0.5)};        
-
-
-        \addplot[dashed,->,color=blue, line width=1.1][xshift=0.3cm,yshift=0.36cm] coordinates {(-0.5+0.04,0+0.02) (-0.25+0.02,0+0.02)};
-        \addplot[dashed,-,color=blue, line width=1.1][xshift=0.3cm,yshift=0.36cm] coordinates {(-0.25,0+0.02) (0.5-0.02,0+0.02)};
-        \addplot[dashed,->,color=blue, line width=1.1][xshift=0.3cm,yshift=0.36cm] coordinates {(0.5-0.02,0+0.02) (0.875-0.02,0.375+0.02)};
-        \addplot[dashed,-,color=blue, line width=1.1][xshift=0.3cm,yshift=0.36cm] coordinates {(0.875-0.02,0.375+0.02) (1.25-0.04,0.75-0.02)};
-        \addplot[dashed,->,color=blue, line width=1.1][xshift=0.3cm,yshift=0.36cm] coordinates {(0.5-0.02,0+0.02) (0.25,0+0.02)};
-        \addplot[dashed,->,color=blue, line width=1.1][xshift=0.3cm,yshift=0.36cm] coordinates {(-0.5-0.02,0+0.02) (-0.75,-0.25)};
-        \addplot[dashed,-,color=blue, line width=1.1][xshift=0.3cm,yshift=0.36cm] coordinates {(-0.5-0.02,0+0.02) (-1,-0.5)};        
-                
-        % % green
-        % \addplot[dashed,->,color=green, line width=1.1] coordinates {(-1.25+0.04,-0.75+0.02) (-0.75,-0.75+0.02)};
-        % \addplot[dashed,-,color=green, line width=1.1] coordinates {(-0.75-0.02,-0.75+0.02) (-0.25-0.02,-0.75+0.02)};
-        % \addplot[dashed,->,color=green, line width=1.1] coordinates {(-0.25-0.02,-0.75+0.02) (0.125-0.02,-0.375+0.02)};
-        % \addplot[dashed,-,color=green, line width=1.1] coordinates {(0.125-0.02,-0.375+0.02) (0.5-0.04,0-0.02)};
-        % \addplot[dashed,->,color=green, line width=1.1] coordinates {(0.5-0.04,0-0.02) (0.25-0.02,0-0.02)};
-        % \addplot[dashed,-,color=green, line width=1.1] coordinates {(0.25-0.02,0-0.02) (-0.5-0.02,0-0.02)};
-        % \addplot[dashed,->,color=green, line width=1.1] coordinates {(-0.5+0.02,0-0.02) (-0.875+0.02,-0.375-0.02)};
-        % \addplot[dashed,-,color=green, line width=1.1] coordinates { (-0.875+0.02,-0.375-0.02) (-1.25+0.04,-0.75+0.02)};
+        \addplot[dashed,->,color=red, line width=1.1] coordinates {(1.25-0.04,0.75-0.02) (0.75+0.02,0.75-0.02)};
+        \addplot[dashed,-,color=red, line width=1.1] coordinates {(0.75+0.02,0.75-0.02) (0.25+0.02,0.75-0.02)};
+        \addplot[dashed,->,color=red, line width=1.1] coordinates {(0.25+0.02,0.75-0.02) (-0.125+0.02,0.375-0.02)};
+        \addplot[dashed,-,color=red, line width=1.1] coordinates {(-0.125+0.02,0.375-0.02) (-0.5+0.04,0+0.02)};
+        % green
+        \addplot[dashed,->,color=green, line width=1.1] coordinates {(-1.25+0.04,-0.75+0.02) (-0.75,-0.75+0.02)};
+        \addplot[dashed,-,color=green, line width=1.1] coordinates {(-0.75-0.02,-0.75+0.02) (-0.25-0.02,-0.75+0.02)};
+        \addplot[dashed,->,color=green, line width=1.1] coordinates {(-0.25-0.02,-0.75+0.02) (0.125-0.02,-0.375+0.02)};
+        \addplot[dashed,-,color=green, line width=1.1] coordinates {(0.125-0.02,-0.375+0.02) (0.5-0.04,0-0.02)};
+        \addplot[dashed,->,color=green, line width=1.1] coordinates {(0.5-0.04,0-0.02) (0.25-0.02,0-0.02)};
+        \addplot[dashed,-,color=green, line width=1.1] coordinates {(0.25-0.02,0-0.02) (-0.5-0.02,0-0.02)};
+        \addplot[dashed,->,color=green, line width=1.1] coordinates {(-0.5+0.02,0-0.02) (-0.875+0.02,-0.375-0.02)};
+        \addplot[dashed,-,color=green, line width=1.1] coordinates { (-0.875+0.02,-0.375-0.02) (-1.25+0.04,-0.75+0.02)};
         % blue
-        % \addplot[dashed,->,color=blue, line width=1.1] coordinates {(0.25+0.02,-0.25-0.02) (0.875+0.02,0.375-0.02)};
-        % \addplot[dashed,-,color=blue, line width=1.1] coordinates {(0.875+0.02,0.375-0.02) (1.+0.02,0.5+0.02)};
-        % \addplot[dashed,->,color=blue, line width=1.1] coordinates {(1.+0.02,0.5+0.02) (0.5,0.5+0.02)};
-        % \addplot[dashed,-,color=blue, line width=1.1] coordinates {(0.5,0.5+0.02) (0.-0.02,0.5+0.02)};
-        % \addplot[dashed,->,color=blue, line width=1.1] coordinates {(0.-0.02,0.5+0.02) (-1-0.02,-0.5+0.02)};
-        % \addplot[dashed,-,color=blue, line width=1.1] coordinates {(-1-0.02,-0.5+0.02) (-1.5-0.04,-1-0.02)};
-        % \addplot[dashed,->,color=blue, line width=1.1] coordinates {(-1.5-0.04,-1-0.02) (-1,-1-0.02)};
-        % \addplot[dashed,-,color=blue, line width=1.1] coordinates {(-1+0.02,-1-0.02) (-0.5+0.02,-1-0.02)};
-        % \addplot[dashed,->,color=blue, line width=1.1] coordinates {(-0.5+0.02,-1-0.02) (0.25+0.02,-0.25-0.02)};
+        \addplot[dashed,->,color=blue, line width=1.1] coordinates {(0.25+0.02,-0.25-0.02) (0.875+0.02,0.375-0.02)};
+        \addplot[dashed,-,color=blue, line width=1.1] coordinates {(0.875+0.02,0.375-0.02) (1.+0.02,0.5+0.02)};
+        \addplot[dashed,->,color=blue, line width=1.1] coordinates {(1.+0.02,0.5+0.02) (0.5,0.5+0.02)};
+        \addplot[dashed,-,color=blue, line width=1.1] coordinates {(0.5,0.5+0.02) (0.-0.02,0.5+0.02)};
+        \addplot[dashed,->,color=blue, line width=1.1] coordinates {(0.-0.02,0.5+0.02) (-1-0.02,-0.5+0.02)};
+        \addplot[dashed,-,color=blue, line width=1.1] coordinates {(-1-0.02,-0.5+0.02) (-1.5-0.04,-1-0.02)};
+        \addplot[dashed,->,color=blue, line width=1.1] coordinates {(-1.5-0.04,-1-0.02) (-1,-1-0.02)};
+        \addplot[dashed,-,color=blue, line width=1.1] coordinates {(-1+0.02,-1-0.02) (-0.5+0.02,-1-0.02)};
+        \addplot[dashed,->,color=blue, line width=1.1] coordinates {(-0.5+0.02,-1-0.02) (0.25+0.02,-0.25-0.02)};
 
         \end{axis}
     \end{tikzpicture}

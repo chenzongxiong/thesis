@@ -1,52 +1,41 @@
-\chapter{Hyteretic neural networks for financial market\label{cha:chapter4}}
+
+
+
+\chapter{Hyteretic neural networks for financial market model\label{cha:chapter4}}
 In this chapter, we discuss how to learn our market model proposed in \mychapterref{cha:chapter3} by HNN. We also provide a way to forecast the future price by HNN.
 
 
 \section{Assumptions}
 \label{sec:chapter4:assumption}
-\mydelete{In reality,} \myupdate{Assume that} we observe a sequence of price $p_1, p_2, ..., p_N$ for a fixed $N > 0$. Based on \mydelete{{\citep{dima2014}}} \myassumptionref{assumption:chapter3:demand/supply-price-formation} in \myupdate{\mychapterref{cha:chapter3}}, we assume that the price $p_{n}$ hysteretically depends on the underlying noise $b_n$, with $b_n$ being a random walk, what we describe in the previous chapter. Using the notation
+\myupdate{Assume that} we observe a sequence of price $x_1, x_2, ..., x_N$ for a fixed $N > 0$. Based on \myassumptionref{assumption:chapter3:demand/supply-price-formation} in \myupdate{\mychapterref{cha:chapter3}}, we assume that the price $x_{n}$ hysteretically depends on the underlying noise $b_n$, with $b_n$ being a random walk \myassumptionref{assumption:chapter3:b_sequence}, what we described in the previous chapter. Using the notation
 
 \begin{equation}\label{eqn:chapter4:define_b_p}
-   \mathcal{B}_n := (b_1, b_2, \ldots, b_n), \quad \mathcal{P}_n := (p_1, p_2, \ldots, p_n)
+   \mathcal{B}_n := (b_1, b_2, \ldots, b_n), \quad \mathcal{X}_n := (x_1, x_2, \ldots, x_n)
 \end{equation}
 
-we have
+% we have
 \begin{equation}\label{eqn:chapter4:random-walk}
 b_{0} = 0, \quad b_{n} \thicksim \mathcal{N} (b_{n-1} + \mu, \sigma)
 \end{equation}
-\begin{equation}
-p_{n} \myupdate{\approx} F(\mathcal{B}_n, W_{p})
-\end{equation}
-
-where $F$ is a hysteretic operator parameterized by a vector $W_p$. The vector $W_p$ contains the weights of the network.
 
 
-Based on \citep{dima2014} again, the underlying noise $b_n$ can be expressed as a hysteretic operator depending on the observed prices $p_n$, i.e., \todo[inline]{Is F always invertible? No. If G networks contains Presaich operators, it might not be inverted. However, I think we can approximate it by Play operator.}
-
+The underlying noise $b_n$ can be expressed as a hysteresis operator depending on the observed price $x_n$ (\myassumptionref{assumption:chapter3:transitions-between-stabilized-prices}), i.e., 
 \begin{equation}\label{eqn:chapter4:g-network}
-b_n=G(\mathcal{P}_n, W_b)
+b_n=G(\mathcal{X}_n, W)
 \end{equation}
+where $G$ is a hysteresis operator parameterized by a vector $W$. The vector $W$ contains the weights of the whole network.
 
-where $G$ is also a hysteretic operator parameterized by a vector $W_b$. The vector $W_b$ contains the weights of the whole network.
-
-If $G$ network is PI operators, there exists $F$ network consisted of PI operators, holding
-\begin{equation}
-   F \approx G^{-1}
-\end{equation}
-
-% Even through one explicitly adds $N$'s trading strategy in \mychapterref{cha:chapter3}, $\mathcal{G}$ becomes Preisach and $\mathcal{F}$ is not Preisach anymore.
 
 \section{Learning \myupdate{the financial market model}}\label{sec:chapter4:direct_learning}
-% \mytodo{we train a HNN given by known labels. However, we cannot observe the sequence of random walk in a real-world financial market. Then the loss function $\mathcal{L}_{SE}$ defined in \mysectionref{sec:chapter2:training-pi-network} doesn't work. Here we learn the market model with another loss function.}
-We describe an approach to learn HNN in case of data sets given ground-truth outputs in \mysectionref{sec:chapter2:training-pi-network}. However, we can not apply this approach straightforward in a financial market model proposed in \mychapterref{cha:chapter3} because we cannot observe the sequence of random walk $\mathcal{B}_N$ directly. Instead,
-we learn the parameters $W_b$, $\mu$ and $\sigma$ of the network $G$ by maximizing
-the likelihood of $\mathcal{P}_N$ (see \myformularef{eqn:chapter4:define_b_p}). Since $\mathcal{P}_N$ is the deterministic function of a random variable
+We \myupdate{described} an approach to learn HNN in case of data sets given ground-truth outputs in \mysectionref{sec:chapter2:training-pi-network}. However, we can not apply this approach straightforwardly in the financial market model proposed in \mychapterref{cha:chapter3} because we cannot observe the sequence of random walk $\mathcal{B}_N$ in the real-world market directly. Instead,
+we learn the parameters $W$, $\mu$ and $\sigma$ of the network $G$ by maximizing
+the likelihood of $\mathcal{X}_N$ (see \myformularef{eqn:chapter4:define_b_p}). Since $\mathcal{X}_N$ is the deterministic function of a random variable
 $\mathcal{B}_N$ (see \myformularef{eqn:chapter4:define_b_p}), its probability density is given by
 \begin{equation}\label{eqn:chapter4:pP}
 \begin{aligned}
-p(\mathcal{P}_N) &= p(p_1, p_2, ..., p_N) \\
-               &= p_b(b_1, b_2, ..., b_N) \left|\det \mathcal{J(P_\textit{N})}\right| \\
-               &= p_b(G(\mathcal{P}_1, W_b), G(\mathcal{P}_2, W_b), \ldots, G(\mathcal{P}_N, W_b)) \left|\det \mathcal{J(P_\textit{N})}\right|
+p(\mathcal{X}_N) &= p(x_1, x_2, ..., x_N) \\
+               &= p_b(b_1, b_2, ..., b_N) \left|\det \mathcal{J(X_\textit{N})}\right| \\
+               &= p_b(G(\mathcal{X}_1, W), G(\mathcal{X}_2, W), \ldots, G(\mathcal{X}_N, W)) \left|\det \mathcal{J(X_\textit{N})}\right|
 \end{aligned}
 \end{equation}
 
@@ -61,231 +50,63 @@ p_b({\mathcal{B}_N}) &= p_b(b_1, b_2, ..., b_N) \\
 is the probability distribution of $\mathcal{B}_N$ and $\mathcal{J(P_\textit{N})}$ is the Jacobian matrix. Recall that \(G\) has the
 causality property \citep[p. 10]{krejci1996hysteresis}, hence $\mathcal{J(P_\textit{N})}$ is a triangular matrix
 \begin{equation}
-J(\mathcal{P_\textit{N}}) = 
+J(\mathcal{X_\textit{N}}) = 
 \Scale[1.3]{
 \begin{bmatrix}\label{eqn:chapter4:Jp}
-    \frac{\partial{b_1}}{\partial{p_1}} & 0 & 0 & \dots  & 0 \\
-    \frac{\partial{b_2}}{\partial{p_1}} & \frac{\partial{b_2}}{\partial{p_2}} & 0 & \dots  & 0 \\
+    \frac{\partial{b_1}}{\partial{x_1}} & 0 & 0 & \dots  & 0 \\
+    \frac{\partial{b_2}}{\partial{x_1}} & \frac{\partial{b_2}}{\partial{x_2}} & 0 & \dots  & 0 \\
     \vdots & \vdots & \vdots & \ddots & \vdots \\
-    \frac{\partial{b_N}}{\partial{p_1}} & \frac{\partial{b_N}}{\partial{p_2}} & \frac{\partial{b_N}}{\partial{p_3}} & \dots  & \frac{\partial{b_N}}{\partial{p_N}}
+    \frac{\partial{b_N}}{\partial{x_1}} & \frac{\partial{b_N}}{\partial{x_2}} & \frac{\partial{b_N}}{\partial{x_3}} & \dots  & \frac{\partial{b_N}}{\partial{x_N}}
 \end{bmatrix}
 }
 \end{equation}
 
-where $b_j = G(\mathcal{P}_j, W_b), \, j = 1, \ldots, N$ (see \myformularef{eqn:chapter4:g-network}).
+where $b_j = G(\mathcal{X}_j, W), \, j = 1, \ldots, N$ (see \myformularef{eqn:chapter4:g-network}).
 
 % \noindent
 Therefore, \myformularef{eqn:chapter4:pP}, \myformularef{eqn:chapter4:Jp} and \myformularef{eqn:chapter4:pB} yield
 \begin{equation}
 \begin{aligned}
-p(\mathcal{P}_N) &= p_b(G(\mathcal{P}_1, W_b), G(\mathcal{P}_2, W_b), \ldots, G(\mathcal{P}_N, W_b)) \left|\det \mathcal{J(P_\textit{N})}\right| \\
+p(\mathcal{X}_N) &= p_b(G(\mathcal{X}_1, W), G(\mathcal{X}_2, W), \ldots, G(\mathcal{X}_N, W)) \left|\det \mathcal{J(X_\textit{N})}\right| \\
                &= \prod_{n=1}^{N} \frac{1}{\sqrt{2 \pi} \sigma} \exp\left(-\frac{(b_{n}-b_{n-1}-\mu)^2}{2 \sigma^2}\right)
-                   \prod_{n=1}^{N} \left| \frac{\partial b_n}{\partial p_n} \right| \\
-               &= \prod_{n=1}^{N} \frac{1}{\sqrt{2 \pi} \sigma} \exp\left(-\frac{(b_{n}-b_{n-1}-\mu)^2}{2 \sigma^2}\right) \left|\frac{\partial b_n}{\partial p_n}\right|
+                   \prod_{n=1}^{N} \left| \frac{\partial b_n}{\partial x_n} \right| \\
+               &= \prod_{n=1}^{N} \frac{1}{\sqrt{2 \pi} \sigma} \exp\left(-\frac{(b_{n}-b_{n-1}-\mu)^2}{2 \sigma^2}\right) \left|\frac{\partial b_n}{\partial x_n}\right|
 \end{aligned}
 \end{equation}
 
-Thus, maximizing the log-likelihood of \(p(\mathcal{P}_N)\) is equivalent to minimize negative log-likelihood $\mathcal{L}_{ML}$ as follows:
+Thus, maximizing the log-likelihood of \(p(\mathcal{X}_N)\) is equivalent to minimize negative log-likelihood $\mathcal{L}_{ML}$ as follows:
 \begin{equation}
 \begin{aligned}
-\mathcal{L}_{ML} = -\ln p(\mathcal{P}_N) &= \sum_{n=1}^{N} \left(\frac{(b_n-b_{n-1}-\mu)^2}{2 \sigma^2} + \frac{1}{2} \ln (2 \pi \sigma^2) - \ln \left|\frac{\partial b_n}{\partial p_n}\right|\right) \\ 
-&\thicksim \sum_{n=1}^{N} \left(\frac{(b_n-b_{n-1}-\mu)^2}{\sigma^2} + \ln \sigma^2 - \ln \left(\frac{\partial b_n}{\partial p_n}\right)^2 \right) \\
-& \longrightarrow{\min_{W_b, \mu, \sigma}} 
-%   &= \frac{1}{2} \sum_{n=1}^{N} \left[\left(\frac{b_n - b_{n-1} - \mu}{\sigma} \right)^2 + 2 \ln \sigma - 2 \ln \left|\frac{\partial b_n}{\partial p_n}\right|\right]
+\mathcal{L}_{ML} = -\ln p(\mathcal{X}_N) &= \sum_{n=1}^{N} \left(\frac{(b_n-b_{n-1}-\mu)^2}{2 \sigma^2} + \frac{1}{2} \ln (2 \pi \sigma^2) - \ln \left|\frac{\partial b_n}{\partial x_n}\right|\right) \\ 
+&\thicksim \sum_{n=1}^{N} \left(\frac{(b_n-b_{n-1}-\mu)^2}{\sigma^2} + \ln \sigma^2 - \ln \left(\frac{\partial b_n}{\partial x_n}\right)^2 \right) \\
+& \longrightarrow{\min_{W, \mu, \sigma}} 
 \end{aligned}
 \end{equation}
 
-As a by-product, we obtain a \mydelete{determenistic}\myupdate{most likely} sequence \mydelete{$b_1,\ldots,b_N$} \myupdate{$b_j = G(\mathcal{P}_j, W_b), j = 1, \ldots, N$} of the noise levels. % which means that $p(\mathcal{B}|\mathcal{P})$ is a delta-distribution.
+As a by-product, we obtain a \myupdate{most likely} sequence \myupdate{$b_j = G(\mathcal{X}_j, W), j = 1, \ldots, N$} of the noise levels. 
 
-% \section{Dynamics of $\mu, \sigma, w$}
-% \begin{equation}
-%     \mu^{new}_b = \mu - \lambda_1 \frac{\partial L}{\partial \mu}
-%                 = \frac{\lambda_1 N + \sigma^2_b}{\sigma^2_b} \mu - \frac{\lambda_1}{\sigma^2_b}(b_N-b_0) 
-% \end{equation}
-% Fixed $\lambda_1, N, \sigma, b_0, b_N$, we obtain estimated $\mu^{est}_{b}$
-% \begin{equation}
-%     \mu^{est}_{b} = \frac{b_N - b_0}{N}
-% \end{equation}
-
-
-% \begin{equation}
-%       \sigma^{new}_b = \sigma - \lambda_2 \frac{\partial L}{\partial \sigma}, \quad\quad
-%     W^{new}_b = W_b - \lambda_3 \frac{\partial L}{\partial W_b}
-% \end{equation}
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% % \begin{equation}
-% % \begin{aligned}
-% % L = \ln p(\mathcal{P}) &\thicksim \sum_{n=1}^{N} \left(- \frac{(b_n-b_{n-1}-\mu)^2}{2 \sigma^2} - \ln \sigma + \ln \left|\frac{\partial b_n}{\partial p_n}\right|\right) \\
-% %   &= - \frac{1}{2} \sum_{n=1}^{N} \left[\left(\frac{b_n - b_{n-1} - \mu}{\sigma} \right)^2 + 2 \ln \sigma - 2 \ln \left|\frac{\partial b_n}{\partial p_n}\right|\right]
-% % \end{aligned}
-% % \end{equation}
-% % It's also equivalent to minimize the loss function as follows:
-% % \begin{equation}
-% % \begin{aligned}
-% % \min_{W_b, p_0} L &=& \min_{W_b, p_0} \sum_{n=1}^{N} \left[\left(\frac{b_n - b_{n-1} - \mu}{\sigma} \right)^2 - 2 \ln \left|\frac{\partial b_n}{\partial p_n}\right|\right] \\
-% %       &=& \min_{W_b, p_0} \sum_{n=1}^{N} \left[\left( b_n - b_{n-1} - \mu\right)^2 - 2 \sigma^2 \ln \left|\frac{\partial b_n}{\partial p_n}\right|\right]
-% % \end{aligned}
-% % \end{equation}
-
-% % From the target loss function, the only parameters we need to known is \(\mu\).
-
-% % Consider second part of loss function, \(\ln \frac{\partial b_{n}}{\partial p_{n}}\), we reformulate it to \(\ln \frac{\partial f_{j}}{\partial x_{j}} = \ln h_{j}\)
-
-% % \begin{eqnarray}
-% % \frac{ \partial \ln h_j}{\partial w^{k}} &=& \frac{1}{h_j} * \frac{\partial h_j} { \partial w^k}
-% % \end{eqnarray}
-
-% % \section{Training with loss function $\mathcal{L}_{ML}$}\label{sec:chapter4:mse-mle}
-% % In \mychapterref{cha:chapter2}, we provide a practical approach to train HNN using $\mathcal{L}_{SE}$ as loss function. In order to make loss function $\mathcal{L}_{ML}$ also work, we fix $\sigma = 1$ and reformulate it as: (\mytodo{later we will show that the $\sigma$ only matters the magnitude of the distribution of $\mathcal{B}$, or the trend. In our prediction, we only can the trend, not the exactly value.})
-% % \begin{equation}
-% %     \mathcal{L}_{ML} = \sum^{N}_{n=1} (b_n - b_{n-1} - \mu)^2 - \sum^{N}_{n=1} \ln \left(\frac{\partial b_n}{\partial p_n} \right)^2 
-% % \end{equation}
-% % % Since we cannot observe the real outputs $b_1, \ldots, b_N$ in the market, we assume that the difference between $b_n - b_{n-1} \thicksim \mathcal{N}(\mu, \sigma)$ i
-
-% % \begin{equation}
-% %     \mathcal{L}_{SE} = \frac{1}{N} \sum^{N}_{n=1}(b_n-b^{gt}_n)^2
-% % \end{equation}
-
-% % % Set $d_n = b_n - b_{n-1}$, 
-% % The same is true when one estimates both $\mu$ and $\sigma$ via maximizing the log-likelihood of a noraml distribution, or, equivalently, minimizing the loss 
-% % % \begin{equation}
-% % %     \mathcal{L}_{ML}(\mathcal{D}, \mu, \sigma) = \frac{1}{N}\sum^N_{n=1} \left( \frac{(d_n - \mu)^2}{\sigma^2_b} + 2 \ln \sigma \right)
-% % % \end{equation}
-
-% % % It is well known that the outliers essentially influence the estimate of the mean $\mu$ if one uses the standard error loss
-
-% % % The same is true when one estimates both mean $\mu$ and precision $\sigma$ via maximizing the log-likelihood of a normal distribution, or, equivalently, minimizing the loss
-% % % \begin{equation}
-% % %     \mathcal{L}_{SE}(\mathcal{Y}, \mathcal{\hat{Y}}) = \frac{1}{N} \sum^{N}_{n=1}(\hat{y}_i-y_i)^2
-% % % \end{equation}
-
-% % The reason is that, in both cases, the derivatives of the loss functions $\mathcal{L}_{SE}$ and $\mathcal{L}_{ML}$ with respect to $\mu$ are proportional to $d_n - \mu$, while the derivative of $\mathcal{L}_{ML}(\mathcal{D}, \mu, \sigma)$ with respect to $\sigma$ contains even $(d_n - \mu)^2$. It turns out that the 
-
-
-% % % \begin{eqnarray}
-% % % y &\thicksim& \mathcal{N} \left( y | G(x, w), \sigma \right)
-% % % \end{eqnarray}
-
-% % % \begin{eqnarray}
-% % % p(y) &=& \frac{1}{\sqrt{2 \pi} \sigma} \exp \left(-\frac{(y-G(x, w))^2}{\sigma^2} \right)
-% % % \end{eqnarray}
-
-% % % \begin{eqnarray}
-% % % p(\mathcal{Y}) &=& p (y_1, y_2, ..., y_N) \\
-% % %               &=& \prod_{i}^N p(y_i)
-% % % \end{eqnarray}
-
-% % % \begin{eqnarray}
-% % % \ln p(\mathcal{Y}) &=& \sum_{i} \left( -\frac{1}{2}\ln 2 \pi - \ln \sigma - \frac{(y_i - G(x_i, w)^2}{\sigma^2} \right)
-% % % \end{eqnarray}
-
-% % % Assume \(z_i = f(y_i)\), we obtain
-% % % \begin{eqnarray}
-% % % p(z_i) = p(f(y_i)) \left(\frac{\partial f}{\partial y_i}\right)^{-1} f^{-1}(z_i)
-% % % \end{eqnarray}
-% % % \(\max (\mu, \sigma, w)\) s.t. \(p(z_i)\) is maximal
-
-% % % \section{Gradient of networks}\label{sec:chapter4:gradient-networks}
-% % % First we only consider \textbf{one} generalized play
-% % % \begin{equation}\label{eqn:chapter4:outputs-of-pi-networks}
-% % % G(P_{n}, w^{1}) = \sum_{i=1}^{S} \tilde{\theta_{i}} \tanh(\theta_{i} P_{n} + \theta_{i0}) + \tilde{\theta_{0}}
-% % % \end{equation}
-
-% % % where $P_{n} = [p_{1}, p_{2}, \ldots, p_{n}]$, $G(P_{n}, w^{1}) = [y_{1}, y_{2}, \ldots, y_{n}]$, $\forall{i} \in [1, ..., S]$, $\theta_{i} P_{n} = (\theta_{i} p_{1}, \theta_{i} p_{2}, \ldots, \theta_{i} p_{n})$,
-
-% % % So $\tanh(\theta_{i} P_{n} + \theta_{i0}) = [\tanh(\theta_{i} p_{1} + \theta_{i0}), \tanh(\theta_{i} p_{2} + \theta_{i0}), \ldots, \tanh(\theta_{i} p_{n} + \theta_{i0})]$
-
-% % % So $\sum_{i=1}^{S} \tilde{\theta_{i}} \tanh(\theta_{i} P_{n} + \theta_{i0}) + \tilde{\theta_{0}} = [\sum_{i=1}^{S} \tilde{\theta_{i}} \tanh(\theta_{i} p_{1} + \theta_{i0}) + \tilde{\theta_{0}},
-% % % \sum_{i=1}^{S} \tilde{\theta_{i}} \tanh(\theta_{i} p_{2} + \theta_{i0}) + \tilde{\theta_{0}},
-% % % \ldots,
-% % % \sum_{i=1}^{S} \tilde{\theta_{i}} \tanh(\theta_{i} p_{n} + \theta_{i0}) + \tilde{\theta_{0}}] =
-% % % [y_{1}, y_{2}, ..., y_{n}]$.
-
-% % % Take $y_{j}$, where $j \in [1, ..., n]$ for example
-
-% % % Let $z_j=\theta_i p_j + \theta_{i0}$ and $f(z_j) = \tanh(\theta_i p_j + \theta_{i0})$, we obtain
-% % % \begin{equation}\label{eqn:chapter4:TODO}
-% % % y_{j}  = \sum_{i=1}^{S} \tilde{\theta_{i}} \tanh(\theta_{i} p_{j} + \theta_{i0}) + \tilde{\theta_{0}}  \\
-% % %       = \sum_{i=1}^{S} \tilde{\theta_{i}} f(z_j) + \tilde{\theta_{i0}}
-% % % \end{equation}
-
-% % % Calculate derivation for $y_{j}$,
-% % % \begin{equation}\label{eqn:chapter4:TODO}
-% % % \frac{\partial y_{j}}{\partial p_{j}} = \sum_{i=1}^{S} \tilde{\theta_{i}} \theta_{i} \frac{\partial f(z_j)}{\partial z_{j}} \frac{\partial z_{j}}{\partial p_{j}}
-% % % \end{equation}
-
-% % % Now let's consider the mapping between $p_{j}$ and $x_{j}$. let $\sigma_{j} = w^{1} x_{j} - p_{j-1}$
-% % % \begin{equation}\label{eqn:chapter4:TODO}
-% % % p_{j} = \Phi(\sigma_{j}) + p_{j-1}
-% % % \end{equation}
-
-% % % and
-
-% % % \begin{equation}\label{eqn:chapter4:TODO}
-% % % \Phi(x) =
-% % %         \begin{cases}
-% % %         x - 0.5, & x > 0.5 \\
-% % %         0, & -0.5 \le x \le 0.5 \\
-% % %         x + 0.5, & x < -0.5 \\
-% % %         \end{cases}
-% % % \end{equation}
-
-% % % Using chain rule, we obtain
-% % % \begin{equation}
-% % % \frac{\partial y_{j}}{\partial x_{j}} = \frac{\partial y_{j}}{\partial p_{j}} \frac{\partial p_{j}}{\partial x_{j}} \\
-% % %                                       = \sum_{i=1}^{S} \tilde{\theta_{i}} \theta_{i} w^{1} \frac{\partial f(z_j)}{\partial z_{j}} \frac{\partial{\Phi(\sigma_{j})}}{\partial{\sigma_{j}}}
-% % % \end{equation}
-
-
-% % % To consider \textbf{multiple} generalized plays case, we reformulate the derivation as follows:
-
-% % % \begin{equation}
-% % % \frac{\partial {y_{j}^{1}}}{\partial x_{j}} = \frac{\partial{y_{j}^{1}}}{\partial{p_{j}^{1}}} \frac{\partial{ p_{j}}^{1}}{\\partial x_{j}} \\
-% % %                                       = \sum_{i=1}^{S} \tilde{\theta_{i}^{1}} \theta_{i}^{1} w^{1} \frac{\partial f(z_{j}^{1})}{\partial z_{j}^{1}} \frac{\partial{\Phi(\sigma_{j}^{1})}}{\partial{\sigma_{j}^{1}}}
-% % % \end{equation}
-
-
-% % % Now from the architecture, we know that if we have $P$ plays,
-% % % \begin{equation}
-% % % F = \frac{1}{P} \sum_{k=1}^{P} G^{k}
-% % % \end{equation}
-% % % Where \(F=[f_1, f_2, ..., f_n]\),
-% % % and
-% % % \begin{equation}
-% % % f_{j} = \frac{1}{P} \sum_{k=1}^{P} y_{j}^{k}
-% % % \end{equation}
-
-% % % our derivation is:
-
-% % % \begin{equation}
-% % % \frac{\partial f_{j}}{\partial x_{j}} = \frac{1}{P} \sum_{k=1}^{P} \frac{\partial {{y_{j}^{k}}}}{\partial {{x_{j}}}} \\
-% % %               = \frac{1}{P} \sum_{k=1}^{P} \frac{\partial {y_{j}^{k}}}{\partial {p_{j}^{k}}} \frac{\partial {p_{j}^{k}}}{\partial {x_{j}}} \\
-% % %               = \frac{1}{P} \sum_{k=1}^{P}  \sum_{i=1}^{S} \tilde{\theta_{i}^{k}} \theta_{i}^{k} w^{k} \frac{\partial f(z_{j}^{k})}{\partial z_{j}^{k}} \frac{\partial{\Phi(\sigma_{j}^{k})}}{\partial{\sigma_{j}^{k}}}
-% % % \end{equation}
-
-% % \section{\mytodo{analysis $\sigma$ is corresponded to scale only, it won't affect our final predictions}}
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{remark}\label{remark:chapter4:standard-deviation}
+The standard deviation $\sigma$ need not be learned as it encodes only the units of the stocks.
+\end{remark}
 
 \section{Predicting}\label{sec:chapter4:predicting_price}
-For the method described in \mysectionref{sec:chapter4:direct_learning}, we predict the \myupdate{distribution of the} next price $p^{predicted}_{N+1}$ as follows: 
+For the method described in \mysectionref{sec:chapter4:direct_learning}, we predict the \myupdate{distribution of the} next price $x^{predicted}_{N+1}$ as follows: 
 \begin{enumerate}
     \item Sampling the next random walk $b_{N+1} \sim \mathcal{N}(b_{N} + \mu, \sigma)$. 
     \item Determining the direction of price trend: If $b_{N+1} - b_{N} < 0$, we know that external agents buy stocks from the market (see \mychapterref{cha:chapter3}) and the price should rise. \mydelete{In verse,}\myupdate{If} $b_{N+1} - b_{N} > 0$, the price should drop.
     \item Brute force search the next price $\hat{p}_{N+1}$ 
-    : At moment $N$, we already observed price $p_N$. We can set next price $\hat{p}_{N+1} = p_{N} + \Delta$ and iterate all possible $\Delta$ until the condition $b_{N+1} = G(\hat{p}_{N+1}, W_b)$ \myupdate{is} satisfied. 
-    \item Repeating from step $1$ to step $3$ multiple times, \myupdate{we obtain a histogram approximating the distribution of the next price $p_{N+1}$}
-    \item Calculating the average of the predicted next price $p^{predicted}_{N+1}$ 
+    : At moment $N$, we already observed price $x_N$. We can set next price $\hat{x}_{N+1} = x_{N} + \Delta$ and iterate all possible $\Delta$ until the condition $b_{N+1} = G(\hat{x}_{N+1}, W)$ \myupdate{is} satisfied. 
+    \item Repeating from step $1$ to step $3$ multiple times, \myupdate{we obtain a histogram approximating the distribution of the next price $x_{N+1}$}
+    \item Calculating the average of the predicted next price $x^{predicted}_{N+1}$ or its distribution (see \myremarkref{remark:chapter4:predicting})
 \end{enumerate}
 
-Once we observed the true price $p_{N+1}$, we \mydelete{predict}\myupdate{reconstruct} the next noise level: 
+Once we observed the true price $x_{N+1}$, we \mydelete{predict}\myupdate{reconstruct} the next noise level: 
 \begin{equation}
-    b_{N+1} = G(\mathcal{P}_{N+1}, W_b)
+    b_{N+1} = G(\mathcal{X}_{N+1}, W)
 \end{equation}
 We keep predicting the next price and the next noise level in turn.
 
-% \todo[inline]{TODO: Average is not always good, especially if the distribution has several peaks (as we observed in our model). One should take decisions based on the whole distribution}
-% \todo[inline]{TODO: You should emphasize somewhere that predicting distributions of the next prices is an important advantage of your approach, compared with other standard models which just predict next price based on the observed prehistory}
-
 \begin{remark}\label{remark:chapter4:predicting}
-In real-world scenarios, using average of next predicted prices in the step 5 during predicting is not always good, especially if the distribution of prices has several peaks (see \myfigureref{fig:chapter5:predicting-price-156-price,fig:chapter5:predicting-price-157-price,fig:chapter5:predicting-price-158-price}). We can make more sophisticated trading decision according to the distribution of prices obtained from step 4, compared with standard models, i.e. \citep{daniel2019financial}, which just predict next price based on the observed prehistory.
+Using the average of next predicted prices in step 5 during predicting is not always good in real-world scenarios, especially if the distribution of prices has several peaks (see \myfigureref{fig:chapter5:predicting-price-157-price} and \myfigureref{fig:chapter5:predicting-price-158-price}). We can make a more sophisticated trading decision according to the distribution of prices obtained from step 4, compared with standard models, i.e., \citep{daniel2019financial}, which predict the next price based on the observed prehistory.
 \end{remark}
+
