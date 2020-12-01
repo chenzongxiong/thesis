@@ -1,0 +1,365 @@
+ \documentclass{standalone}
+%\documentclass{article}
+% \documentclass[bibtotoc,liststotoc,BCOR5mm,DIV12]{scrbook}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{pgfplots}
+\usepackage[ngerman, english]{babel}
+\usepackage{bibgerm}       		% german references
+\usepackage[latin1]{inputenc} % german characters
+\usepackage{graphicx} 				% it's recommended to use PDF images but you can use JPG or PNG as well
+\usepackage{url}           		% format URLs
+\usepackage{hyperref} 				% create hyperlinks
+\usepackage{listings, color}	% for source code
+\usepackage{subfig}						% two figures next to each other (example: figure 3a), figure 3b)
+\usepackage{scrpage2}					% header and footer line
+\usepackage{amsmath}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{algorithmic}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{pgfplots}
+% \usepackage{filecontents}
+\usepgfplotslibrary{groupplots}
+\usepackage{pgfplotstable}
+% \usepackage{pgfplotstable} % <-- required in preamble
+\usepackage{booktabs}      % <-- required in preamble
+\usepackage{tikz}
+\usepackage{xstring}
+\usepackage{catchfile}
+\usepackage{amsmath,mathtools}
+\usepackage{tikz}
+\usepackage{scalerel}
+\usepackage{pgfplots}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{standalone}
+\usepackage{mathtools}
+\usepackage{stackengine}
+\usepackage{subfig}
+\usepackage{cleveref}
+% \usepackage[longnamesfirst, authoryear]{natbib}
+\usepackage[]{natbib}
+\usepackage{float}
+\usepackage{pgfplotstable}
+\usepackage{booktabs}      % <-- required in preamble
+\usepackage{xstring}
+\usepackage{catchfile}
+\usepackage[titletoc]{appendix}
+\usepackage{pgfplotstable}
+% \usepackage{pgfplotstable} % <-- required in preamble
+\usepackage{booktabs}      % <-- required in preamble
+\usepackage{tikz}
+\usepackage{xstring}
+\usepackage{catchfile}
+\usepackage[section]{placeins}
+\usetikzlibrary{shapes,snakes}
+\usepackage[normalem]{ulem}
+\begin{document}
+% \begin{math}
+% \begin{equation*}
+%     x(n) = \mathcal{N}(5 \cos (0.1n), \sigma), \sigma \in \{0.1, 0.5, 1, 2, 3, 4, 5\}
+% \end{equation*}
+% \end{math}
+% $\text{inputs}(n) = \mathcal{N}(5 \cos (0.1n), \sigma), \sigma \in \{0.1, 0.5, 1, 2, 3, 4, 5\}$    
+
+% $h_n = \phi(h_{n-1}, x_n)$
+% \begin{tabular}{||c|c|c|c|c|c||}
+% \hline 
+%  Data set & network & \#parameters & estimated $\mu$ & estimated $\sigma$ & RMSE  \\
+% \hline \hline
+% \multirow{2}{4em}{$\sigma=10$} & \multirow{1}{4em}{LSTM} & 16961 & 0.05 $\pm$ 0.20 & 5.55 $\pm$ 1.98 & 10.05 $\pm$ 1.39 \\ 
+%                           \cline{2-6}
+%                           & \multirow{1}{4em}{HNN}  & 7501 & -0.25  $\pm$ 0.44 & 12.22 $\pm$ 0.38 & 7.40 $\pm$ 0.84 \\ 
+%                           \cline{2-6}
+% \hline
+
+% \multirow{2}{4em}{$\sigma=20$} & \multirow{1}{4em}{LSTM} & 16961 & 0.05 $\pm$ 0.20 & 15.24 $\pm$ $4.26$ & 18.36 $\pm$ 2.05 \\
+%                           \cline{2-6}
+%                           & \multirow{1}{4em}{HNN}  & 7501 & 0.09 $\pm$ 0.20 & 19.74 $\pm$ 0.42  & 8.82 $\pm$ 0.91 \\ 
+%                           \cline{2-6}
+% \hline
+
+
+% \end{tabular}
+
+
+% \begin{tabular}{||c|cc||}
+% \hline 
+% Networks & \#parameters & RMSE \\
+% \hline \hline
+%                             \multirow{1}{6em}{SimpleRNN} & 16769 & 5.75 $\pm$ 0.66 \\
+% \cline{1-3}
+
+%                              %&
+%                              \multirow{1}{6em}{GRU} & 50049 & 4.70 $\pm$ 0.45 \\ 
+% \cline{1-3}
+%                             %& 
+%                             \multirow{1}{6em}{LSTM}   & 66560 & 4.99 $\pm$ 0.33 \\ 
+
+% \cline{1-3}
+%                          %& 
+%                          \multirow{1}{6em}{HNN} & 7501 & \textbf{0.09 $\pm$ 0.02} \\ 
+% \hline
+% \end{tabular}
+
+% phi(x)
+    % \begin{tikzpicture}
+    %     \begin{axis} [
+    %         xmin=-2.5, xmax=2.5, ymin=-1.5, ymax=1.5, 
+    %         %grid=both,
+    %         ylabel={$\Phi(x)$}, xlabel={$x$},
+    %         xtick={-2,-1.5,...,2}, ytick={-2,-1.5,...,2},
+    %         % xticklabel style={font=\tiny, xshift=0.5ex},
+    %         % yticklabel style={font=\tiny, yshift=0.5ex},
+    %           yticklabels={,,},
+    %           xticklabels={,,},
+    %         axis line style={->},
+    %         axis x line=middle,
+    %         axis y line=middle,
+    %         legend pos=north west,
+    %         ticks=none
+    %     ]
+    %     \addplot+[mark=none, line width=1.5, color=black, domain=-2:-1] {x+1};
+    %     \addplot+[mark=none, line width=1.5, color=black, domain=-1:1] {0};
+    %     \addplot+[mark=none, line width=1.5, color=black, domain=1:2] {x-1};
+    %      \node[below] at (axis cs:1,0) {$r$};
+    %       \node[below] at (axis cs:-1,0) {$-r$};
+        
+    %     \end{axis}
+    % \end{tikzpicture}
+    
+    % $
+    % p_{n} = p_{n-1} + \Phi(w x_{n} - p_{n-1})
+    % $
+    
+    % $
+    % p_0, (x_1, x_2, \ldots) \mapsto (p_1, p_2, \ldots)
+    % $
+    
+    % play
+    
+    %     \begin{tikzpicture}
+    %     \begin{axis} [
+    %         xmin=-2.5, xmax=2.7, ymin=-2, ymax=2, 
+    %         % grid=both,
+    %         ylabel={$p(n)$}, xlabel={$x(n)$},
+    %         % xtick={-2,-1.5,...,2}, ytick={-2,-1.5,...,2},
+    %         % xticklabel style={font=\tiny, xshift=0.5ex},
+    %         % yticklabel style={font=\tiny, yshift=0.5ex},
+    %         axis line style={->},
+    %         axis x line=middle,
+    %         axis y line=middle,
+    %         ticks=none
+    %     ]
+               
+    %      \draw (axis cs:-0.8, 1.85) rectangle (axis cs:-2.2, 1.5);
+    %      \node[] at (axis cs:-1.5,1.7) {$r < A < 2r$};
+         
+    %     \addplot+[solid, mark=none, color=black, domain=-2.5:0.5] {x+1};
+    %     \addplot[line width=1.5pt, -> ,mark=none, color=black, domain=0:0.6] {0};
+    %     \addplot[line width=1.5pt, - ,mark=none, color=black, domain=0.5:1] {0};
+
+    %     \addplot[line width=1.5pt, -> ,mark=none, color=black, domain=1:1.6] {x-1};
+    %     \addplot[line width=1.5pt, - ,mark=none, color=black, domain=1.5:2] {x-1};
+        
+    %     \addplot[line width=1.5pt, -> ,mark=none, color=black, domain=2:0.8] {1};
+    %     \addplot[line width=1.5pt, - ,mark=none, color=black, domain=1:0] {1};
+        
+    %     \addplot[line width=1.5pt, -> ,mark=none, color=black, domain=0:-1.2] {x+1};
+    %     \addplot[line width=1.5pt, - ,mark=none, color=black, domain=-1:-2] {x+1};
+        
+    %     \addplot[line width=1.5pt, -> ,mark=none, color=black, domain=-2:-0.8] {-1};
+    %     \addplot[line width=1.5pt, - ,mark=none, color=black, domain=-1:0] {-1};
+        
+    %     \addplot[line width=1.5pt, -> ,mark=none, color=black, domain=0:0.6] {x-1};
+
+    %     \node[below] at (axis cs:1.2,0){$r$};
+    %     \node[above] at (axis cs:-1.2, 0){$-r$};
+    %     \node[below] at (axis cs:2,0) {$A$};
+    %     \node[above] at (axis cs:-2,0) {$-A$};
+    %     \draw[dashed] (axis cs:-2,0) -- (axis cs:-2,-1);
+    %     \draw[dashed] (axis cs:2,0) -- (axis cs:2,1);
+    %     \addplot+[solid,mark=none, color=black, domain=-0.5:2.5] {x-1};
+        
+    %     \node[above,color=blue,fill=none] at (axis cs:0.1,0) {$n_0$};
+    %     \node[above,color=blue,fill=none] at (axis cs:1.,0) {$n_1$};
+    %     \node[above,color=blue, fill=none] at (axis cs:1.95,0.95) {$n_2$};
+    %     \node[above,color=blue,fill=none] at (axis cs:1.0,0.95) {$n_3$};
+    %     % \node[circle,above,color=blue] at (axis cs:1.0,0.95) {};
+    %     \fill[color=blue] (axis cs:0,0)  circle[radius=2pt];
+    %     \fill[color=blue] (axis cs:1,0)  circle[radius=2pt];
+    %     \fill[color=blue] (axis cs:2.0,1.0)  circle[radius=2pt];
+    %     \fill[color=blue] (axis cs:1,1.0)  circle[radius=2pt];
+
+    %     \draw[dashed,color=blue] (axis cs:1.0,0) -- (axis cs:1.0,0.95);
+
+    %     \node[left,color=black,fill=none] at (axis cs:0,0.98) {$A-r$};
+    %     \node[right,color=black,fill=none] at (axis cs:-0,-0.98) {$-(A-r)$};
+        
+    %     \end{axis}
+    % \end{tikzpicture}
+    
+    
+    
+    % u(t)
+    
+    
+%      \begin{tikzpicture}
+%     \begin{axis}[
+%     xmin=-2,xmax=15,
+%     ymin=-2.3,ymax=2.3,
+%     ylabel={$u(t)$}, xlabel={$t$},
+%               axis line style={->},
+%                   axis x line=middle,
+%              axis y line=middle,
+% ticks=none
+%     % ticks=none
+%     %legend pos=outer north east
+%     ]
+%     \addplot[mark=none, color=black,smooth,domain=0:13.2] {2*sin(deg(x))}; 
+
+%     \node[left] at (axis cs:0,1) {$r$};
+%      \node[left] at (axis cs:0,-1) {$-r$};
+%     \draw[dashed,color=blue] (axis cs:0,1) -- (axis cs:13.0,1);
+%     \draw[dashed,color=blue] (axis cs:0,-1) -- (axis cs:13.0,-1);
+
+
+%     \node[left] at (axis cs:0,2) {$A$};
+%      \node[left] at (axis cs:0,-2) {$-A$};
+%     \draw[dashed,color=blue] (axis cs:0,2) -- (axis cs:13.0,2);
+%     \draw[dashed,color=blue] (axis cs:0,-2) -- (axis cs:13.0,-2);
+%     \end{axis}
+% \end{tikzpicture}
+    
+% formula of play
+% $p(n) = p(n-1) + \Phi[x(n) - p(n-1)]$
+% input sequence
+% \begin{array}{ccc}
+% x(t_0) &=& 0 \\
+%     u(t_1) &=& r \\
+%     u(t_2) &=& A \\
+%     u(t_3) &=& r \\
+% \end{array}
+% \begin{array}{ccccc}
+%     x(t_1) &=& x(t_0) + \Phi[u(t_0) - x(t_0)] &=& 0 \\
+%     x(t_2) &=& x(t_1) + \Phi[u(t_1) - x(t_1)] &=& A - r  \\
+%     x(t_3) &=& x(t_2) + \Phi[u(t_2) - x(t_2)] &=& A - r \\
+% \end{array}
+% \begin{array}{cccccc}
+%     x(n_0) &=& \varnothing \quad\quad\quad p(n_0) &=& 0 \\
+%     \color{blue}x(n_1) &\color{blue}=& \color{blue}r           \quad\quad\quad \color{blue}p(n_1) &=&  \color{blue}0 \\
+%     x(n_2) &=& A           \quad\quad\quad p(n_2) &=& A - r  \\
+%     \color{blue}x(n_3) &\color{blue}=& \color{blue}r           \quad\quad\quad \color{blue}p(n_3) &=&  \color{blue}A-r \\
+% \end{array}
+
+% strategies of agents N and D
+
+    % \begin{tabular}{|c|c|c|c|c|c|}
+    % \hline 
+    % Time & $\chi$ & $x(t)$ & $\max_{s \le \tau \le t} x(\tau)$ & $\min_{s \le \tau \le t} x(\tau)$ &  Remark \\
+    % \hline\hline
+    % $t_0$ & 1 & $A$ & $A$ & - & $x(t_0)$ is the maximum price observed until now \\
+    % \hline
+    % $t_1$ & 1 & $B$ & $B$ & - & $x(t_1)$ is larger than $x(t_0)$ \\
+    % \hline
+    % $t_2$ & 1 & $C$ & $B$ & - & $x(t_1)$ is larger than $x(t_2)$ \\
+    % \hline
+    % $t_3$ & 1 & $D$ & $B$ & - & $x(t_1)$ is larger than $x(t_3)$ \\
+    % \hline
+    % $t_4$ & 1 & $E$ & $B$ & - & $x(t_1)$ is larger than $x(t_4)$ \\
+    % \hline
+    % $t_5$ & 1 & $F$ & $F$ & - & $x(t_5)$ is larger than $x(t_1)$ \\
+    % \hline
+    % $t_6$ & 1 & $G$ & $F$ & - & $x(t_5)$ is larger than $x(t_6)$ \\
+    % \hline
+    % $t_7$ & 1 & $H$ & $H$ & - & $x(t_7)$ is larger than $x(t_5)$  \\
+    % \hline
+    
+    % \multirow{2}{1em}{$t_8$} & \multirow{2}{0.5em}{0} & \multirow{2}{0.5em}{$I$} & \multirow{2}{0.5em}{$H$} & \multirow{2}{0.5em}{$I$} & Agent D sells a stock due to $x(t_7)$ - $x(t_8) \ge \beta_R$  \\
+    % & & & & & and starts to track $\min_{s \le \tau \le t} x(\tau)$ \\
+    % \hline  
+    % $t_9$ & 0 & $J$ & - & $I$ &  $x(t_8)$ is smaller than $x(t_9)$ \\
+    % \hline
+    % $t_{10}$ & 0 & $K$ & - & $K$ &  $x(t_{10})$ is smaller than $x(t_8)$ \\
+    % \hline
+    % $t_{11}$ & 0 & $L$ & - & $K$ &  $x(t_{10})$ is smaller than $x(t_{11})$ \\
+    % \hline
+    
+    % \multirow{2}{1em}{$t_{12}$} & \multirow{2}{0.5em}{1} & \multirow{2}{0.5em}{$Q$} & \multirow{2}{0.5em}{$Q$} & \multirow{2}{0.6em}{$K$} & Agent D buys a stock due to $x(t_{12})$ - $x(t_{10}) \ge \beta_L$  \\
+    % & & & & & and starts to track $\max_{s \le \tau \le t} x(\tau)$ \\
+    % \hline      
+    % \end{tabular}
+  
+
+
+    \begin{tabular}{|c|c|c|c|c|c|}
+    \hline 
+    Time & $\chi$ & $x(t)$ & upper threshold &  lower threshold &  Remark \\
+    \hline\hline
+    $t_0$ & 1 & $A$ & $\alpha_R$ & - & - \\
+    \hline
+
+    $t_1$ & 0 & $B$ & $\alpha_R$ & $\alpha_L$ & Agent N  sells a stock due to $x(t_{1}) \ge \alpha_R$. \\
+    \hline  
+    $t_2$ & 0 & $C$ & - & $\alpha_L$ & - \\
+    \hline
+    $t_3$ & 0 & $D$ & - & $\alpha_L$ & - \\
+    \hline
+    $t_4$ & 0 & $E$ &- &  $\alpha_L$ & - \\
+    \hline
+    $t_5$ & 0 & $F$ & - &  $\alpha_L$ & - \\
+    \hline
+    $t_6$ & 0 & $G$ & - &  $\alpha_L$ & - \\
+    \hline
+    $t_7$ & 0 & $H$ & - &  $\alpha_L$ & - \\
+    \hline
+
+    $t_8$ & 1 & $I$ & $\alpha_R$ & $\alpha_L$ & Agent N buys a stock due to $x(t_8) \le \alpha_L$ \\
+    \hline
+    $t_9$ & 1 & $J$ & $\alpha_R$ &  - & - \\
+    \hline
+    $t_{10}$ & 1 & $K$ & $\alpha_R$ &  - & - \\
+    \hline
+    $t_{11}$ & 1 & $L$ & $\alpha_R$ &  - & - \\
+    \hline
+
+    $t_{12}$ & 0 & $Q$ & $\alpha_R$ & $\alpha_L$ & Agent N sells a stock due to $x(t_{12}) \ge \alpha_R$ \\
+    \hline    
+    \end{tabular}
+
+
+
+
+
+  %  $\max_{s \le \tau \le t} x(\tau)$
+  %    $\min_{s \le \tau \le t} x(\tau)$
+% \begin{eqnarray*}\label{eqn:chapter3:agent-n-relay}
+%   \begin{aligned}
+%     %\chi_{\alpha^{(i)}_L, \alpha^{(j)}_R}[x_n] =
+%     \chi[x] =
+%     \begin{cases}
+%       0 &, \quad x \ge \alpha_R \\
+%       1 &, \quad x \le \alpha_L  \\
+%       \rho &, \quad \text{otherwise}
+%     \end{cases}
+%   \end{aligned}
+% \end{eqnarray*}
+
+% \begin{eqnarray}\label{eqn:chapter3:agent-d-play}
+%   \begin{aligned}
+%     \chi[x] =
+%     \begin{cases}
+%       1  &,  \quad x - \min_{s\le \tau \le t} x(\tau) \ge \beta_L \\
+%       0  &,  \quad \max_{s\le \tau \le t} x(\tau) - x \ge \beta_R  \\
+%       \rho &, \quad \text{otherwise}
+%     \end{cases}
+%   \end{aligned}
+% \end{eqnarray}
+
+\end{document}
+
+% \begin{document}
+% $u(t_2) = A$
+% $u(t_3) = r$
+% \end{document}

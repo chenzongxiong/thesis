@@ -1,6 +1,6 @@
 \chapter{Evaluation in case of given ground-truth outputs}\label{cha:chapter5}
 
-In this chapter, we evaluate the performance of LSTM/SimpleRNN/GRU networks (see \myappendixsectionref{sec:appendix:rnn}) and HNN with two different data sets $D$ and $P$, which are generated from ground-truth networks with \#nb\_plays\_\_=50 and \#\_\_units\_\_ = 50 (see \mytableref{tbl:chapter5:hyperparameters}). 
+In this chapter, we evaluate the performance of LSTM/SimpleRNN/GRU networks (see \myappendixsectionref{sec:appendix:rnn}) and HNN with two different data sets $D$ and $P$, which are generated from ground-truth networks with $\#nb\_plays=50$ and $\#units = 50$ (see \mytableref{tbl:chapter5:hyperparameters}). 
 
 \section{Synthetic Data sets}
 We generate data sets to identify whether LSTM/SimpleRNN/GRU networks and HNN could capture the micro-loops \myupdate{(see \myfigref{fig:chapter1:hysteresis-loop})} of a hysteretic process. 
@@ -59,38 +59,38 @@ In this evaluation, we focus on optimizing the following hyperparameters in LSTM
     \hline
     Name                  & Explanation \\
     \hline 
-    \#nb\_plays           & the number of $plays$ in ground-truth data sets \\
+    $\#nb\_plays$           & the number of $plays$ in ground-truth data sets \\
     \hline
-    \#units               & the number of $units$ in ground-truth data sets \\
+    $\#units$               & the number of $units$ in ground-truth data sets \\
     \hline
-     \#\_\_nb\_plays\_\_  & the number of $plays$ used in training phase \\
+     $\#\_\_nb\_plays\_\_$  & the number of $plays$ used in training phase \\
      \hline
-     \#\_\_units\_\_      & the number of $units$ used in training phase \\
+     $\#\_\_units\_\_$      & the number of $units$ used in training phase \\
     \hline
     \end{tabular}
-    \caption[Hyperparameters used for evaluation.]{Hyperparameters used for evaluation. \#\_\_nb\_plays\_\_ and \#\_\_units\_\_  can be different from the ground-truth parameters, $\#plays$ and $\#units$, since they're blind to us in reality. Both \#\_\_nb\_plays\_\_ and \#\_\_units\_\_ are used for HNN during training phase (see \mychapterref{cha:chapter2} for details), \#\_\_units\_\_ is only used  for LSTM/SimpleRNN/GRU networks during the training phase. $\#plays = K$ and $\#units=S$ in \myfigref{fig:chapter1:nn-arch} because of $K$ \textit{play} cell in \myfigref{fig:chapter1:nn-pi} and the number of nonlinear functions ($\tanh$) is $S$.}
+    \caption[Hyperparameters used for evaluation.]{Hyperparameters used for evaluation. $\#\_\_nb\_plays\_\_$ and $\#\_\_units\_\_$  can be different from the ground-truth parameters, $\#plays$ and $\#units$, since they're blind to us in reality. Both $\#\_\_nb\_plays\_\_$ and $\#\_\_units\_\_$ are used for HNN during training phase (see \mychapterref{cha:chapter2} for details), $\#\_\_units\_\_$ is only used  for LSTM/SimpleRNN/GRU networks during the training phase. $\#plays = K$ and $\#units=S$ in \myfigref{fig:chapter1:nn-arch} because of $K$ \textit{play} cell in \myfigref{fig:chapter1:nn-pi} and the number of nonlinear functions ($\tanh$) is $S$.}
     \label{tbl:chapter5:hyperparameters}    
 \end{center}
 \end{table}
 
 \textbf{LSTM network.} We use one LSTM layer with \textit{tanh} nonlinearities and one dense layer. We use the default settings of hyperparameters in tensorflow \citep{abadi2016tensorflow} except for the hidden units in LSTM layer. We grid search a sequence of hidden units, $1, 8, 16, 32, 64, 128, 256$, to find out the best results achieved by LSTM networks. As for the loss functions, we minimize mean squared error (MSE) (see \mysectionref{sec:chapter2:training-pi-network}) and minimize the negative maximal likelihood estimator (MLE) (see \mysectionref{sec:chapter4:direct_learning}). The total number of parameters used in this architecture is given by
 \begin{equation*}
-    \text{\#parameters} = 4 * ({\text{\#\_\_units\_\_}}^2 + 2*\text{\#\_\_units\_\_}) + \text{\#\_\_units\_\_} + 1
+    {\#parameters} = 4 * ({{\#\_\_units\_\_}}^2 + 2*{\#\_\_units\_\_}) + {\#\_\_units\_\_} + 1
 \end{equation*}
 \textbf{SimpleRNN/GRU network.} As for SimpleRNN/GRU network, we use the same architecture as LSTM network except the recurrent block. In SimpleRNN/GRU network, we apply SimpleRNN/GRU block instead of LSTM block. The total number of parameters used in these two different networks are given by 
 
 \begin{equation*}
-   \text{\#parameters} = ({\text{\#\_\_units\_\_}}^2 + 2*\text{\#\_\_units\_\_}) + \text{\#\_\_units\_\_} + 1    
+   {\#parameters} = ({{\#\_\_units\_\_}}^2 + 2*{\#\_\_units\_\_}) + {\#\_\_units\_\_} + 1    
 \end{equation*}
 and
 \begin{equation*}
-   \text{\#parameters} = 3 * ({\text{\#\_\_units\_\_}}^2 + 2*\text{\#\_\_units\_\_}) + \text{\#\_\_units\_\_} + 1    
+   {\#parameters} = 3 * ({{\#\_\_units\_\_}}^2 + 2*{\#\_\_units\_\_}) + {\#\_\_units\_\_} + 1    
 \end{equation*}
  respectively.
 
 \textbf{HNN.}  We use architecture shown in \mychapterref{cha:chapter1} (see \myfigref{fig:chapter1:nn-arch}). We also exploit hyperparameters $\_\_plays\_\_$, $\_\_units\_\_$ in HNN. The number of parameters $\#parameters$ used in HNN is given by
 \begin{equation*}
-    \text{\#parameters} = 3 * \text{\#\_\_plays\_\_} * \text{\#\_\_units\_\_} + 1
+    {\#parameters} = 3 * {\#\_\_plays\_\_} * {\#\_\_units\_\_} + 1
 \end{equation*}
 % where $\#play$ is the number of plays and $\#units$ is the number of units.
 
